@@ -9,6 +9,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -18,6 +19,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonBuilder
 import org.jetbrains.compose.resources.StringResource
 import kotlin.coroutines.CoroutineContext
 import kotlin.jvm.JvmInline
@@ -150,11 +153,11 @@ data class I18N internal constructor(
      *
      * @param url the full url to the content delivery (without localization).
      */
-    @JvmInline
-    @Serializable
-    value class ContentDelivery internal constructor(
+    @ConsistentCopyVisibility
+    data class ContentDelivery internal constructor(
         val url: String,
-    ): JvmSerializable, CharSequence {
+        private val json: Json,
+    ): CharSequence {
 
         override val length: Int
             get() = url.length
@@ -183,13 +186,22 @@ data class I18N internal constructor(
             val response = urls.firstNotNullOfOrNull { response(it) } ?: return null
             return suspendCatching {
                 response.body<Map<String, String>>()
-            }.getOrNull()
+            }.getOrNull() ?: run {
+                val source = suspendCatching {
+                    response.readRawBytes().decodeToString()
+                }.getOrNull() ?: return null
+
+                suspendCatching {
+                    json.decodeFromString<Map<String, String>>(source)
+                }.getOrNull()
+            }
         }
 
         class Builder {
             private var fullUrl: String? = null
             private var baseUrl: String = DEFAULT_BASE_URL
             private lateinit var id: String
+            private var json: Json = defaultJson
 
             /**
              * The full url to your content delivery.
@@ -226,11 +238,27 @@ data class I18N internal constructor(
                 this.id = value
             }
 
-            fun build(): ContentDelivery = ContentDelivery(fullUrl ?: combineUrlParts(baseUrl, id))
+            fun json(value: Json) = apply {
+                this.json = value
+            }
+
+            fun json(from: Json = defaultJson, builderAction: JsonBuilder.() -> Unit) = apply {
+                json(Json(from, builderAction))
+            }
+
+            fun build(): ContentDelivery = ContentDelivery(
+                url = fullUrl ?: combineUrlParts(baseUrl, id),
+                json = json,
+            )
         }
 
         companion object {
             const val DEFAULT_BASE_URL = "https://cdn.tolg.ee/"
+
+            internal val defaultJson = Json {
+                isLenient = true
+                ignoreUnknownKeys = true
+            }
         }
     }
 

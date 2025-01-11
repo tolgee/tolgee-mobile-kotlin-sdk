@@ -18,7 +18,7 @@ val libName = "tolgee-compose"
 val artifact = "dev.datlag.tolgee"
 
 group = artifact
-version = "0.1.0"
+version = "0.1.1"
 
 dokka {
     dokkaSourceSets.configureEach {
@@ -68,6 +68,7 @@ kotlin {
             implementation(libs.immutable)
             implementation(libs.ktor)
             implementation(libs.serialization)
+            implementation(libs.serialization.json)
             implementation(libs.tooling)
         }
 
@@ -110,7 +111,7 @@ mavenPublishing {
     coordinates(
         groupId = artifact,
         artifactId = libName,
-        version = "0.1.0"
+        version = "0.1.1"
     )
 
     pom {
