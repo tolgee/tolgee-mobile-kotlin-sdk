@@ -42,6 +42,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.components.resources)
 
+            implementation(libs.datetime)
             implementation(libs.immutable)
             implementation(libs.ktor)
             implementation(libs.serialization)

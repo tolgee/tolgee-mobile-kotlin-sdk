@@ -2,6 +2,7 @@ package dev.datlag.tolgee
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
+import dev.datlag.tolgee.format.sprintf
 import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
@@ -118,6 +119,22 @@ data class I18N internal constructor(
             get(res) ?: org.jetbrains.compose.resources.stringResource(res)
         ) {
             value = translation(res) ?: get(res) ?: value
+        }.value
+    }
+
+    /**
+     * Retrieves the translation from cache or resources by default and updates if new translations are available.
+     *
+     * @param res the [StringResource] used by default.
+     * @param formatArgs arguments for formatting.
+     * @return [String] from [ContentDelivery] or default [StringResource].
+     */
+    @Composable
+    fun stringResource(res: StringResource, vararg formatArgs: Any): String {
+        return produceState<String>(
+            get(res)?.sprintf(*formatArgs) ?: org.jetbrains.compose.resources.stringResource(res, *formatArgs)
+        ) {
+            value = translation(res)?.sprintf(*formatArgs) ?: get(res)?.sprintf(*formatArgs) ?: value
         }.value
     }
 
