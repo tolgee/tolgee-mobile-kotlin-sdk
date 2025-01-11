@@ -31,7 +31,7 @@ import kotlin.jvm.JvmInline
 @ConsistentCopyVisibility
 data class I18N internal constructor(
     private val contentDelivery: ContentDelivery?,
-    private val locale: Locale?,
+    val locale: Locale?,
     private val client: HttpClient?,
     private val networkDispatcher: CoroutineContext,
     private val initialTranslationCache: ImmutableMap<String, String>?
