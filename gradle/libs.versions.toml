@@ -1,0 +1,25 @@
+# Version catalog is a central place for you to declare and version dependencies
+# https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+
+[versions]
+compose = "1.7.3"
+immutable = "0.3.8"
+kotlin = "2.1.0"
+ktor = "3.0.3"
+locale = "0.8.0"
+serialization = "1.7.3"
+tooling = "1.7.0"
+
+[libraries]
+immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
+ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+locale = { group = "com.vanniktech", name = "multiplatform-locale", version.ref = "locale" }
+serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
+tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
+
+[plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
