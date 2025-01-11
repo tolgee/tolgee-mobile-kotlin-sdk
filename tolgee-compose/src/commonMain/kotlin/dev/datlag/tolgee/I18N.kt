@@ -28,6 +28,7 @@ import kotlin.jvm.JvmInline
  * @param contentDelivery a [ContentDelivery] feature.
  * @param locale the users or used [Locale].
  */
+@ConsistentCopyVisibility
 data class I18N internal constructor(
     private val contentDelivery: ContentDelivery?,
     private val locale: Locale?,
@@ -241,6 +242,7 @@ data class I18N internal constructor(
      * @param regionCode code for the region (like "US")
      */
     @Serializable
+    @ConsistentCopyVisibility
     data class Locale internal constructor(
         val localization: String,
         val languageCode: String,

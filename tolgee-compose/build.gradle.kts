@@ -30,7 +30,9 @@ dokka {
 }
 
 kotlin {
-    androidTarget()
+    androidTarget {
+        publishAllLibraryVariants()
+    }
     jvm {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
