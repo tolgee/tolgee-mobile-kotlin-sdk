@@ -5,8 +5,21 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.vanniktech.publish)
+    `maven-publish`
+    signing
+}
+
+dokka {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(file("src"))
+            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/tolgee-compose/src")
+        }
+    }
 }
 
 kotlin {
