@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import dev.datlag.tolgee.I18N.ContentDelivery
 import dev.datlag.tolgee.format.sprintf
 import dev.datlag.tooling.async.scopeCatching
+import dev.datlag.tooling.async.suspendCatching
 
 /**
  * Retrieves the translation from cache or resources by default and updates if new translations are available.
@@ -47,8 +48,14 @@ fun I18N.stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
     }
 
     return produceState<String>(
-        key?.let(::getTranslation)?.sprintf(*formatArgs) ?: androidx.compose.ui.res.stringResource(id, *formatArgs)
+        scopeCatching {
+            key?.let(::getTranslation)?.sprintf(*formatArgs)
+        }.getOrNull() ?: androidx.compose.ui.res.stringResource(id, *formatArgs)
     ) {
-        value = key?.let { translation(it) }?.sprintf(*formatArgs) ?: key?.let(::getTranslation)?.sprintf(*formatArgs) ?: value
+        value = suspendCatching {
+            key?.let { translation(it) }?.sprintf(*formatArgs)
+        }.getOrNull() ?: suspendCatching {
+            key?.let(::getTranslation)?.sprintf(*formatArgs)
+        }.getOrNull() ?: value
     }.value
 }

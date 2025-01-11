@@ -132,9 +132,15 @@ data class I18N internal constructor(
     @Composable
     fun stringResource(res: StringResource, vararg formatArgs: Any): String {
         return produceState<String>(
-            get(res)?.sprintf(*formatArgs) ?: org.jetbrains.compose.resources.stringResource(res, *formatArgs)
+            scopeCatching {
+                get(res)?.sprintf(*formatArgs)
+            }.getOrNull() ?: org.jetbrains.compose.resources.stringResource(res, *formatArgs)
         ) {
-            value = translation(res)?.sprintf(*formatArgs) ?: get(res)?.sprintf(*formatArgs) ?: value
+            value = suspendCatching {
+                translation(res)?.sprintf(*formatArgs)
+            }.getOrNull() ?: suspendCatching {
+                get(res)?.sprintf(*formatArgs)
+            }.getOrNull() ?: value
         }.value
     }
 
