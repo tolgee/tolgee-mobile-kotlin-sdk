@@ -278,7 +278,7 @@ data class I18N internal constructor(
 
     class Builder {
         private var contentDelivery: ContentDelivery? = null
-        private var locale: Locale? = null
+        private var locale: Locale? = I18N.defaultLocale
         private var client: HttpClient? = null
         private var networkContext: CoroutineContext = I18N.networkDispatcher
         private var translationCache: ImmutableMap<String, String>? = null

@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+    alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.multiplatform)
@@ -8,7 +10,12 @@ plugins {
 }
 
 kotlin {
-    jvm()
+    androidTarget()
+    jvm {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
 
     iosX64()
     iosArm64()
@@ -44,6 +51,7 @@ kotlin {
         val localeMain by creating {
             dependsOn(commonMain.get())
 
+            androidMain.orNull?.dependsOn(this)
             jvmMain.orNull?.dependsOn(this)
             iosMain.orNull?.dependsOn(this)
 
@@ -51,5 +59,19 @@ kotlin {
                 implementation(libs.locale)
             }
         }
+    }
+}
+
+android {
+    compileSdk = 35
+    namespace = "dev.datlag.tolgee.compose"
+
+    defaultConfig {
+        minSdk = 21
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
