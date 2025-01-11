@@ -48,6 +48,10 @@ kotlin {
             implementation(libs.tooling)
         }
 
+        androidMain.dependencies {
+            implementation(compose.ui)
+        }
+
         val localeMain by creating {
             dependsOn(commonMain.get())
 

@@ -61,7 +61,7 @@ data class I18N internal constructor(
         )
     }
 
-    private suspend fun translation(key: String): String? = withContext(networkDispatcher) {
+    internal suspend fun translation(key: String): String? = withContext(networkDispatcher) {
         suspendCatching {
             fetchTranslation()
         }.getOrNull()?.ifEmpty { initialTranslationCache }?.let {
@@ -72,7 +72,7 @@ data class I18N internal constructor(
         getTranslation(key)
     }
 
-    private suspend fun translation(key: StringResource): String? = translation(key.key)
+    internal suspend fun translation(key: StringResource): String? = translation(key.key)
 
     /**
      * Reset translation cache to your initial value.
