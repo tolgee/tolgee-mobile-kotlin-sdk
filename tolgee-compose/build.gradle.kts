@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -12,6 +13,12 @@ plugins {
     `maven-publish`
     signing
 }
+
+val libName = "tolgee-compose"
+val artifact = "dev.datlag.tolgee"
+
+group = artifact
+version = "0.1.0"
 
 dokka {
     dokkaSourceSets.configureEach {
@@ -91,5 +98,43 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral(host = SonatypeHost.S01, automaticRelease = true)
+    signAllPublications()
+
+    coordinates(
+        groupId = artifact,
+        artifactId = libName,
+        version = "0.1.0"
+    )
+
+    pom {
+        name.set(libName)
+
+        description.set("Compose Multiplatform localization wrapper for Tolgee")
+        url.set("https://github.com/DatL4g/compose-tolgee")
+
+        licenses {
+            license {
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+
+        scm {
+            url.set("https://github.com/DatL4g/compose-tolgee")
+            connection.set("scm:git:git://github.com/DatL4g/compose-tolgee.git")
+        }
+
+        developers {
+            developer {
+                id.set("DatL4g")
+                name.set("Jeff Retz (DatLag)")
+                url.set("https://github.com/DatL4g")
+            }
+        }
     }
 }
