@@ -5,13 +5,7 @@ import com.vanniktech.locale.Language
 import com.vanniktech.locale.Locale
 import com.vanniktech.locale.Locales
 import dev.datlag.tooling.Platform
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlin.jvm.JvmOverloads
-
-internal actual val I18N.Companion.networkDispatcher: CoroutineDispatcher
-    get() = Dispatchers.IO
 
 internal actual val I18N.Companion.defaultLocale: I18N.Locale?
     get() = I18N.Locale.Builder().locale().build()

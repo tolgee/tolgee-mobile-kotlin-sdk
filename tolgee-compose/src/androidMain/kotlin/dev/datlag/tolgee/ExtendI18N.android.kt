@@ -9,6 +9,11 @@ import dev.datlag.tolgee.I18N.ContentDelivery
 import dev.datlag.tolgee.format.sprintf
 import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.async.suspendCatching
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+
+internal actual val I18N.Companion.networkDispatcher: CoroutineDispatcher
+    get() = Dispatchers.IO
 
 /**
  * Retrieves the translation from cache or resources by default and updates if new translations are available.
