@@ -23,7 +23,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonBuilder
 import org.jetbrains.compose.resources.StringResource
 import kotlin.coroutines.CoroutineContext
-import kotlin.jvm.JvmInline
 
 /**
  * Class for handling localization.
@@ -70,8 +69,8 @@ data class I18N internal constructor(
         suspendCatching {
             fetchTranslation()
         }.getOrNull()?.ifEmpty { initialTranslationCache }?.let {
-            this@I18N.fetchRequired = false
             this@I18N.translationCache = it.toImmutableMap()
+            this@I18N.fetchRequired = false
         }
 
         getTranslation(key)
