@@ -23,6 +23,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonBuilder
 import org.jetbrains.compose.resources.StringResource
 import kotlin.coroutines.CoroutineContext
+import kotlin.jvm.JvmOverloads
 
 /**
  * Class for handling localization.
@@ -364,8 +365,9 @@ data class I18N internal constructor(
          * @see ContentDelivery
          * @return the updated [Builder] instance.
          */
-        fun contentDelivery(url: String) = contentDelivery {
-            url(url)
+        @JvmOverloads
+        fun contentDelivery(url: String, block: ContentDelivery.Builder.() -> Unit = { }) = apply {
+            contentDelivery(ContentDelivery.Builder().url(url).apply(block).build())
         }
 
         /**
