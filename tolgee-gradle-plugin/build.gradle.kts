@@ -9,6 +9,6 @@ plugins {
 dependencies {
     implementation(libs.kotlin.gradle.plugin.api)
 
-    implementation(libs.ktor)
+    implementation(libs.ktor.okhttp)
     implementation(libs.ktorfit)
 }

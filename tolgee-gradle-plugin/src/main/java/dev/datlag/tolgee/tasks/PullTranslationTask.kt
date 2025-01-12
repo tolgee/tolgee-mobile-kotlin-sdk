@@ -4,6 +4,7 @@ import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.TolgeePluginExtension
 import dev.datlag.tolgee.api.createTolgee
 import dev.datlag.tolgee.common.tolgeeExtension
+import io.ktor.client.engine.okhttp.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
@@ -48,6 +49,9 @@ open class PullTranslationTask : DefaultTask() {
         val lang = languages.orNull?.mapNotNull { it?.ifBlank { null } }?.ifEmpty { null }
         val ktor = ktorfit {
             baseUrl(baseUrl.getOrElse(TolgeePluginExtension.DEFAULT_URL))
+            httpClient(OkHttp) {
+                followRedirects = true
+            }
         }
         val tolgee = ktor.createTolgee()
         val outputDir = projectLayout.buildDirectory.dir("tolgee")
