@@ -33,5 +33,5 @@ fun kodeinStringResource(res: StringResource): String {
 fun kodeinStringResource(res: StringResource, vararg formatArgs: Any): String {
     val i18n by localDI().instanceOrNull<I18N>()
 
-    return i18n?.stringResource(res) ?: stringResource(res, *formatArgs)
+    return i18n?.stringResource(res, *formatArgs) ?: stringResource(res, *formatArgs)
 }
