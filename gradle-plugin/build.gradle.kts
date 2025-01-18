@@ -19,10 +19,13 @@ group = libGroup
 version = libVersion
 
 dependencies {
+    implementation(kotlin("gradle-plugin"))
     implementation(libs.kotlin.gradle.plugin.api)
+    implementation(libs.android)
 
     implementation(libs.ktor.okhttp)
     implementation(libs.ktorfit)
+    implementation(libs.tooling)
 }
 
 gradlePlugin {

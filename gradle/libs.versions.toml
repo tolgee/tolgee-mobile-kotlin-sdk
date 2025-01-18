@@ -19,6 +19,7 @@ serialization = "1.7.3"
 tooling = "1.7.0"
 
 [libraries]
+android = { group = "com.android.tools.build", name = "gradle", version.ref = "android" }
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
 kodein-compose = { group = "org.kodein.di", name = "kodein-di-framework-compose", version.ref = "kodein" }

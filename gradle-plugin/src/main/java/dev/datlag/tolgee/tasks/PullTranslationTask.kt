@@ -3,14 +3,21 @@ package dev.datlag.tolgee.tasks
 import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.TolgeePluginExtension
 import dev.datlag.tolgee.api.createTolgee
+import dev.datlag.tolgee.common.androidResources
+import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tolgee.common.tolgeeExtension
+import dev.datlag.tooling.async.scopeCatching
+import dev.datlag.tooling.async.suspendCatching
+import dev.datlag.tooling.deleteSafely
+import dev.datlag.tooling.existsSafely
+import dev.datlag.tooling.mkdirsSafely
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.provider.ListProperty
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
@@ -39,6 +46,12 @@ open class PullTranslationTask : DefaultTask() {
     @get:Input
     open val apiKey: Property<String> = project.objects.property(String::class.java)
 
+    @get:Input
+    open val androidOnly: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @get:Input
+    open val androidResources: DirectoryProperty = project.objects.directoryProperty()
+
     @get:Inject
     open val projectLayout = project.layout
 
@@ -61,12 +74,14 @@ open class PullTranslationTask : DefaultTask() {
         }
         val tolgee = ktor.createTolgee()
         val outputDir = projectLayout.buildDirectory.dir("tolgee")
+        val isAndroidOnly = androidOnly.getOrElse(false)
+        val androidResourcesPath = androidResources.orNull?.asFile
 
         runBlocking {
             val response = tolgee.export(
                 apiKey = key,
                 id = id,
-                format = "COMPOSE_XML",
+                format = if (isAndroidOnly && androidResourcesPath != null) "ANDROID_XML" else "COMPOSE_XML",
                 languages = lang,
                 filterState = filter,
                 zip = true
@@ -74,25 +89,29 @@ open class PullTranslationTask : DefaultTask() {
 
             if (response.status.isSuccess()) {
                 val outputDirFile = outputDir.get().asFile
-                runCatching {
-                    outputDirFile.mkdirs()
+                scopeCatching {
+                    outputDirFile.mkdirsSafely()
                 }
 
                 val outputFile = File(outputDirFile, "translation.zip")
 
-                runCatching {
+                suspendCatching {
                     outputFile.writeBytes(response.readRawBytes())
                 }.onFailure {
                     logger.warn("Could not read translation zip file.")
                     return@runBlocking
                 }
 
-                val composeResDir = projectLayout.projectDirectory.dir("src/commonMain/composeResources").asFile
-                runCatching {
-                    composeResDir.mkdirs()
+                val composeResDir = androidResourcesPath ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
+                scopeCatching {
+                    composeResDir.mkdirsSafely()
                 }
 
                 unzipTo(composeResDir, outputFile)
+
+                scopeCatching {
+                    outputFile.deleteSafely()
+                }
             } else {
                 logger.warn("Translation zip could not be downloaded")
             }
@@ -105,9 +124,24 @@ open class PullTranslationTask : DefaultTask() {
         languages.set(extension.languages)
         filterState.set(extension.filterState)
         apiKey.set(extension.apiKey)
+
+        androidOnly.set(project.provider {
+            project.isAndroidOnly
+        })
+        androidResources.set(project.provider {
+            if (project.layout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile.existsSafely()) {
+                null
+            } else {
+                project.androidResources.firstOrNull()?.let {
+                    project.layout.projectDirectory.dir(it.path)
+                }
+            }
+        })
     }
 
     companion object {
         internal const val NAME = "pullTranslation"
+
+        private const val COMMON_RESOURCES_PATH = "src/commonMain/composeResources"
     }
 }
