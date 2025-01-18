@@ -1,14 +1,22 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     `kotlin-dsl`
     kotlin("jvm")
     id("java-gradle-plugin")
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.vanniktech.publish)
+    `maven-publish`
+    signing
 }
 
-val artifact = "dev.datlag.tolgee"
-group = artifact
-version = "0.1.2"
+val libGroup = "dev.datlag.tolgee"
+val libName = "gradle-plugin"
+val libVersion = "0.1.2"
+
+group = libGroup
+version = libVersion
 
 dependencies {
     implementation(libs.kotlin.gradle.plugin.api)
@@ -23,10 +31,48 @@ gradlePlugin {
         vcsUrl.set("https://github.com/DatL4g/compose-tolgee")
 
         create("tolgeePlugin") {
-            id = artifact
+            id = libGroup
             implementationClass = "dev.datlag.tolgee.TolgeePlugin"
             displayName = "Tolgee Plugin"
             description = "Gradle Plugin for Tolgee"
+        }
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral(host = SonatypeHost.S01, automaticRelease = true)
+    signAllPublications()
+
+    coordinates(
+        groupId = libGroup,
+        artifactId = libName,
+        version = libVersion
+    )
+
+    pom {
+        name.set(libName)
+
+        description.set("Compose Multiplatform localization wrapper for Tolgee")
+        url.set("https://github.com/DatL4g/compose-tolgee")
+
+        licenses {
+            license {
+                name.set("Apache License 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+
+        scm {
+            url.set("https://github.com/DatL4g/compose-tolgee")
+            connection.set("scm:git:git://github.com/DatL4g/compose-tolgee.git")
+        }
+
+        developers {
+            developer {
+                id.set("DatL4g")
+                name.set("Jeff Retz (DatLag)")
+                url.set("https://github.com/DatL4g")
+            }
         }
     }
 }

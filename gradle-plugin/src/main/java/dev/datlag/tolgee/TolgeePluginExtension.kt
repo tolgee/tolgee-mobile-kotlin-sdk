@@ -20,6 +20,9 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
 
     fun setupConvention(project: Project) {
         baseUrl.convention(DEFAULT_URL)
+        apiKey.convention(project.provider {
+            project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
+        })
     }
 
     sealed interface FilterState {

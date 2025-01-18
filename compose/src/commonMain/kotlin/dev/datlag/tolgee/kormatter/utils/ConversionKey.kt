@@ -1,5 +1,6 @@
 package dev.datlag.tolgee.kormatter.utils
 
+@ConsistentCopyVisibility
 data class ConversionKey internal constructor(
     val prefix: Char?,
     val conversion: Char

@@ -1,5 +1,6 @@
 package dev.datlag.tolgee.kormatter.utils
 
+@ConsistentCopyVisibility
 data class FormatString internal constructor(
     val argumentIndex: Int?,
     val flags: String,
