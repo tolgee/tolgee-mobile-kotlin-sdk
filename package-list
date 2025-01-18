@@ -3,3 +3,5 @@ $dokka.linkExtension:html
 
 module:compose
 dev.datlag.tolgee
+module:kodein
+dev.datlag.tolgee
