@@ -12,4 +12,5 @@ plugins {
 
 dependencies {
     dokka(project(":compose"))
+    dokka(project(":kodein"))
 }

@@ -130,7 +130,7 @@ data class I18N internal constructor(
      * Retrieves the translation from cache or resources by default and updates if new translations are available.
      *
      * @param res the [StringResource] used by default.
-     * @param formatArgs arguments for formatting.
+     * @param formatArgs arguments for formatting. (Mostly Java-format and C-sprintf compatible)
      * @return [String] from [ContentDelivery] or default [StringResource].
      */
     @Composable

@@ -41,6 +41,7 @@ fun I18N.stringResource(@StringRes id: Int): String {
  * Retrieves the translation from cache or resources by default and updates if new translations are available.
  *
  * @param id the [StringRes] used by default.
+ * @param formatArgs arguments for formatting. (Mostly Java-format and C-sprintf compatible)
  * @return [String] from [ContentDelivery] or default [StringRes].
  */
 @Composable

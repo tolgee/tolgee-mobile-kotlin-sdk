@@ -14,17 +14,18 @@ plugins {
     signing
 }
 
+val libGroup = "dev.datlag.tolgee"
 val libName = "tolgee-compose"
-val artifact = "dev.datlag.tolgee"
+val libVersion = "0.1.2"
 
-group = artifact
-version = "0.1.1"
+group = libGroup
+version = libVersion
 
 dokka {
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/tolgee-compose/src")
+            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/compose/src")
         }
     }
 }
@@ -109,9 +110,9 @@ mavenPublishing {
     signAllPublications()
 
     coordinates(
-        groupId = artifact,
+        groupId = libGroup,
         artifactId = libName,
-        version = "0.1.1"
+        version = libVersion
     )
 
     pom {
