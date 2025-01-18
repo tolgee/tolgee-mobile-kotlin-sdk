@@ -2,7 +2,11 @@ package dev.datlag.tolgee
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
+import dev.datlag.tolgee.format.kormat
 import dev.datlag.tolgee.format.sprintf
+import dev.datlag.tolgee.kormatter.DefaultFormatter
+import dev.datlag.tolgee.kormatter.Formatter
+import dev.datlag.tolgee.kormatter.FormatterBuilder
 import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
@@ -35,8 +39,7 @@ import kotlin.jvm.JvmOverloads
 data class I18N internal constructor(
     private val contentDelivery: ContentDelivery?,
     val locale: Locale?,
-    private val client: HttpClient?,
-    private val networkDispatcher: CoroutineContext,
+    private val config: Config?,
     private val initialTranslationCache: ImmutableMap<String, String>?
 ) : AutoCloseable {
 
@@ -44,6 +47,9 @@ data class I18N internal constructor(
 
     private var fetchRequired: Boolean = true
     private val fetchTranslationMutex = Mutex()
+
+    private val contentDeliveryFormatter: Format
+        get() = contentDelivery?.format ?: Format.Default
 
     /**
      * Retrieve the translation for the given [key] from cache.
@@ -61,7 +67,8 @@ data class I18N internal constructor(
         }
 
         return@withLock this.contentDelivery?.fetch(
-            client = this.client ?: return@withLock null,
+            client = this.config?.client ?: return@withLock null,
+            json = this.config.json,
             locale = this.locale ?: return@withLock null
         )
     }
@@ -111,6 +118,10 @@ data class I18N internal constructor(
         clearTranslationCache()
     }
 
+    internal fun String.contentDeliveryFormat(vararg formatArgs: Any): String {
+        return contentDeliveryFormatter.format(this, *formatArgs)
+    }
+
     /**
      * Retrieves the translation from cache or resources by default and updates if new translations are available.
      *
@@ -137,13 +148,13 @@ data class I18N internal constructor(
     fun stringResource(res: StringResource, vararg formatArgs: Any): String {
         return produceState<String>(
             scopeCatching {
-                get(res)?.sprintf(*formatArgs)
+                get(res)?.contentDeliveryFormat(*formatArgs)
             }.getOrNull() ?: org.jetbrains.compose.resources.stringResource(res, *formatArgs)
         ) {
             value = suspendCatching {
-                translation(res)?.sprintf(*formatArgs)
+                translation(res)?.contentDeliveryFormat(*formatArgs)
             }.getOrNull() ?: suspendCatching {
-                get(res)?.sprintf(*formatArgs)
+                get(res)?.contentDeliveryFormat(*formatArgs)
             }.getOrNull() ?: value
         }.value
     }
@@ -156,7 +167,7 @@ data class I18N internal constructor(
     @ConsistentCopyVisibility
     data class ContentDelivery internal constructor(
         val url: String,
-        private val json: Json,
+        internal val format: Format,
     ): CharSequence {
 
         override val length: Int
@@ -166,7 +177,7 @@ data class I18N internal constructor(
 
         override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = url.subSequence(startIndex, endIndex)
 
-        internal suspend fun fetch(client: HttpClient, locale: Locale): Map<String, String>? {
+        internal suspend fun fetch(client: HttpClient, json: Json, locale: Locale): Map<String, String>? {
             suspend fun response(url: String) = suspendCatching {
                 client.get(url)
             }.getOrNull()?.let {
@@ -201,7 +212,7 @@ data class I18N internal constructor(
             private var fullUrl: String? = null
             private var baseUrl: String = DEFAULT_BASE_URL
             private lateinit var id: String
-            private var json: Json = defaultJson
+            private var format: Format = Format.Default
 
             /**
              * The full url to your content delivery.
@@ -238,27 +249,46 @@ data class I18N internal constructor(
                 this.id = value
             }
 
-            fun json(value: Json) = apply {
-                this.json = value
+            /**
+             * Specify your string formatter.
+             *
+             * Default mostly supports Java-format and C-sprintf.
+             *
+             * @param value the [Format] to be used.
+             * @return the updated [Builder] instance.
+             */
+            fun format(value: Format = Format.Default) = apply {
+                this.format = value
             }
 
-            fun json(from: Json = defaultJson, builderAction: JsonBuilder.() -> Unit) = apply {
-                json(Json(from, builderAction))
+            /**
+             * Specify your string formatter.
+             *
+             * @param value the [Formatter] to be used.
+             * @return the updated [Builder] instance.
+             */
+            fun format(value: Formatter) = apply {
+                this.format = Format.Kormatter(value)
+            }
+
+            /**
+             * Specify your string formatter.
+             *
+             * @param builder build the [Formatter] yourself.
+             * @return the updated [Builder] instance.
+             */
+            fun format(builder: FormatterBuilder.() -> Unit) = apply {
+                this.format = Format.Kormatter(FormatterBuilder().apply(builder).createFormatter())
             }
 
             fun build(): ContentDelivery = ContentDelivery(
                 url = fullUrl ?: combineUrlParts(baseUrl, id),
-                json = json,
+                format = format,
             )
         }
 
         companion object {
             const val DEFAULT_BASE_URL = "https://cdn.tolg.ee/"
-
-            internal val defaultJson = Json {
-                isLenient = true
-                ignoreUnknownKeys = true
-            }
         }
     }
 
@@ -329,11 +359,118 @@ data class I18N internal constructor(
         companion object
     }
 
+    @ConsistentCopyVisibility
+    data class Config internal constructor(
+        internal val json: Json,
+        internal val client: HttpClient?,
+        internal val networkDispatcher: CoroutineContext,
+    ) {
+
+        class Builder {
+            private var json: Json = defaultJson
+            private var client: HttpClient? = null
+            private var networkContext: CoroutineContext = I18N.networkDispatcher
+
+            fun json(value: Json) = apply {
+                this.json = value
+            }
+
+            fun json(from: Json = defaultJson, builderAction: JsonBuilder.() -> Unit) = apply {
+                json(Json(from, builderAction))
+            }
+
+            /**
+             * [HttpClient] used for every network request.
+             *
+             * @param value the Http client to be used.
+             * @return the updated [Builder] instance.
+             */
+            fun client(value: HttpClient) = apply {
+                this.client = value
+            }
+
+            /**
+             * Build [HttpClient] by passing an [HttpClientEngine].
+             *
+             * @param engine the engine used for the [HttpClient].
+             * @see [client]
+             * @return the updated [Builder] instance.
+             */
+            fun client(engine: HttpClientEngine) = client(HttpClient(engine))
+
+            /**
+             * Build [HttpClient] by passing an [HttpClientEngineFactory].
+             *
+             * @param engineFactory the engine factory used for the [HttpClient].
+             * @see [client]
+             * @return the updated [Builder] instance.
+             */
+            fun <T : HttpClientEngineConfig> client(engineFactory: HttpClientEngineFactory<T>) = client(HttpClient(engineFactory))
+
+            /**
+             * Build [HttpClient] by passing an [HttpClientConfig].
+             *
+             * @param config the config used for the [HttpClient].
+             * @see [client]
+             * @return the updated [Builder] instance.
+             */
+            fun client(config: HttpClientConfig<*>.() -> Unit) = client(HttpClient(config))
+
+            /**
+             * Build and configure a [HttpClient].
+             *
+             * @param engine the engine used for the [HttpClient].
+             * @param config the configuration used for the [HttpClient].
+             * @see [client]
+             * @return the updated [Builder] instance.
+             */
+            fun client(
+                engine: HttpClientEngine,
+                config: HttpClientConfig<*>.() -> Unit
+            ) = client(HttpClient(engine, config))
+
+            /**
+             * Build and configure a [HttpClient].
+             *
+             * @param engineFactory the engine factory used for the [HttpClient].
+             * @param config the configuration used for the [HttpClient].
+             * @see [client]
+             * @return the updated [Builder] instance.
+             */
+            fun <T : HttpClientEngineConfig> client(
+                engineFactory: HttpClientEngineFactory<T>,
+                config: HttpClientConfig<T>.() -> Unit
+            ) = client(HttpClient(engineFactory, config))
+
+            /**
+             * [CoroutineDispatcher] used for every network request.
+             *
+             * @param value the [CoroutineDispatcher] used for network requests.
+             * @return the updated [Builder] instance.
+             */
+            fun networkContext(value: CoroutineContext) = apply {
+                this.networkContext = value
+            }
+
+            fun build() = Config(
+                json = json,
+                client = client,
+                networkDispatcher = networkContext
+            )
+        }
+
+        companion object {
+            internal val defaultJson = Json {
+                isLenient = true
+                ignoreUnknownKeys = true
+            }
+        }
+    }
+
     class Builder {
         private var contentDelivery: ContentDelivery? = null
         private var locale: Locale? = I18N.defaultLocale
-        private var client: HttpClient? = null
-        private var networkContext: CoroutineContext = I18N.networkDispatcher
+        private var config: Config? = null
         private var translationCache: ImmutableMap<String, String>? = null
 
         /**
@@ -391,79 +528,6 @@ data class I18N internal constructor(
         }
 
         /**
-         * [HttpClient] used for every network request.
-         *
-         * @param value the Http client to be used.
-         * @return the updated [Builder] instance.
-         */
-        fun client(value: HttpClient) = apply {
-            this.client = value
-        }
-
-        /**
-         * Build [HttpClient] by passing an [HttpClientEngine].
-         *
-         * @param engine the engine used for the [HttpClient].
-         * @see [client]
-         * @return the updated [Builder] instance.
-         */
-        fun client(engine: HttpClientEngine) = client(HttpClient(engine))
-
-        /**
-         * Build [HttpClient] by passing an [HttpClientEngineFactory].
-         *
-         * @param engineFactory the engine factory used for the [HttpClient].
-         * @see [client]
-         * @return the updated [Builder] instance.
-         */
-        fun <T : HttpClientEngineConfig> client(engineFactory: HttpClientEngineFactory<T>) = client(HttpClient(engineFactory))
-
-        /**
-         * Build [HttpClient] by passing an [HttpClientConfig].
-         *
-         * @param config the config used for the [HttpClient].
-         * @see [client]
-         * @return the updated [Builder] instance.
-         */
-        fun client(config: HttpClientConfig<*>.() -> Unit) = client(HttpClient(config))
-
-        /**
-         * Build and configure a [HttpClient].
-         *
-         * @param engine the engine used for the [HttpClient].
-         * @param config the configuration used for the [HttpClient].
-         * @see [client]
-         * @return the updated [Builder] instance.
-         */
-        fun client(
-            engine: HttpClientEngine,
-            config: HttpClientConfig<*>.() -> Unit
-        ) = client(HttpClient(engine, config))
-
-        /**
-         * Build and configure a [HttpClient].
-         *
-         * @param engineFactory the engine factory used for the [HttpClient].
-         * @param config the configuration used for the [HttpClient].
-         * @see [client]
-         * @return the updated [Builder] instance.
-         */
-        fun <T : HttpClientEngineConfig> client(
-            engineFactory: HttpClientEngineFactory<T>,
-            config: HttpClientConfig<T>.() -> Unit
-        ) = client(HttpClient(engineFactory, config))
-
-        /**
-         * [CoroutineDispatcher] used for every network request.
-         *
-         * @param value the [CoroutineDispatcher] used for network requests.
-         * @return the updated [Builder] instance.
-         */
-        fun networkContext(value: CoroutineContext) = apply {
-            this.networkContext = value
-        }
-
-        /**
          * The initial translation cache.
          *
          * If you fetched some translations before, you can load them into the cache here.
@@ -475,13 +539,41 @@ data class I18N internal constructor(
             this.translationCache = value.toImmutableMap()
         }
 
+        fun config(value: Config) = apply {
+            this.config = value
+        }
+
+        fun config(block: Config.Builder.() -> Unit) = apply {
+            config(Config.Builder().apply(block).build())
+        }
+
         fun build(): I18N = I18N(
             contentDelivery = contentDelivery,
             locale = locale,
-            client = client,
-            networkDispatcher = networkDispatcher,
+            config = config,
             initialTranslationCache = translationCache
         )
+    }
+
+    sealed interface Format {
+
+        fun format(value: String, vararg args: Any): String
+
+        data object Default : Format {
+            override fun format(value: String, vararg args: Any): String {
+                return value.sprintf(*args)
+            }
+        }
+
+        data class Kormatter(private val instance: Formatter = DefaultFormatter) : Format {
+            override fun format(value: String, vararg args: Any): String {
+                return value.kormat(instance, *args)
+            }
+        }
+
+        interface Custom : Format
+
+        companion object
     }
 
     companion object {

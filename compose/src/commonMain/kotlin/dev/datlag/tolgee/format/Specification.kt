@@ -5,10 +5,18 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal sealed interface Positioning {
+
+    @Serializable
     data object Left : Positioning
+
+    @Serializable
     data object Right : Positioning
+
+    @Serializable
     data object Center : Positioning
 }
 
@@ -312,9 +320,16 @@ internal data class Specification(
 
     private fun scientificFormat(value: Double, width: Int, fractionPartLength: Int = -1) = ExponentFormatter(value).scientific(width, fractionPartLength)
 
+    @Serializable
     sealed interface Stage {
+
+        @Serializable
         data object Flags : Stage
+
+        @Serializable
         data object Length : Stage
+
+        @Serializable
         data object Fraction : Stage
     }
 }

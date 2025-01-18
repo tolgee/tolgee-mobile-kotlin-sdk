@@ -6,7 +6,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import dev.datlag.tolgee.I18N.ContentDelivery
-import dev.datlag.tolgee.format.sprintf
 import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.async.suspendCatching
 import kotlinx.coroutines.CoroutineDispatcher
@@ -55,13 +54,13 @@ fun I18N.stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
 
     return produceState<String>(
         scopeCatching {
-            key?.let(::getTranslation)?.sprintf(*formatArgs)
+            key?.let(::getTranslation)?.contentDeliveryFormat(*formatArgs)
         }.getOrNull() ?: androidx.compose.ui.res.stringResource(id, *formatArgs)
     ) {
         value = suspendCatching {
-            key?.let { translation(it) }?.sprintf(*formatArgs)
+            key?.let { translation(it) }?.contentDeliveryFormat(*formatArgs)
         }.getOrNull() ?: suspendCatching {
-            key?.let(::getTranslation)?.sprintf(*formatArgs)
+            key?.let(::getTranslation)?.contentDeliveryFormat(*formatArgs)
         }.getOrNull() ?: value
     }.value
 }
