@@ -12,6 +12,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
@@ -29,7 +30,11 @@ open class PullTranslationTask : DefaultTask() {
 
     @get:Optional
     @get:Input
-    open val languages: ListProperty<String> = project.objects.listProperty(String::class.java)
+    open val languages: SetProperty<String> = project.objects.setProperty(String::class.java)
+
+    @get:Optional
+    @get:Input
+    open val filterState: SetProperty<TolgeePluginExtension.FilterState> = project.objects.setProperty(TolgeePluginExtension.FilterState::class.java)
 
     @get:Input
     open val apiKey: Property<String> = project.objects.property(String::class.java)
@@ -47,6 +52,7 @@ open class PullTranslationTask : DefaultTask() {
         val id = projectId.orNull?.ifBlank { null } ?: return
         val key = apiKey.orNull?.ifBlank { null } ?: return
         val lang = languages.orNull?.mapNotNull { it?.ifBlank { null } }?.ifEmpty { null }
+        val filter = filterState.orNull?.mapNotNull { it?.value }?.ifEmpty { null }
         val ktor = ktorfit {
             baseUrl(baseUrl.getOrElse(TolgeePluginExtension.DEFAULT_URL))
             httpClient(OkHttp) {
@@ -62,6 +68,7 @@ open class PullTranslationTask : DefaultTask() {
                 id = id,
                 format = "COMPOSE_XML",
                 languages = lang,
+                filterState = filter,
                 zip = true
             )
 
@@ -96,6 +103,7 @@ open class PullTranslationTask : DefaultTask() {
         baseUrl.set(extension.baseUrl)
         projectId.set(extension.projectId)
         languages.set(extension.languages)
+        filterState.set(extension.filterState)
         apiKey.set(extension.apiKey)
     }
 

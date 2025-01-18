@@ -14,6 +14,7 @@ interface Tolgee {
         @Path("id") id: String,
         @Query("format") format: String,
         @Query("languages") languages: List<String>?,
+        @Query("filterState") filterState: List<String>?,
         @Query("zip") zip: Boolean
     ): HttpResponse
 }

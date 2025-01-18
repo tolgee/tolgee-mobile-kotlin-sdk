@@ -11,5 +11,5 @@ plugins {
 }
 
 dependencies {
-    dokka(project(":tolgee-compose"))
+    dokka(project(":compose"))
 }

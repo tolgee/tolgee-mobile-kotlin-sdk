@@ -8,6 +8,7 @@ compose = "1.7.3"
 datetime = "0.6.1"
 dokka = "2.0.0"
 immutable = "0.3.8"
+kodein = "7.24.1"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 ktor = "3.0.3"
@@ -20,6 +21,7 @@ tooling = "1.7.0"
 [libraries]
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
+kodein-compose = { group = "org.kodein.di", name = "kodein-di-framework-compose", version.ref = "kodein" }
 kotlin-gradle-plugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
