@@ -1,5 +1,5 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
-module:tolgee-compose
+module:compose
 dev.datlag.tolgee
