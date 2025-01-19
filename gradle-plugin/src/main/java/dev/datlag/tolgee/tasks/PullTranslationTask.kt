@@ -21,6 +21,7 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.support.unzipTo
@@ -49,7 +50,8 @@ open class PullTranslationTask : DefaultTask() {
     @get:Input
     open val androidOnly: Property<Boolean> = project.objects.property(Boolean::class.java)
 
-    @get:Input
+    @get:Optional
+    @get:InputDirectory
     open val androidResources: DirectoryProperty = project.objects.directoryProperty()
 
     @get:Inject
