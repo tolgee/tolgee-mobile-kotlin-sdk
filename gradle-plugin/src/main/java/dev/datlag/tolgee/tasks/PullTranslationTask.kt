@@ -97,6 +97,10 @@ open class PullTranslationTask : DefaultTask() {
 
                 val outputFile = File(outputDirFile, "translation.zip")
 
+                scopeCatching {
+                    outputFile.deleteSafely()
+                }
+
                 suspendCatching {
                     outputFile.writeBytes(response.readRawBytes())
                 }.onFailure {

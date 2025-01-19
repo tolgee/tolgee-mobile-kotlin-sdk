@@ -69,22 +69,32 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
 
         object Untranslated : FilterState {
             override val value: String = "UNTRANSLATED"
+
+            override fun toString(): String = value
         }
 
         object Translated : FilterState {
             override val value: String = "TRANSLATED"
+
+            override fun toString(): String = value
         }
 
         object Reviewed : FilterState {
             override val value: String = "REVIEWED"
+
+            override fun toString(): String = value
         }
 
         object Disabled : FilterState {
             override val value: String = "DISABLED"
+
+            override fun toString(): String = value
         }
 
         @JvmInline
-        value class Custom(override val value: String) : FilterState
+        value class Custom(override val value: String) : FilterState {
+            override fun toString(): String = value
+        }
     }
 
     @JvmDefaultWithCompatibility
@@ -104,18 +114,26 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
 
         object ComposeXML : PullType {
             override val value: String = "COMPOSE_XML"
+
+            override fun toString(): String = value
         }
 
         object AndroidXML : PullType {
             override val value: String = "ANDROID_XML"
+
+            override fun toString(): String = value
         }
 
         object Po : PullType {
             override val value: String = "PO"
+
+            override fun toString(): String = value
         }
 
         @JvmInline
-        value class Custom(override val value: String) : PullType
+        value class Custom(override val value: String) : PullType {
+            override fun toString(): String = value
+        }
     }
 
     companion object {
