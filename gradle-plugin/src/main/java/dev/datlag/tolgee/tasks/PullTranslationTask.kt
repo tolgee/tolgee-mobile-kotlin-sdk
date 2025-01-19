@@ -2,6 +2,7 @@ package dev.datlag.tolgee.tasks
 
 import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.TolgeePluginExtension
+import dev.datlag.tolgee.TolgeePluginExtension.Companion.COMMON_RESOURCES_PATH
 import dev.datlag.tolgee.api.createTolgee
 import dev.datlag.tolgee.common.androidResources
 import dev.datlag.tolgee.common.isAndroidOnly
@@ -48,11 +49,11 @@ open class PullTranslationTask : DefaultTask() {
     open val apiKey: Property<String> = project.objects.property(String::class.java)
 
     @get:Input
-    open val androidOnly: Property<Boolean> = project.objects.property(Boolean::class.java)
+    open val type: Property<TolgeePluginExtension.PullType> = project.objects.property(TolgeePluginExtension.PullType::class.java)
 
     @get:Optional
     @get:InputDirectory
-    open val androidResources: DirectoryProperty = project.objects.directoryProperty()
+    open val destination: DirectoryProperty = project.objects.directoryProperty()
 
     @get:Inject
     open val projectLayout = project.layout
@@ -76,14 +77,13 @@ open class PullTranslationTask : DefaultTask() {
         }
         val tolgee = ktor.createTolgee()
         val outputDir = projectLayout.buildDirectory.dir("tolgee")
-        val isAndroidOnly = androidOnly.getOrElse(false)
-        val androidResourcesPath = androidResources.orNull?.asFile
+        val format = type.getOrElse(TolgeePluginExtension.PullType.ComposeXML)
 
         runBlocking {
             val response = tolgee.export(
                 apiKey = key,
                 id = id,
-                format = if (isAndroidOnly && androidResourcesPath != null) "ANDROID_XML" else "COMPOSE_XML",
+                format = format.value,
                 languages = lang,
                 filterState = filter,
                 zip = true
@@ -104,7 +104,7 @@ open class PullTranslationTask : DefaultTask() {
                     return@runBlocking
                 }
 
-                val composeResDir = androidResourcesPath ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
+                val composeResDir = destination.orNull?.asFile ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
                 scopeCatching {
                     composeResDir.mkdirsSafely()
                 }
@@ -126,24 +126,11 @@ open class PullTranslationTask : DefaultTask() {
         languages.set(extension.languages)
         filterState.set(extension.filterState)
         apiKey.set(extension.apiKey)
-
-        androidOnly.set(project.provider {
-            project.isAndroidOnly
-        })
-        androidResources.set(project.provider {
-            if (project.layout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile.existsSafely()) {
-                null
-            } else {
-                project.androidResources.firstOrNull()?.let {
-                    project.layout.projectDirectory.dir(it.path)
-                }
-            }
-        })
+        type.set(extension.pullType)
+        destination.set(extension.pullDestination)
     }
 
     companion object {
         internal const val NAME = "pullTranslation"
-
-        private const val COMMON_RESOURCES_PATH = "src/commonMain/composeResources"
     }
 }
