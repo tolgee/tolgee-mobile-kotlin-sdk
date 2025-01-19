@@ -21,23 +21,23 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
 
     open val filterState: SetProperty<FilterState> = objectFactory.setProperty(FilterState::class.java)
 
-    open val pullType: Property<PullType> = objectFactory.property(PullType::class.java)
+    open val type: Property<PullType> = objectFactory.property(PullType::class.java)
 
-    open val pullDestination: DirectoryProperty = objectFactory.directoryProperty()
+    open val destination: DirectoryProperty = objectFactory.directoryProperty()
 
     fun setupConvention(project: Project) {
         baseUrl.convention(DEFAULT_URL)
         apiKey.convention(project.provider {
             project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
         })
-        pullType.convention(project.provider {
+        type.convention(project.provider {
             if (project.isAndroidOnly) {
                 PullType.AndroidXML
             } else {
                 PullType.ComposeXML
             }
         })
-        pullDestination.convention(pullType.map {
+        destination.convention(type.map {
             when (it) {
                 is PullType.ComposeXML -> project.layout.projectDirectory.dir(COMMON_RESOURCES_PATH)
                 is PullType.AndroidXML -> project.androidResources.firstOrNull()?.let { res ->
@@ -66,6 +66,9 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         object Disabled : FilterState {
             override val value: String = "DISABLED"
         }
+
+        @JvmInline
+        value class Custom(override val value: String) : FilterState
     }
 
     sealed interface PullType {
@@ -83,7 +86,8 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
             override val value: String = "PO"
         }
 
-        data class Custom(override val value: String) : PullType
+        @JvmInline
+        value class Custom(override val value: String) : PullType
     }
 
     companion object {

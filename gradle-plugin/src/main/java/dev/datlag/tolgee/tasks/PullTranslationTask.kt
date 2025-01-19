@@ -126,8 +126,8 @@ open class PullTranslationTask : DefaultTask() {
         languages.set(extension.languages)
         filterState.set(extension.filterState)
         apiKey.set(extension.apiKey)
-        type.set(extension.pullType)
-        destination.set(extension.pullDestination)
+        type.set(extension.type)
+        destination.set(extension.destination)
     }
 
     companion object {
