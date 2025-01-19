@@ -91,15 +91,10 @@ open class PullTranslationTask : DefaultTask() {
 
             if (response.status.isSuccess()) {
                 val outputDirFile = outputDir.get().asFile
-                scopeCatching {
-                    outputDirFile.mkdirsSafely()
-                }
+                outputDirFile.mkdirsSafely()
 
                 val outputFile = File(outputDirFile, "translation.zip")
-
-                scopeCatching {
-                    outputFile.deleteSafely()
-                }
+                outputFile.deleteSafely()
 
                 suspendCatching {
                     outputFile.writeBytes(response.readRawBytes())
@@ -109,15 +104,10 @@ open class PullTranslationTask : DefaultTask() {
                 }
 
                 val composeResDir = destination.orNull?.asFile ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
-                scopeCatching {
-                    composeResDir.mkdirsSafely()
-                }
 
+                composeResDir.mkdirsSafely()
                 unzipTo(composeResDir, outputFile)
-
-                scopeCatching {
-                    outputFile.deleteSafely()
-                }
+                outputFile.deleteSafely()
             } else {
                 logger.warn("Translation zip could not be downloaded")
             }
