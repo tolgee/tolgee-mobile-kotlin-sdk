@@ -13,7 +13,7 @@ plugins {
 
 val libGroup = "dev.datlag.tolgee"
 val libName = "gradle-plugin"
-val libVersion = "0.1.5"
+val libVersion = "1.0.0"
 
 group = libGroup
 version = libVersion

@@ -15,8 +15,8 @@ plugins {
 }
 
 val libGroup = "dev.datlag.tolgee"
-val libName = "tolgee-compose"
-val libVersion = "0.1.5"
+val libName = "compose"
+val libVersion = "1.0.0"
 
 group = libGroup
 version = libVersion

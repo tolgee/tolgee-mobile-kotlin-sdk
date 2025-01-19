@@ -3,11 +3,14 @@ package dev.datlag.tolgee
 import dev.datlag.tolgee.common.androidResources
 import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tooling.existsSafely
+import dev.datlag.tooling.scopeCatching
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
+import java.io.File
+import java.util.Properties
 import javax.inject.Inject
 
 open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactory) {
@@ -27,10 +30,38 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
     open val destination: DirectoryProperty = objectFactory.directoryProperty()
 
     fun setupConvention(project: Project) {
+        fun loadProperties(file: File): Properties? {
+            val stream = scopeCatching {
+                file.inputStream()
+            }.getOrNull() ?: return null
+
+            return scopeCatching {
+                stream.use { stream ->
+                    Properties().apply { load(stream) }
+                }
+            }.getOrNull().also {
+                scopeCatching {
+                    stream.close()
+                }
+            }
+        }
+
         baseUrl.convention(DEFAULT_URL)
         apiKey.convention(project.provider {
             project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
                 ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }
+                ?: run {
+                    val projectLocal = project.layout.projectDirectory.file("local.properties").asFile
+                    val rootLocal = project.rootProject.layout.projectDirectory.file("local.properties").asFile
+
+                    loadProperties(projectLocal)?.let { props ->
+                        props.getProperty("tolgee.apikey")?.ifBlank { null }
+                            ?: props.getProperty("tolgee.apiKey")?.ifBlank { null }
+                    } ?: loadProperties(rootLocal)?.let { props ->
+                        props.getProperty("tolgee.apikey")?.ifBlank { null }
+                            ?: props.getProperty("tolgee.apiKey")?.ifBlank { null }
+                    }
+                }
         })
         type.convention(project.provider {
             if (project.isAndroidOnly) {
