@@ -2,6 +2,7 @@ package dev.datlag.tolgee
 
 import dev.datlag.tolgee.common.androidResources
 import dev.datlag.tolgee.common.isAndroidOnly
+import dev.datlag.tooling.existsSafely
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
@@ -29,6 +30,7 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         baseUrl.convention(DEFAULT_URL)
         apiKey.convention(project.provider {
             project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
+                ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }
         })
         type.convention(project.provider {
             if (project.isAndroidOnly) {
@@ -40,7 +42,9 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         destination.convention(type.map {
             when (it) {
                 is PullType.ComposeXML -> project.layout.projectDirectory.dir(COMMON_RESOURCES_PATH)
-                is PullType.AndroidXML -> project.androidResources.firstOrNull()?.let { res ->
+                is PullType.AndroidXML -> project.androidResources.filter { res ->
+                    res.existsSafely()
+                }.ifEmpty { project.androidResources }.firstOrNull()?.let { res ->
                     project.layout.projectDirectory.dir(res.path)
                 }
                 else -> null
@@ -48,8 +52,20 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         })
     }
 
-    sealed interface FilterState {
+    @JvmDefaultWithCompatibility
+    sealed interface FilterState : CharSequence {
         val value: String
+
+        override val length: Int
+            get() = value.length
+
+        override operator fun get(index: Int): Char {
+            return value[index]
+        }
+
+        override fun subSequence(startIndex: Int, endIndex: Int): CharSequence {
+            return value.subSequence(startIndex, endIndex)
+        }
 
         object Untranslated : FilterState {
             override val value: String = "UNTRANSLATED"
@@ -71,8 +87,20 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         value class Custom(override val value: String) : FilterState
     }
 
-    sealed interface PullType {
+    @JvmDefaultWithCompatibility
+    sealed interface PullType : CharSequence {
         val value: String
+
+        override val length: Int
+            get() = value.length
+
+        override operator fun get(index: Int): Char {
+            return value[index]
+        }
+
+        override fun subSequence(startIndex: Int, endIndex: Int): CharSequence {
+            return value.subSequence(startIndex, endIndex)
+        }
 
         object ComposeXML : PullType {
             override val value: String = "COMPOSE_XML"

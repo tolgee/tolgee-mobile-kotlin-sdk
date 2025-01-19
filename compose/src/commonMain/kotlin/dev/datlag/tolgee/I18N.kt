@@ -61,6 +61,13 @@ data class I18N internal constructor(
      */
     operator fun get(key: StringResource) = getTranslation(key.key)
 
+    /**
+     * Retrieve the current translation cache.
+     *
+     * May be empty if content delivery was not fetched yet and no initial cache present.
+     */
+    fun getTranslationCache(): ImmutableMap<String, String> = translationCache
+
     private suspend fun fetchTranslation(): Map<String, String>? = fetchTranslationMutex.withLock {
         if (!fetchRequired && translationCache.isNotEmpty()) {
             return@withLock null
@@ -76,7 +83,7 @@ data class I18N internal constructor(
     internal suspend fun translation(key: String): String? = withContext(networkDispatcher) {
         suspendCatching {
             fetchTranslation()
-        }.getOrNull()?.ifEmpty { initialTranslationCache }?.let {
+        }.getOrNull()?.ifEmpty { this@I18N.translationCache }?.let {
             this@I18N.translationCache = it.toImmutableMap()
             this@I18N.fetchRequired = false
         }
@@ -85,6 +92,15 @@ data class I18N internal constructor(
     }
 
     internal suspend fun translation(key: StringResource): String? = translation(key.key)
+
+    /**
+     * Fetches new translations without clearing previous cache.
+     *
+     * @see resetTranslationCache
+     */
+    fun fetchTranslationOnDemand() {
+        this.fetchRequired = true
+    }
 
     /**
      * Reset translation cache to your initial value.
@@ -211,7 +227,7 @@ data class I18N internal constructor(
         class Builder {
             private var fullUrl: String? = null
             private var baseUrl: String = DEFAULT_BASE_URL
-            private lateinit var id: String
+            private var id: String? = null
             private var format: Format = Format.Default
 
             /**
@@ -245,7 +261,7 @@ data class I18N internal constructor(
              * @param value the url.
              * @return the updated [Builder] instance.
              */
-            fun id(value: String) = apply {
+            fun id(value: String?) = apply {
                 this.id = value
             }
 
@@ -281,10 +297,12 @@ data class I18N internal constructor(
                 this.format = Format.Kormatter(FormatterBuilder().apply(builder).createFormatter())
             }
 
-            fun build(): ContentDelivery = ContentDelivery(
-                url = fullUrl ?: combineUrlParts(baseUrl, id),
-                format = format,
-            )
+            fun build(): ContentDelivery? = (fullUrl ?: id?.let { combineUrlParts(baseUrl, it) })?.let {
+                ContentDelivery(
+                    url = it,
+                    format = format,
+                )
+            }
         }
 
         companion object {
@@ -375,6 +393,7 @@ data class I18N internal constructor(
                 this.json = value
             }
 
+            @JvmOverloads
             fun json(from: Json = defaultJson, builderAction: JsonBuilder.() -> Unit) = apply {
                 json(Json(from, builderAction))
             }
@@ -492,7 +511,7 @@ data class I18N internal constructor(
          * @return the updated [Builder] instance.
          */
         fun contentDelivery(block: ContentDelivery.Builder.() -> Unit) = apply {
-            contentDelivery(ContentDelivery.Builder().apply(block).build())
+            ContentDelivery.Builder().apply(block).build()?.let { contentDelivery(it) }
         }
 
         /**
@@ -504,7 +523,7 @@ data class I18N internal constructor(
          */
         @JvmOverloads
         fun contentDelivery(url: String, block: ContentDelivery.Builder.() -> Unit = { }) = apply {
-            contentDelivery(ContentDelivery.Builder().url(url).apply(block).build())
+            ContentDelivery.Builder().url(url).apply(block).build()?.let { contentDelivery(it) }
         }
 
         /**
@@ -565,7 +584,7 @@ data class I18N internal constructor(
             }
         }
 
-        data class Kormatter(private val instance: Formatter = DefaultFormatter) : Format {
+        data class Kormatter @JvmOverloads constructor(private val instance: Formatter = DefaultFormatter) : Format {
             override fun format(value: String, vararg args: Any): String {
                 return value.kormat(instance, *args)
             }
