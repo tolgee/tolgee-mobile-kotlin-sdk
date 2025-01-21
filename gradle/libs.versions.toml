@@ -9,12 +9,14 @@ datetime = "0.6.1"
 dokka = "2.0.0"
 immutable = "0.3.8"
 kodein = "7.24.1"
+kommand = "2.3.0"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 ktor = "3.0.3"
 ktorfit = "2.2.0"
 locale = "0.8.0"
 publish = "0.30.0"
+semver = "2.0.0"
 serialization = "1.7.3"
 tooling = "1.7.0"
 
@@ -23,12 +25,14 @@ android = { group = "com.android.tools.build", name = "gradle", version.ref = "a
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
 kodein-compose = { group = "org.kodein.di", name = "kodein-di-framework-compose", version.ref = "kodein" }
+kommand = { group = "com.kgit2", name = "kommand", version.ref = "kommand" }
 kotlin-gradle-plugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfit" }
 locale = { group = "com.vanniktech", name = "multiplatform-locale", version.ref = "locale" }
+semver = { group = "io.github.z4kn4fein", name = "semver", version.ref = "semver" }
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }

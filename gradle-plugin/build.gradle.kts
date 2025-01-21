@@ -20,11 +20,14 @@ version = libVersion
 
 dependencies {
     implementation(kotlin("gradle-plugin"))
+    testImplementation(kotlin("test"))
     implementation(libs.kotlin.gradle.plugin.api)
     implementation(libs.android)
 
+    implementation(libs.kommand)
     implementation(libs.ktor.okhttp)
     implementation(libs.ktorfit)
+    implementation(libs.semver)
     implementation(libs.tooling)
 }
 

@@ -4,6 +4,7 @@ import dev.datlag.tolgee.common.androidResources
 import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tooling.existsSafely
 import dev.datlag.tooling.scopeCatching
+import dev.datlag.tooling.systemEnv
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
@@ -50,6 +51,7 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         apiKey.convention(project.provider {
             project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
                 ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }
+                ?: systemEnv("TOLGEE_API_KEY")?.ifBlank { null }
                 ?: run {
                     val projectLocal = project.layout.projectDirectory.file("local.properties").asFile
                     val rootLocal = project.rootProject.layout.projectDirectory.file("local.properties").asFile
