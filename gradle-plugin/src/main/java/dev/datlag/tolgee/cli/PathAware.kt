@@ -1,9 +1,7 @@
 package dev.datlag.tolgee.cli
 
 import dev.datlag.tooling.Platform
-import dev.datlag.tooling.scopeCatching
 import dev.datlag.tooling.systemEnv
-import java.io.File
 
 open class PathAware {
 
@@ -25,12 +23,6 @@ open class PathAware {
             existing == path || existing == path.let { p -> if (p.endsWith("/")) p else "$p/" }
         }
     }
-
-    fun fullFilePath(file: File): String? = scopeCatching {
-        file.canonicalPath
-    }.getOrNull()?.ifBlank { null } ?: scopeCatching {
-        file.absolutePath
-    }.getOrNull()?.ifBlank { null }
 
     companion object {
         private const val PATH_ENV = "PATH"

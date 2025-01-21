@@ -7,7 +7,7 @@ import io.github.z4kn4fein.semver.toVersion
 import io.github.z4kn4fein.semver.toVersionOrNull
 import java.io.File
 
-object TolgeeCLI : NPM() {
+object TolgeeCLI : Node() {
 
     private const val app = "tolgee"
 
@@ -17,7 +17,7 @@ object TolgeeCLI : NPM() {
     }
 
     fun version(): Version? = scopeCatching {
-        NPMCommand(app)
+        NodeCommand(app)
             .arg("--version")
             .output()
             .stdout
@@ -41,7 +41,7 @@ object TolgeeCLI : NPM() {
         languages: Set<String>,
         states: Set<String>,
     ): Boolean = installed && scopeCatching {
-        NPMCommand(app)
+        NodeCommand(app)
             .arg("pull")
             .apply {
                 if (!apiKey.isNullOrBlank()) {
