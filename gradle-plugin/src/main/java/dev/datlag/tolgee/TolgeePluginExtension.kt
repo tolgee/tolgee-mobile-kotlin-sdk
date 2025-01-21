@@ -51,6 +51,7 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         apiKey.convention(project.provider {
             project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
                 ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }
+                ?: project.findProperty("tolgee.api-key")?.toString()?.ifBlank { null }
                 ?: systemEnv("TOLGEE_API_KEY")?.ifBlank { null }
                 ?: run {
                     val projectLocal = project.layout.projectDirectory.file("local.properties").asFile
@@ -59,9 +60,11 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
                     loadProperties(projectLocal)?.let { props ->
                         props.getProperty("tolgee.apikey")?.ifBlank { null }
                             ?: props.getProperty("tolgee.apiKey")?.ifBlank { null }
+                            ?: props.getProperty("tolgee.api-key")?.ifBlank { null }
                     } ?: loadProperties(rootLocal)?.let { props ->
                         props.getProperty("tolgee.apikey")?.ifBlank { null }
                             ?: props.getProperty("tolgee.apiKey")?.ifBlank { null }
+                            ?: props.getProperty("tolgee.api-key")?.ifBlank { null }
                     }
                 }
         })

@@ -9,14 +9,27 @@ import java.io.File
 
 open class Node : PathAware() {
 
+    /**
+     * Sorted whether they are in system PATH.
+     * If in system PATH they're probably preferred and used method.
+     */
+    private val packageManagers = setOf(
+        NPM,
+        Yarn,
+        PNPM
+    ).sortedByDescending {it.globalPathInSystemPath }
+
     protected fun NodeCommand(name: String): Command {
-        val resolved = NPM.executable(name) ?: Yarn.executable(name) ?: PNPM.executable(name)
+        val resolved = packageManagers.firstNotNullOfOrNull { it.executable(name) }
 
         return Command(resolved ?: name)
     }
 
-    interface PackageManager {
-        val globalPath: String?
+    abstract class PackageManager : PathAware() {
+        abstract val globalPath: String?
+        val globalPathInSystemPath: Boolean by lazy {
+            globalPath?.let { systemPathContains(it) } ?: false
+        }
 
         fun executable(name: String): String? {
             val packageFile = File(globalPath, name)
@@ -26,7 +39,7 @@ open class Node : PathAware() {
         }
     }
 
-    private object NPM : PathAware(), PackageManager {
+    private object NPM : PackageManager() {
         override val globalPath: String? by lazy {
             val prefix = scopeCatching {
                 Command("npm")
@@ -55,7 +68,7 @@ open class Node : PathAware() {
         }
     }
 
-    private object Yarn : PathAware(), PackageManager {
+    private object Yarn : PackageManager() {
         override val globalPath: String? by lazy {
             scopeCatching {
                 Command("yarn")
@@ -68,7 +81,7 @@ open class Node : PathAware() {
         }
     }
 
-    private object PNPM : PathAware(), PackageManager {
+    private object PNPM : PackageManager() {
         override val globalPath: String? by lazy {
             scopeCatching {
                 Command("pnpm")
