@@ -1,5 +1,6 @@
 package dev.datlag.tolgee
 
+import dev.datlag.tolgee.cli.PathAware
 import dev.datlag.tolgee.common.androidResources
 import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tooling.existsSafely
@@ -172,9 +173,11 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         }
     }
 
-    companion object {
+    companion object : PathAware() {
         internal const val DEFAULT_URL = "https://app.tolgee.io/v2/"
 
-        internal const val COMMON_RESOURCES_PATH = "src/commonMain/composeResources"
+        internal val COMMON_RESOURCES_PATH by lazy {
+            "src${filePathDelimiter}commonMain${filePathDelimiter}composeResources"
+        }
     }
 }

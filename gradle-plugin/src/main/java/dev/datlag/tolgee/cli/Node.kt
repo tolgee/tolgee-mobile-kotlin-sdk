@@ -64,7 +64,7 @@ open class Node : PathAware() {
                     .stdout
             }.getOrNull()?.ifBlank { null }
 
-            prefix?.trim()?.let { "$it/bin" } ?: scopeCatching {
+            prefix?.trim()?.let { "$it${filePathDelimiter}bin" } ?: scopeCatching {
                 Command("npm")
                     .args("bin", "--global")
                     .stdout(Stdio.Pipe)
