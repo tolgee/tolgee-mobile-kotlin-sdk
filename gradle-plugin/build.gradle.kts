@@ -6,6 +6,7 @@ plugins {
     id("java-gradle-plugin")
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.vanniktech.publish)
     `maven-publish`
     signing
@@ -16,6 +17,15 @@ val libName = "gradle-plugin"
 
 group = libGroup
 version = libVersion
+
+dokka {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(file("src"))
+            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/gradle-plugin/src")
+        }
+    }
+}
 
 dependencies {
     implementation(kotlin("gradle-plugin"))

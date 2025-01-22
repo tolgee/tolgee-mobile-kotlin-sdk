@@ -10,7 +10,7 @@ import io.github.z4kn4fein.semver.toVersion
 import io.github.z4kn4fein.semver.toVersionOrNull
 import java.io.File
 
-object TolgeeCLI : Node() {
+internal object TolgeeCLI : Node() {
 
     private const val app = "tolgee"
 

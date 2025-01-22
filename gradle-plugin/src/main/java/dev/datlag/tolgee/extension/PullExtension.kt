@@ -36,7 +36,7 @@ open class PullExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
         })
     }
 
-    companion object : PathAware() {
+    internal companion object : PathAware() {
         internal val COMMON_RESOURCES_PATH by lazy {
             "src${filePathDelimiter}commonMain${filePathDelimiter}composeResources"
         }

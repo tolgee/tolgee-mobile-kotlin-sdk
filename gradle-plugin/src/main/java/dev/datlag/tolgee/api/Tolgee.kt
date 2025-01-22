@@ -6,7 +6,7 @@ import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.statement.*
 
-interface Tolgee {
+internal interface Tolgee {
 
     @GET("projects/{projectId}/export")
     suspend fun export(

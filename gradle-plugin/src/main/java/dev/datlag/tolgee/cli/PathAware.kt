@@ -7,7 +7,7 @@ import dev.datlag.tooling.systemEnv
 import dev.datlag.tooling.systemProperty
 import java.io.File
 
-open class PathAware {
+internal open class PathAware {
 
     val systemPath: String? by lazy {
         systemEnv(PATH_ENV)?.trim()

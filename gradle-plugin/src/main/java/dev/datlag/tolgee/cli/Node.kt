@@ -7,7 +7,7 @@ import dev.datlag.tooling.getOriginalFile
 import dev.datlag.tooling.scopeCatching
 import java.io.File
 
-open class Node : PathAware() {
+internal open class Node : PathAware() {
 
     private val packageManagers = setOf(
         NPM,

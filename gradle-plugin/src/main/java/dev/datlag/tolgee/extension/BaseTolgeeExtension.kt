@@ -10,6 +10,21 @@ import org.gradle.api.provider.Property
 import java.io.File
 import java.util.*
 
+/**
+ * Base class for configuring global options for the Tolgee Gradle plugin.
+ *
+ * This class provides common configuration properties that can be shared across
+ * Gradle tasks or extensions inheriting from it. It allows setting up essential
+ * options for interacting with the Tolgee CLI or REST API.
+ *
+ * @property fallbackEnabled Determines whether the REST API is used as a fallback if the CLI fails.
+ *                           Default is `true`.
+ * @property apiUrl The base URL for the Tolgee API.
+ * @property projectId The unique identifier for the Tolgee project.
+ * @property apiKey The API key used to authenticate with Tolgee. The plugin will attempt to resolve
+ *                  this value using default properties or a system environment variable if not explicitly provided.
+ * @property format The format used by Tolgee for localization files. For example: `COMPOSE_XML` or `ANDROID_XML`.
+ */
 open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
 
     open val fallbackEnabled: Property<Boolean> = objectFactory.property(Boolean::class.java)
@@ -22,6 +37,15 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
 
     open val format: Property<Format> = objectFactory.property(Format::class.java)
 
+    /**
+     * Configures default values for the extensions properties by inheriting from another instance
+     * or reading available information from the Gradle project.
+     *
+     * @param project The Gradle [Project] instance used to extract information, such as properties
+     *                or environment variables, if no inheritance instance is provided.
+     * @param inherit An optional [BaseTolgeeExtension] instance from which default values can be inherited.
+     *                If `null`, defaults will be derived from the [project].
+     */
     @JvmOverloads
     open fun setupConvention(project: Project, inherit: BaseTolgeeExtension? = null) {
         if (inherit == null) {
