@@ -12,7 +12,7 @@ open class TolgeePlugin : Plugin<Project> {
         val extension = target.tolgeeExtension
 
         target.tasks.maybeCreate(PullTranslationTask.NAME, PullTranslationTask::class).also { task ->
-            task.apply(target, extension)
+            task.apply(target, extension.pull)
         }
     }
 }

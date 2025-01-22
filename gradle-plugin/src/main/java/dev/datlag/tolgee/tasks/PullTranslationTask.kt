@@ -4,9 +4,14 @@ import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.TolgeePluginExtension
 import dev.datlag.tolgee.TolgeePluginExtension.Companion.COMMON_RESOURCES_PATH
 import dev.datlag.tolgee.api.createTolgee
+import dev.datlag.tolgee.cli.TolgeeCLI
 import dev.datlag.tolgee.common.androidResources
 import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tolgee.common.tolgeeExtension
+import dev.datlag.tolgee.extension.BaseTolgeeExtension
+import dev.datlag.tolgee.extension.PullExtension
+import dev.datlag.tolgee.model.Format
+import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.async.suspendCatching
 import dev.datlag.tooling.deleteSafely
@@ -32,10 +37,21 @@ import javax.inject.Inject
 open class PullTranslationTask : DefaultTask() {
 
     @get:Input
-    open val baseUrl: Property<String> = project.objects.property(String::class.java)
+    open val apiUrl: Property<String> = project.objects.property(String::class.java)
 
     @get:Input
     open val projectId: Property<String> = project.objects.property(String::class.java)
+
+    @get:Optional
+    @get:Input
+    open val apiKey: Property<String> = project.objects.property(String::class.java)
+
+    @get:Input
+    open val format: Property<Format> = project.objects.property(Format::class.java)
+
+    @get:Optional
+    @get:InputDirectory
+    open val path: DirectoryProperty = project.objects.directoryProperty()
 
     @get:Optional
     @get:Input
@@ -43,17 +59,7 @@ open class PullTranslationTask : DefaultTask() {
 
     @get:Optional
     @get:Input
-    open val filterState: SetProperty<TolgeePluginExtension.FilterState> = project.objects.setProperty(TolgeePluginExtension.FilterState::class.java)
-
-    @get:Input
-    open val apiKey: Property<String> = project.objects.property(String::class.java)
-
-    @get:Input
-    open val type: Property<TolgeePluginExtension.PullType> = project.objects.property(TolgeePluginExtension.PullType::class.java)
-
-    @get:Optional
-    @get:InputDirectory
-    open val destination: DirectoryProperty = project.objects.directoryProperty()
+    open val states: SetProperty<State> = project.objects.setProperty(State::class.java)
 
     @get:Inject
     open val projectLayout = project.layout
@@ -65,19 +71,27 @@ open class PullTranslationTask : DefaultTask() {
 
     @TaskAction
     fun pull() {
-        val id = projectId.orNull?.ifBlank { null } ?: return
-        val key = apiKey.orNull?.ifBlank { null } ?: return
-        val lang = languages.orNull?.mapNotNull { it?.ifBlank { null } }?.ifEmpty { null }
-        val filter = filterState.orNull?.mapNotNull { it?.value }?.ifEmpty { null }
+        val apiUrl = apiUrl.getOrElse(BaseTolgeeExtension.DEFAULT_API_URL)
+        val projectId = projectId.orNull?.ifBlank { null } ?: return
+        val apiKey = apiKey.orNull?.ifBlank { null }
+        val format = format.getOrElse(Format.ComposeXML)
+        val path = path.orNull?.asFile ?: projectLayout.projectDirectory.dir(PullExtension.COMMON_RESOURCES_PATH).asFile
+        val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }?.ifEmpty { null }
+        val states = states.orNull?.mapNotNull { it?.value }?.ifEmpty { null }
+
+        if (TolgeeCLI.installed) {
+
+        } else {
+
+        }
         val ktor = ktorfit {
-            baseUrl(baseUrl.getOrElse(TolgeePluginExtension.DEFAULT_URL))
+            baseUrl(apiUrl)
             httpClient(OkHttp) {
                 followRedirects = true
             }
         }
         val tolgee = ktor.createTolgee()
         val outputDir = projectLayout.buildDirectory.dir("tolgee")
-        val format = type.getOrElse(TolgeePluginExtension.PullType.ComposeXML)
 
         runBlocking {
             val response = tolgee.export(
@@ -114,14 +128,29 @@ open class PullTranslationTask : DefaultTask() {
         }
     }
 
-    fun apply(project: Project, extension: TolgeePluginExtension = project.tolgeeExtension) {
-        baseUrl.set(extension.baseUrl)
+    private fun cliPulling(
+        apiUrl: String?,
+        projectId: String,
+        apiKey: String?,
+        format: Format
+    ) {
+        TolgeeCLI.pull(
+            apiKey = apiUrl,
+            projectId = projectId,
+            path = ,
+            format = format.value,
+            languages =
+        )
+    }
+
+    fun apply(project: Project, extension: PullExtension = project.tolgeeExtension.pull) {
+        apiUrl.set(extension.apiUrl)
         projectId.set(extension.projectId)
-        languages.set(extension.languages)
-        filterState.set(extension.filterState)
         apiKey.set(extension.apiKey)
-        type.set(extension.type)
-        destination.set(extension.destination)
+        format.set(extension.format)
+        languages.set(extension.languages)
+        states.set(extension.states)
+        path.set(extension.path)
     }
 
     companion object {

@@ -1,183 +1,67 @@
 package dev.datlag.tolgee
 
-import dev.datlag.tolgee.cli.PathAware
-import dev.datlag.tolgee.common.androidResources
-import dev.datlag.tolgee.common.isAndroidOnly
-import dev.datlag.tooling.existsSafely
-import dev.datlag.tooling.scopeCatching
-import dev.datlag.tooling.systemEnv
+import dev.datlag.tolgee.extension.BaseTolgeeExtension
+import dev.datlag.tolgee.extension.PullExtension
+import dev.datlag.tolgee.extension.PushExtension
+import groovy.lang.Closure
+import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
-import org.gradle.api.provider.SetProperty
-import java.io.File
-import java.util.Properties
+import org.gradle.internal.Actions
+import org.gradle.util.internal.ConfigureUtil
 import javax.inject.Inject
 
-open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactory) {
+open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactory) : BaseTolgeeExtension(objectFactory) {
 
-    open val baseUrl: Property<String> = objectFactory.property(String::class.java)
+    /**
+     * Configuration for handling pull action.
+     */
+    lateinit var pull: PullExtension
+        private set
 
-    open val projectId: Property<String> = objectFactory.property(String::class.java)
+    /**
+     * Configuration for handling push action.
+     */
+    lateinit var push: PushExtension
+        private set
 
-    open val apiKey: Property<String> = objectFactory.property(String::class.java)
-
-    open val languages: SetProperty<String> = objectFactory.setProperty(String::class.java)
-
-    open val filterState: SetProperty<FilterState> = objectFactory.setProperty(FilterState::class.java)
-
-    open val type: Property<PullType> = objectFactory.property(PullType::class.java)
-
-    open val destination: DirectoryProperty = objectFactory.directoryProperty()
-
-    fun setupConvention(project: Project) {
-        fun loadProperties(file: File): Properties? {
-            val stream = scopeCatching {
-                file.inputStream()
-            }.getOrNull() ?: return null
-
-            return scopeCatching {
-                stream.use { stream ->
-                    Properties().apply { load(stream) }
-                }
-            }.getOrNull().also {
-                scopeCatching {
-                    stream.close()
-                }
-            }
-        }
-
-        baseUrl.convention(DEFAULT_URL)
-        apiKey.convention(project.provider {
-            project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
-                ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }
-                ?: project.findProperty("tolgee.api-key")?.toString()?.ifBlank { null }
-                ?: systemEnv("TOLGEE_API_KEY")?.ifBlank { null }
-                ?: run {
-                    val projectLocal = project.layout.projectDirectory.file("local.properties").asFile
-                    val rootLocal = project.rootProject.layout.projectDirectory.file("local.properties").asFile
-
-                    loadProperties(projectLocal)?.let { props ->
-                        props.getProperty("tolgee.apikey")?.ifBlank { null }
-                            ?: props.getProperty("tolgee.apiKey")?.ifBlank { null }
-                            ?: props.getProperty("tolgee.api-key")?.ifBlank { null }
-                    } ?: loadProperties(rootLocal)?.let { props ->
-                        props.getProperty("tolgee.apikey")?.ifBlank { null }
-                            ?: props.getProperty("tolgee.apiKey")?.ifBlank { null }
-                            ?: props.getProperty("tolgee.api-key")?.ifBlank { null }
-                    }
-                }
-        })
-        type.convention(project.provider {
-            if (project.isAndroidOnly) {
-                PullType.AndroidXML
-            } else {
-                PullType.ComposeXML
-            }
-        })
-        destination.convention(type.map {
-            when (it) {
-                is PullType.ComposeXML -> project.layout.projectDirectory.dir(COMMON_RESOURCES_PATH)
-                is PullType.AndroidXML -> project.androidResources.filter { res ->
-                    res.existsSafely()
-                }.ifEmpty { project.androidResources }.firstOrNull()?.let { res ->
-                    project.layout.projectDirectory.dir(res.path)
-                }
-                else -> null
-            }
-        })
+    /**
+     * Change how the pull action is handled.
+     */
+    fun pull(closure: Closure<in PullExtension>): PullExtension {
+        return pull(ConfigureUtil.configureUsing(closure))
     }
 
-    @JvmDefaultWithCompatibility
-    sealed interface FilterState : CharSequence {
-        val value: String
+    /**
+     * Change how the pull action is handled.
+     */
+    fun pull(action: Action<in PullExtension>): PullExtension {
+        return Actions.with(pull, action)
+    }
 
-        override val length: Int
-            get() = value.length
+    /**
+     * Change how the push action is handled.
+     */
+    fun push(closure: Closure<in PushExtension>): PushExtension {
+        return push(ConfigureUtil.configureUsing(closure))
+    }
 
-        override operator fun get(index: Int): Char {
-            return value[index]
+    /**
+     * Change how the push action is handled.
+     */
+    fun push(action: Action<in PushExtension>): PushExtension {
+        return Actions.with(push, action)
+    }
+
+    override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
+        super.setupConvention(project, inherit)
+
+        pull = PullExtension(project.objects).also {
+            it.setupConvention(project, this)
         }
-
-        override fun subSequence(startIndex: Int, endIndex: Int): CharSequence {
-            return value.subSequence(startIndex, endIndex)
-        }
-
-        object Untranslated : FilterState {
-            override val value: String = "UNTRANSLATED"
-
-            override fun toString(): String = value
-        }
-
-        object Translated : FilterState {
-            override val value: String = "TRANSLATED"
-
-            override fun toString(): String = value
-        }
-
-        object Reviewed : FilterState {
-            override val value: String = "REVIEWED"
-
-            override fun toString(): String = value
-        }
-
-        object Disabled : FilterState {
-            override val value: String = "DISABLED"
-
-            override fun toString(): String = value
-        }
-
-        @JvmInline
-        value class Custom(override val value: String) : FilterState {
-            override fun toString(): String = value
+        push = PushExtension(project.objects).also {
+            it.setupConvention(project, this)
         }
     }
 
-    @JvmDefaultWithCompatibility
-    sealed interface PullType : CharSequence {
-        val value: String
-
-        override val length: Int
-            get() = value.length
-
-        override operator fun get(index: Int): Char {
-            return value[index]
-        }
-
-        override fun subSequence(startIndex: Int, endIndex: Int): CharSequence {
-            return value.subSequence(startIndex, endIndex)
-        }
-
-        object ComposeXML : PullType {
-            override val value: String = "COMPOSE_XML"
-
-            override fun toString(): String = value
-        }
-
-        object AndroidXML : PullType {
-            override val value: String = "ANDROID_XML"
-
-            override fun toString(): String = value
-        }
-
-        object Po : PullType {
-            override val value: String = "PO"
-
-            override fun toString(): String = value
-        }
-
-        @JvmInline
-        value class Custom(override val value: String) : PullType {
-            override fun toString(): String = value
-        }
-    }
-
-    companion object : PathAware() {
-        internal const val DEFAULT_URL = "https://app.tolgee.io/v2/"
-
-        internal val COMMON_RESOURCES_PATH by lazy {
-            "src${filePathDelimiter}commonMain${filePathDelimiter}composeResources"
-        }
-    }
 }
