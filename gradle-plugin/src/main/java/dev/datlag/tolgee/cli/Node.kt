@@ -9,18 +9,25 @@ import java.io.File
 
 open class Node : PathAware() {
 
-    /**
-     * Sorted whether they are in system PATH.
-     * If in system PATH they're probably preferred and used method.
-     */
     private val packageManagers = setOf(
         NPM,
         Yarn,
         PNPM
-    ).sortedByDescending {it.globalPathInSystemPath }
+    )
 
+    /**
+     * Tries to find the executable in package managers on system.
+     *
+     * Prefers executables available in system PATH and falls back to any package manager and finally locally.
+     */
     protected fun NodeCommand(name: String): Command {
-        val resolved = packageManagers.firstNotNullOfOrNull { it.executable(name) }
+        val resolved = packageManagers.firstNotNullOfOrNull {
+            if (it.globalPathInSystemPath) {
+                it.executable(name)
+            } else {
+                null
+            }
+        } ?: systemPathExecutable(name) ?: packageManagers.firstNotNullOfOrNull { it.executable(name) }
 
         return Command(resolved ?: name)
     }
