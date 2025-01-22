@@ -12,6 +12,8 @@ import java.util.*
 
 open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
 
+    open val fallbackEnabled: Property<Boolean> = objectFactory.property(Boolean::class.java)
+
     open val apiUrl: Property<String> = objectFactory.property(String::class.java)
 
     open val projectId: Property<String> = objectFactory.property(String::class.java)
@@ -23,6 +25,7 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     @JvmOverloads
     open fun setupConvention(project: Project, inherit: BaseTolgeeExtension? = null) {
         if (inherit == null) {
+            fallbackEnabled.convention(true)
             apiUrl.convention(DEFAULT_API_URL)
             apiKey.convention(project.provider {
                 project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
@@ -57,6 +60,7 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     }
 
     private fun setupConvention(inherit: BaseTolgeeExtension) {
+        fallbackEnabled.convention(inherit.fallbackEnabled)
         apiUrl.convention(inherit.apiUrl)
         projectId.convention(inherit.projectId)
         apiKey.convention(inherit.apiKey)

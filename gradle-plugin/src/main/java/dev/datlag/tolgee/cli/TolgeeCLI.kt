@@ -1,6 +1,8 @@
 package dev.datlag.tolgee.cli
 
 import com.kgit2.kommand.process.Stdio
+import dev.datlag.tolgee.model.Format
+import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tooling.scopeCatching
 import io.github.z4kn4fein.semver.Version
 import io.github.z4kn4fein.semver.toVersion
@@ -34,28 +36,32 @@ object TolgeeCLI : Node() {
      * @return true if command was successful.
      */
     fun pull(
-        apiKey: String?,
+        apiUrl: String?,
         projectId: String,
+        apiKey: String?,
+        format: Format,
         path: File,
-        format: String,
-        languages: Set<String>,
-        states: Set<String>,
+        languages: Collection<String>?,
+        states: Collection<State>?,
     ): Boolean = installed && scopeCatching {
         NodeCommand(app)
             .arg("pull")
             .apply {
+                if (!apiUrl.isNullOrBlank()) {
+                    args("--api-url", apiUrl)
+                }
                 if (!apiKey.isNullOrBlank()) {
                     args("--api-key", apiKey)
                 }
             }
             .args("--project-id", projectId)
+            .args("--format", format.value)
             .args("--path", path.path)
-            .args("--format", format)
             .apply {
-                if (languages.isNotEmpty()) {
+                if (!languages.isNullOrEmpty()) {
                     args("--languages", languages.joinToString(" "))
                 }
-                if (states.isNotEmpty()) {
+                if (!states.isNullOrEmpty()) {
                     args("--states", states.joinToString(" "))
                 }
             }

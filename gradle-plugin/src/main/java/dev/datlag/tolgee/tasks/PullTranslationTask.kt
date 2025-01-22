@@ -36,6 +36,10 @@ import javax.inject.Inject
 
 open class PullTranslationTask : DefaultTask() {
 
+    @get:Optional
+    @get:Input
+    open val fallbackEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
     @get:Input
     open val apiUrl: Property<String> = project.objects.property(String::class.java)
 
@@ -76,81 +80,75 @@ open class PullTranslationTask : DefaultTask() {
         val apiKey = apiKey.orNull?.ifBlank { null }
         val format = format.getOrElse(Format.ComposeXML)
         val path = path.orNull?.asFile ?: projectLayout.projectDirectory.dir(PullExtension.COMMON_RESOURCES_PATH).asFile
-        val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }?.ifEmpty { null }
-        val states = states.orNull?.mapNotNull { it?.value }?.ifEmpty { null }
+        val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }
+        val states = states.orNull?.filterNotNull()
 
-        if (TolgeeCLI.installed) {
-
-        } else {
-
-        }
-        val ktor = ktorfit {
-            baseUrl(apiUrl)
-            httpClient(OkHttp) {
-                followRedirects = true
-            }
-        }
-        val tolgee = ktor.createTolgee()
-        val outputDir = projectLayout.buildDirectory.dir("tolgee")
-
-        runBlocking {
-            val response = tolgee.export(
-                apiKey = key,
-                id = id,
-                format = format.value,
-                languages = lang,
-                filterState = filter,
-                zip = true
-            )
-
-            if (response.status.isSuccess()) {
-                val outputDirFile = outputDir.get().asFile
-                outputDirFile.mkdirsSafely()
-
-                val outputFile = File(outputDirFile, "translation.zip")
-                outputFile.deleteSafely()
-
-                suspendCatching {
-                    outputFile.writeBytes(response.readRawBytes())
-                }.onFailure {
-                    logger.warn("Could not read translation zip file.")
-                    return@runBlocking
-                }
-
-                val composeResDir = destination.orNull?.asFile ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
-
-                composeResDir.mkdirsSafely()
-                unzipTo(composeResDir, outputFile)
-                outputFile.deleteSafely()
-            } else {
-                logger.warn("Translation zip could not be downloaded")
-            }
-        }
-    }
-
-    private fun cliPulling(
-        apiUrl: String?,
-        projectId: String,
-        apiKey: String?,
-        format: Format
-    ) {
-        TolgeeCLI.pull(
-            apiKey = apiUrl,
+        val cliSuccessful = TolgeeCLI.pull(
+            apiUrl = apiUrl,
             projectId = projectId,
-            path = ,
+            apiKey = apiKey,
             format = format.value,
-            languages =
+            path = path,
+            languages = languages,
+            states = states
         )
+        val useFallback = fallbackEnabled.getOrElse(true) && !cliSuccessful
+
+        if (useFallback) {
+            val ktor = ktorfit {
+                baseUrl(apiUrl)
+                httpClient(OkHttp) {
+                    followRedirects = true
+                }
+            }
+            val tolgee = ktor.createTolgee()
+            val outputDir = projectLayout.buildDirectory.dir("tolgee")
+
+            runBlocking {
+                val response = tolgee.export(
+                    apiKey = apiKey,
+                    id = projectId,
+                    format = format.value,
+                    languages = languages,
+                    filterState = states,
+                    zip = true
+                )
+
+                if (response.status.isSuccess()) {
+                    val outputDirFile = outputDir.get().asFile
+                    outputDirFile.mkdirsSafely()
+
+                    val outputFile = File(outputDirFile, "translation.zip")
+                    outputFile.deleteSafely()
+
+                    suspendCatching {
+                        outputFile.writeBytes(response.readRawBytes())
+                    }.onFailure {
+                        logger.warn("Could not read translation zip file.")
+                        return@runBlocking
+                    }
+
+                    val composeResDir = destination.orNull?.asFile ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
+
+                    composeResDir.mkdirsSafely()
+                    unzipTo(composeResDir, outputFile)
+                    outputFile.deleteSafely()
+                } else {
+                    logger.warn("Translation zip could not be downloaded")
+                }
+            }
+        }
     }
 
     fun apply(project: Project, extension: PullExtension = project.tolgeeExtension.pull) {
+        fallbackEnabled.set(extension.fallbackEnabled)
         apiUrl.set(extension.apiUrl)
         projectId.set(extension.projectId)
         apiKey.set(extension.apiKey)
         format.set(extension.format)
+        path.set(extension.path)
         languages.set(extension.languages)
         states.set(extension.states)
-        path.set(extension.path)
     }
 
     companion object {
