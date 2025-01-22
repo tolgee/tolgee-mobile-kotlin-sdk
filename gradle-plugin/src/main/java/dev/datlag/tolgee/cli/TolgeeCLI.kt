@@ -3,6 +3,7 @@ package dev.datlag.tolgee.cli
 import com.kgit2.kommand.process.Stdio
 import dev.datlag.tolgee.model.Format
 import dev.datlag.tolgee.model.pull.State
+import dev.datlag.tolgee.model.push.Mode
 import dev.datlag.tooling.scopeCatching
 import io.github.z4kn4fein.semver.Version
 import io.github.z4kn4fein.semver.toVersion
@@ -63,6 +64,41 @@ object TolgeeCLI : Node() {
                 }
                 if (!states.isNullOrEmpty()) {
                     args("--states", states.joinToString(" "))
+                }
+            }
+            .stdout(Stdio.Inherit)
+            .spawn()
+            .waitWithOutput()
+    }.getOrNull()?.status == 0
+
+    fun push(
+        apiUrl: String?,
+        projectId: String,
+        apiKey: String?,
+        format: Format?,
+        mode: Mode,
+        languages: Collection<String>?,
+    ): Boolean = installed && scopeCatching {
+        NodeCommand(app)
+            .arg("push")
+            .apply {
+                if (!apiUrl.isNullOrBlank()) {
+                    args("--api-url", apiUrl)
+                }
+                if (!apiKey.isNullOrBlank()) {
+                    args("--api-key", apiKey)
+                }
+            }
+            .args("--project-id", projectId)
+            .apply {
+                if (format != null) {
+                    args("--format", format.value)
+                }
+            }
+            .args("--force-mode", mode.value)
+            .apply {
+                if (!languages.isNullOrEmpty()) {
+                    args("--languages", languages.joinToString(" "))
                 }
             }
             .stdout(Stdio.Inherit)

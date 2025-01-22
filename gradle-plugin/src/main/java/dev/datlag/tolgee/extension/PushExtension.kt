@@ -15,6 +15,7 @@ open class PushExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
     override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
         super.setupConvention(project, inherit)
 
+        format.convention(null)
         forceMode.convention(Mode.NoForce)
     }
 }
