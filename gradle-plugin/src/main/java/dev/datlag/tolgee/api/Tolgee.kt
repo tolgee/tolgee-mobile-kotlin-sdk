@@ -8,13 +8,13 @@ import io.ktor.client.statement.*
 
 interface Tolgee {
 
-    @GET("projects/{id}/export")
+    @GET("projects/{projectId}/export")
     suspend fun export(
         @Header("X-API-Key") apiKey: String,
-        @Path("id") id: String,
+        @Path("projectId") projectId: String,
         @Query("format") format: String,
         @Query("languages") languages: List<String>?,
-        @Query("filterState") filterState: List<String>?,
+        @Query("filterState") states: List<String>?,
         @Query("zip") zip: Boolean
     ): HttpResponse
 }

@@ -2,7 +2,6 @@ package dev.datlag.tolgee.tasks
 
 import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.TolgeePluginExtension
-import dev.datlag.tolgee.TolgeePluginExtension.Companion.COMMON_RESOURCES_PATH
 import dev.datlag.tolgee.api.createTolgee
 import dev.datlag.tolgee.cli.TolgeeCLI
 import dev.datlag.tolgee.common.androidResources
@@ -40,6 +39,7 @@ open class PullTranslationTask : DefaultTask() {
     @get:Input
     open val fallbackEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
+    @get:Optional
     @get:Input
     open val apiUrl: Property<String> = project.objects.property(String::class.java)
 
@@ -87,7 +87,7 @@ open class PullTranslationTask : DefaultTask() {
             apiUrl = apiUrl,
             projectId = projectId,
             apiKey = apiKey,
-            format = format.value,
+            format = format,
             path = path,
             languages = languages,
             states = states
@@ -95,6 +95,8 @@ open class PullTranslationTask : DefaultTask() {
         val useFallback = fallbackEnabled.getOrElse(true) && !cliSuccessful
 
         if (useFallback) {
+            logger.warn("Could not use CLI, falling back to REST API.")
+            val requiredApiKey = apiKey ?: return logger.error("No API Key provided.")
             val ktor = ktorfit {
                 baseUrl(apiUrl)
                 httpClient(OkHttp) {
@@ -106,11 +108,11 @@ open class PullTranslationTask : DefaultTask() {
 
             runBlocking {
                 val response = tolgee.export(
-                    apiKey = apiKey,
-                    id = projectId,
+                    apiKey = requiredApiKey,
+                    projectId = projectId,
                     format = format.value,
                     languages = languages,
-                    filterState = states,
+                    states = states?.map { it.value },
                     zip = true
                 )
 
@@ -128,10 +130,8 @@ open class PullTranslationTask : DefaultTask() {
                         return@runBlocking
                     }
 
-                    val composeResDir = destination.orNull?.asFile ?: projectLayout.projectDirectory.dir(COMMON_RESOURCES_PATH).asFile
-
-                    composeResDir.mkdirsSafely()
-                    unzipTo(composeResDir, outputFile)
+                    path.mkdirsSafely()
+                    unzipTo(path, outputFile)
                     outputFile.deleteSafely()
                 } else {
                     logger.warn("Translation zip could not be downloaded")
