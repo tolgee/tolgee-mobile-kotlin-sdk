@@ -19,6 +19,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
+      - name: Install Tolgee CLI
+        run: npm install --global @tolgee/cli
+
       - name: Publish release
         run: ./gradlew publishAllPublicationsToMavenCentralRepository
         env:
