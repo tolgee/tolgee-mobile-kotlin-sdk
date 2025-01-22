@@ -1,20 +1,15 @@
 package dev.datlag.tolgee.tasks
 
 import de.jensklingenberg.ktorfit.ktorfit
-import dev.datlag.tolgee.TolgeePluginExtension
 import dev.datlag.tolgee.api.createTolgee
 import dev.datlag.tolgee.cli.TolgeeCLI
-import dev.datlag.tolgee.common.androidResources
-import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tolgee.common.tolgeeExtension
 import dev.datlag.tolgee.extension.BaseTolgeeExtension
 import dev.datlag.tolgee.extension.PullExtension
 import dev.datlag.tolgee.model.Format
 import dev.datlag.tolgee.model.pull.State
-import dev.datlag.tooling.async.scopeCatching
 import dev.datlag.tooling.async.suspendCatching
 import dev.datlag.tooling.deleteSafely
-import dev.datlag.tooling.existsSafely
 import dev.datlag.tooling.mkdirsSafely
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.statement.*
@@ -65,6 +60,10 @@ open class PullTranslationTask : DefaultTask() {
     @get:Input
     open val states: SetProperty<State> = project.objects.setProperty(State::class.java)
 
+    @get:Optional
+    @get:Input
+    open val namespaces: SetProperty<String> = project.objects.setProperty(String::class.java)
+
     @get:Inject
     open val projectLayout = project.layout
 
@@ -75,13 +74,20 @@ open class PullTranslationTask : DefaultTask() {
 
     @TaskAction
     fun pull() {
-        val apiUrl = apiUrl.getOrElse(BaseTolgeeExtension.DEFAULT_API_URL)
+        val apiUrl = apiUrl.orNull?.ifBlank { null }?.let {
+            if (it == BaseTolgeeExtension.DEFAULT_API_URL || "$it/" == BaseTolgeeExtension.DEFAULT_API_URL) {
+                null // Let the CLI handle the base URL
+            } else {
+                it
+            }
+        }
         val projectId = projectId.orNull?.ifBlank { null } ?: return
         val apiKey = apiKey.orNull?.ifBlank { null }
         val format = format.getOrElse(Format.ComposeXML)
         val path = path.orNull?.asFile ?: projectLayout.projectDirectory.dir(PullExtension.COMMON_RESOURCES_PATH).asFile
         val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }
         val states = states.orNull?.filterNotNull()
+        val namespaces = namespaces.orNull?.mapNotNull { it?.ifBlank { null } }
 
         val cliSuccessful = TolgeeCLI.pull(
             apiUrl = apiUrl,
@@ -90,15 +96,17 @@ open class PullTranslationTask : DefaultTask() {
             format = format,
             path = path,
             languages = languages,
-            states = states
+            states = states,
+            namespaces = namespaces
         )
         val useFallback = fallbackEnabled.getOrElse(true) && !cliSuccessful
 
         if (useFallback) {
             logger.warn("Could not use CLI, falling back to REST API.")
             val requiredApiKey = apiKey ?: return logger.error("No API Key provided.")
+            val requiredApiUrl = apiUrl ?: BaseTolgeeExtension.DEFAULT_API_URL
             val ktor = ktorfit {
-                baseUrl(apiUrl)
+                baseUrl(requiredApiUrl)
                 httpClient(OkHttp) {
                     followRedirects = true
                 }
@@ -111,8 +119,9 @@ open class PullTranslationTask : DefaultTask() {
                     apiKey = requiredApiKey,
                     projectId = projectId,
                     format = format.value,
-                    languages = languages,
-                    states = states?.map { it.value },
+                    languages = languages?.joinToString(separator = ",")?.ifBlank { null },
+                    states = states?.joinToString(separator = ",") { it.value }?.ifBlank { null },
+                    namespaces = namespaces?.joinToString(separator = ",")?.ifBlank { null },
                     zip = true
                 )
 
@@ -146,9 +155,11 @@ open class PullTranslationTask : DefaultTask() {
         projectId.set(extension.projectId)
         apiKey.set(extension.apiKey)
         format.set(extension.format)
+
         path.set(extension.path)
         languages.set(extension.languages)
         states.set(extension.states)
+        namespaces.set(extension.namespaces)
     }
 
     companion object {

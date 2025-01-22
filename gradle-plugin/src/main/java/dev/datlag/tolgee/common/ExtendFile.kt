@@ -5,7 +5,7 @@ import dev.datlag.tooling.scopeCatching
 import java.io.File
 
 @JvmOverloads
-fun File.fullPathSafely(checkExists: Boolean = true): String? {
+internal fun File.fullPathSafely(checkExists: Boolean = true): String? {
     if (checkExists && !this.existsSafely()) {
         return null
     }

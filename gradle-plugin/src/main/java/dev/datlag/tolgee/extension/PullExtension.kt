@@ -18,6 +18,8 @@ open class PullExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
 
     open val states: SetProperty<State> = objectFactory.setProperty(State::class.java)
 
+    open val namespaces: SetProperty<String> = objectFactory.setProperty(String::class.java)
+
     override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
         super.setupConvention(project, inherit)
 

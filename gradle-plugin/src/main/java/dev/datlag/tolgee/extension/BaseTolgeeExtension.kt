@@ -26,7 +26,6 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     open fun setupConvention(project: Project, inherit: BaseTolgeeExtension? = null) {
         if (inherit == null) {
             fallbackEnabled.convention(true)
-            apiUrl.convention(DEFAULT_API_URL)
             apiKey.convention(project.provider {
                 project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
                     ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }

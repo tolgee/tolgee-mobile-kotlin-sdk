@@ -12,6 +12,8 @@ open class PushExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
 
     open val languages: SetProperty<String> = objectFactory.setProperty(String::class.java)
 
+    open val namespaces: SetProperty<String> = objectFactory.setProperty(String::class.java)
+
     override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
         super.setupConvention(project, inherit)
 

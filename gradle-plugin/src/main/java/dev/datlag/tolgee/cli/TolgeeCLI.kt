@@ -44,6 +44,7 @@ object TolgeeCLI : Node() {
         path: File,
         languages: Collection<String>?,
         states: Collection<State>?,
+        namespaces: Collection<String>?,
     ): Boolean = installed && scopeCatching {
         NodeCommand(app)
             .arg("pull")
@@ -65,6 +66,9 @@ object TolgeeCLI : Node() {
                 if (!states.isNullOrEmpty()) {
                     args("--states", states.joinToString(" "))
                 }
+                if (!namespaces.isNullOrEmpty()) {
+                    args("--namespaces", namespaces.joinToString(" "))
+                }
             }
             .stdout(Stdio.Inherit)
             .spawn()
@@ -78,6 +82,7 @@ object TolgeeCLI : Node() {
         format: Format?,
         mode: Mode,
         languages: Collection<String>?,
+        namespaces: Collection<String>?,
     ): Boolean = installed && scopeCatching {
         NodeCommand(app)
             .arg("push")
@@ -99,6 +104,9 @@ object TolgeeCLI : Node() {
             .apply {
                 if (!languages.isNullOrEmpty()) {
                     args("--languages", languages.joinToString(" "))
+                }
+                if (!namespaces.isNullOrEmpty()) {
+                    args("--namespaces", namespaces.joinToString(" "))
                 }
             }
             .stdout(Stdio.Inherit)
