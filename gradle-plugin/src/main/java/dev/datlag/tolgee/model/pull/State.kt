@@ -78,4 +78,14 @@ sealed class State(open val value: String) : CharSequence {
      * @property value The custom string representation of the state.
      */
     data class Custom(override val value: String) : State(value)
+
+    companion object {
+        fun from(value: String): State = when {
+            value.equals(Untranslated.value, ignoreCase = true) -> Untranslated
+            value.equals(Translated.value, ignoreCase = true) -> Translated
+            value.equals(Reviewed.value, ignoreCase = true) -> Reviewed
+            value.equals(Disabled.value, ignoreCase = true) -> Disabled
+            else -> Custom(value)
+        }
+    }
 }

@@ -1,7 +1,10 @@
 package dev.datlag.tolgee.extension
 
 import dev.datlag.tolgee.common.isAndroidOnly
+import dev.datlag.tolgee.common.lazyMap
+import dev.datlag.tolgee.model.Configuration
 import dev.datlag.tolgee.model.Format
+import dev.datlag.tooling.existsSafely
 import dev.datlag.tooling.scopeCatching
 import dev.datlag.tooling.systemEnv
 import org.gradle.api.Project
@@ -27,6 +30,8 @@ import java.util.*
  */
 open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
 
+    internal val configuration: Property<Configuration> = objectFactory.property(Configuration::class.java)
+
     open val fallbackEnabled: Property<Boolean> = objectFactory.property(Boolean::class.java)
 
     open val apiUrl: Property<String> = objectFactory.property(String::class.java)
@@ -49,8 +54,14 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     @JvmOverloads
     open fun setupConvention(project: Project, inherit: BaseTolgeeExtension? = null) {
         if (inherit == null) {
+            configuration.convention(project.provider { loadConfiguration(project) })
             fallbackEnabled.convention(true)
-            apiKey.convention(project.provider {
+            apiUrl.convention(configuration.map { it.apiUrl ?: "" })
+            projectId.convention(configuration.map { it.projectId ?: "" })
+            apiKey.convention(configuration.lazyMap(
+                project = project,
+                map = { it?.apiKey }
+            ) {
                 project.findProperty("tolgee.apikey")?.toString()?.ifBlank { null }
                     ?: project.findProperty("tolgee.apiKey")?.toString()?.ifBlank { null }
                     ?: project.findProperty("tolgee.api-key")?.toString()?.ifBlank { null }
@@ -70,7 +81,10 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
                         }
                     }
             })
-            format.convention(project.provider {
+            format.convention(configuration.lazyMap(
+                project = project,
+                map = { it?.format }
+            ) {
                 if (project.isAndroidOnly) {
                     Format.AndroidXML
                 } else {
@@ -83,6 +97,7 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     }
 
     private fun setupConvention(inherit: BaseTolgeeExtension) {
+        configuration.convention(inherit.configuration)
         fallbackEnabled.convention(inherit.fallbackEnabled)
         apiUrl.convention(inherit.apiUrl)
         projectId.convention(inherit.projectId)
@@ -104,6 +119,27 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
                 stream.close()
             }
         }
+    }
+
+    internal fun loadConfiguration(project: Project): Configuration? {
+        val supportedNames = setOf(
+            ".tolgeerc",
+            ".tolgeerc.json",
+            ".tolgeerc.yaml",
+            ".tolgeerc.yml"
+        )
+
+        val configFile = supportedNames.map { name ->
+            project.layout.projectDirectory.file(name).asFile
+        }.firstOrNull {
+            it.existsSafely()
+        } ?: supportedNames.map { name ->
+            project.rootProject.layout.projectDirectory.file(name).asFile
+        }.firstOrNull {
+            it.existsSafely()
+        }
+
+        return configFile?.let(Configuration::from)
     }
 
     companion object {

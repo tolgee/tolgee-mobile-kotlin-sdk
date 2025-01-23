@@ -2,6 +2,7 @@ package dev.datlag.tolgee.model
 
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.decodeFromStream
+import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tolgee.model.push.Mode
 import dev.datlag.tooling.scopeCatching
 import kotlinx.serialization.SerialName
@@ -39,10 +40,13 @@ internal data class Configuration(
         @SerialName("path") private val _path: String? = null,
         @SerialName("languages") val languages: List<String> = emptyList(),
         @SerialName("namespaces") val namespaces: List<String> = emptyList(),
-        @SerialName("states") val states: List<String> = emptyList(),
+        @SerialName("states") private val _states: List<String> = emptyList(),
     ) {
         @Transient
         val path: String? = _path?.ifBlank { null }?.trim()
+
+        @Transient
+        val states: Set<State> = _states.map(State::from).toSet()
     }
 
     @Serializable

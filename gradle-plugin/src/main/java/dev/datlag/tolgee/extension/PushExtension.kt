@@ -18,6 +18,14 @@ open class PushExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
         super.setupConvention(project, inherit)
 
         format.convention(null)
-        forceMode.convention(Mode.NoForce)
+        forceMode.convention(configuration.map {
+            it.push?.forceMode ?: Mode.NoForce
+        })
+        languages.convention(configuration.map {
+            it.push?.languages ?: emptyList()
+        })
+        namespaces.convention(configuration.map {
+            it.push?.namespaces ?: emptyList()
+        })
     }
 }

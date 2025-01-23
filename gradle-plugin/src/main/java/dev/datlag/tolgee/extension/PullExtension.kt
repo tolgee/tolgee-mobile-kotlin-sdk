@@ -23,8 +23,26 @@ open class PullExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
     override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
         super.setupConvention(project, inherit)
 
-        path.convention(format.map {
-            when (it) {
+        path.convention(project.provider {
+            val configPath = configuration.orNull?.pull?.path
+
+            configPath?.let {
+                project.layout.projectDirectory.dir(configPath)
+            }?.let {
+                if (it.asFile.existsSafely()) {
+                    it
+                } else {
+                    null
+                }
+            } ?: configPath?.let {
+                project.rootProject.layout.projectDirectory.dir(configPath)
+            }?.let {
+                if (it.asFile.existsSafely()) {
+                    it
+                } else {
+                    null
+                }
+            } ?: when (format.orNull) {
                 is Format.ComposeXML -> project.layout.projectDirectory.dir(COMMON_RESOURCES_PATH)
                 is Format.AndroidXML -> project.androidResources.filter { res ->
                     res.existsSafely()
@@ -33,6 +51,15 @@ open class PullExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
                 }
                 else -> null
             }
+        })
+        languages.convention(configuration.map {
+            it.pull?.languages ?: emptyList()
+        })
+        states.convention(configuration.map {
+            it.pull?.states ?: emptySet()
+        })
+        namespaces.convention(configuration.map {
+            it.pull?.namespaces ?: emptyList()
         })
     }
 
