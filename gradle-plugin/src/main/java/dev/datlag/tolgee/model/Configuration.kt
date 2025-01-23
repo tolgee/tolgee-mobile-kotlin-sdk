@@ -35,28 +35,72 @@ internal data class Configuration(
     @Transient
     val format: Format? = _format?.ifBlank { null }?.trim()?.let(Format::from)
 
+    /**
+     * De-serialization may succeed even if it should not because all values are optional, resulting in an empty object.
+     */
+    fun isNull(): Boolean {
+        val pullNull = pull == null || pull.isNull()
+        val pushNull = push == null || push.isNull()
+
+        return pullNull && pushNull && apiUrl.isNullOrBlank() && projectId.isNullOrBlank() && apiKey.isNullOrBlank() && format.isNullOrBlank()
+    }
+
+    fun toNullIfEmpty(): Configuration? {
+        return if (isNull()) {
+            null
+        } else {
+            this
+        }
+    }
+
     @Serializable
     internal data class Pull(
         @SerialName("path") private val _path: String? = null,
-        @SerialName("languages") val languages: List<String> = emptyList(),
-        @SerialName("namespaces") val namespaces: List<String> = emptyList(),
+        @SerialName("languages") private val _languages: List<String> = emptyList(),
+        @SerialName("namespaces") private val _namespaces: List<String> = emptyList(),
         @SerialName("states") private val _states: List<String> = emptyList(),
     ) {
         @Transient
         val path: String? = _path?.ifBlank { null }?.trim()
 
         @Transient
+        val languages: List<String> = _languages.mapNotNull { it.ifBlank { null } }
+
+        @Transient
+        val namespaces: List<String> = _namespaces.mapNotNull { it.ifBlank { null } }
+
+        @Transient
         val states: Set<State> = _states.map(State::from).toSet()
+
+        /**
+         * De-serialization may succeed even if it should not because all values are optional, resulting in an empty object.
+         */
+        fun isNull(): Boolean {
+            return path.isNullOrBlank() && languages.isEmpty() && namespaces.isEmpty() && states.isEmpty()
+        }
     }
 
     @Serializable
     internal data class Push(
         @SerialName("forceMode") private val _forceMode: String? = null,
-        @SerialName("languages") val languages: List<String> = emptyList(),
-        @SerialName("namespaces") val namespaces: List<String> = emptyList(),
+        @SerialName("languages") private val _languages: List<String> = emptyList(),
+        @SerialName("namespaces") private val _namespaces: List<String> = emptyList(),
     ) {
         @Transient
         val forceMode: Mode? = _forceMode?.ifBlank { null }?.trim()?.let(Mode::from)
+
+        @Transient
+        val languages: List<String> = _languages.mapNotNull { it.ifBlank { null } }
+
+        @Transient
+        val namespaces: List<String> = _namespaces.mapNotNull { it.ifBlank { null } }
+
+        /**
+         * De-serialization may succeed even if it should not because all values are optional, resulting in an empty object.
+         */
+        fun isNull(): Boolean {
+            return forceMode.isNullOrBlank() && languages.isEmpty() && namespaces.isEmpty()
+        }
     }
 
     companion object {
@@ -69,18 +113,18 @@ internal data class Configuration(
 
         fun from(data: String): Configuration? = scopeCatching {
             jsonParser.decodeFromString<Configuration>(data)
-        }.getOrNull() ?: scopeCatching {
+        }.getOrNull()?.toNullIfEmpty() ?: scopeCatching {
             yamlParser.decodeFromString<Configuration>(data)
-        }.getOrNull()
+        }.getOrNull()?.toNullIfEmpty()
 
         fun from(stream: InputStream): Configuration? = scopeCatching {
             jsonParser.decodeFromStream<Configuration>(stream)
-        }.getOrNull() ?: scopeCatching {
+        }.getOrNull()?.toNullIfEmpty() ?: scopeCatching {
             scopeCatching {
                 stream.reset()
             }
             yamlParser.decodeFromStream<Configuration>(stream)
-        }.getOrNull()
+        }.getOrNull()?.toNullIfEmpty()
 
         fun from(file: File): Configuration? = file.inputStream().use(::from) ?: from(file.readText())
     }

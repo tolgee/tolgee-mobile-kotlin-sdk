@@ -126,7 +126,14 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
             ".tolgeerc",
             ".tolgeerc.json",
             ".tolgeerc.yaml",
-            ".tolgeerc.yml"
+            ".tolgeerc.yml",
+
+            ".config/tolgeerc",
+            ".config/tolgeerc.json",
+            ".config/tolgeerc.yaml",
+            ".config/tolgeerc.yml",
+
+            "tolgee.config"
         )
 
         val configFile = supportedNames.map { name ->
