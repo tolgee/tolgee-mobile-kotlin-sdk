@@ -3,7 +3,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-library = "1.0.1-SNAPSHOT"
+library = "1.0.2-SNAPSHOT"
 android = "8.4.2"
 compose = "1.7.3"
 datetime = "0.6.1"
