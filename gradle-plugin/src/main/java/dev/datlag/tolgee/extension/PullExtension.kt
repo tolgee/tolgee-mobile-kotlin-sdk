@@ -2,6 +2,7 @@ package dev.datlag.tolgee.extension
 
 import dev.datlag.tolgee.cli.PathAware
 import dev.datlag.tolgee.common.androidResources
+import dev.datlag.tolgee.common.lazyMap
 import dev.datlag.tolgee.model.Format
 import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tooling.existsSafely
@@ -19,6 +20,10 @@ open class PullExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
     open val states: SetProperty<State> = objectFactory.setProperty(State::class.java)
 
     open val namespaces: SetProperty<String> = objectFactory.setProperty(String::class.java)
+
+    open val tags: SetProperty<String> = objectFactory.setProperty(String::class.java)
+
+    open val excludeTags: SetProperty<String> = objectFactory.setProperty(String::class.java)
 
     override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
         super.setupConvention(project, inherit)
@@ -52,15 +57,11 @@ open class PullExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
                 else -> null
             }
         })
-        languages.convention(configuration.map {
-            it.pull?.languages ?: emptyList()
-        })
-        states.convention(configuration.map {
-            it.pull?.states ?: emptySet()
-        })
-        namespaces.convention(configuration.map {
-            it.pull?.namespaces ?: emptyList()
-        })
+        languages.convention(configuration.lazyMap(project = project, map = { it?.pull?.languages }) { null })
+        states.convention(configuration.lazyMap(project = project, map = { it?.pull?.states }) { null })
+        namespaces.convention(configuration.lazyMap(project = project, map = { it?.pull?.namespaces }) { null })
+        tags.convention(configuration.lazyMap(project = project, map = { it?.pull?.tags }) { null })
+        excludeTags.convention(configuration.lazyMap(project = project, map = { it?.pull?.excludeTags }) { null })
     }
 
     internal companion object : PathAware() {

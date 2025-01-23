@@ -45,6 +45,8 @@ internal object TolgeeCLI : Node() {
         languages: Collection<String>?,
         states: Collection<State>?,
         namespaces: Collection<String>?,
+        tags: Collection<String>?,
+        excludeTags: Collection<String>?,
     ): Boolean = installed && scopeCatching {
         NodeCommand(app)
             .arg("pull")
@@ -68,6 +70,12 @@ internal object TolgeeCLI : Node() {
                 }
                 if (!namespaces.isNullOrEmpty()) {
                     args("--namespaces", namespaces.joinToString(" "))
+                }
+                if (!tags.isNullOrEmpty()) {
+                    args("--tags", tags.joinToString(" "))
+                }
+                if (!excludeTags.isNullOrEmpty()) {
+                    args("--exclude-tags", excludeTags.joinToString(" "))
                 }
             }
             .stdout(Stdio.Inherit)

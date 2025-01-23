@@ -16,6 +16,8 @@ internal interface Tolgee {
         @Query("languages") languages: String?,
         @Query("filterState") states: String?,
         @Query("filterNamespace") namespaces: String?,
+        @Query("filterTagIn") tags: String?,
+        @Query("filterTagNotIn") excludeTags: String?,
         @Query("zip") zip: Boolean
     ): HttpResponse
 }

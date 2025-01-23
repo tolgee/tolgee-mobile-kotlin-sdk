@@ -64,6 +64,14 @@ open class PullTranslationTask : DefaultTask() {
     @get:Input
     open val namespaces: SetProperty<String> = project.objects.setProperty(String::class.java)
 
+    @get:Optional
+    @get:Input
+    open val tags: SetProperty<String> = project.objects.setProperty(String::class.java)
+
+    @get:Optional
+    @get:Input
+    open val excludeTags: SetProperty<String> = project.objects.setProperty(String::class.java)
+
     @get:Inject
     open val projectLayout = project.layout
 
@@ -88,6 +96,8 @@ open class PullTranslationTask : DefaultTask() {
         val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }
         val states = states.orNull?.filterNotNull()
         val namespaces = namespaces.orNull?.mapNotNull { it?.ifBlank { null } }
+        val tags = tags.orNull?.mapNotNull { it?.ifBlank { null } }
+        val excludeTags = excludeTags.orNull?.mapNotNull { it?.ifBlank { null } }
 
         val cliSuccessful = TolgeeCLI.pull(
             apiUrl = apiUrl,
@@ -97,7 +107,9 @@ open class PullTranslationTask : DefaultTask() {
             path = path,
             languages = languages,
             states = states,
-            namespaces = namespaces
+            namespaces = namespaces,
+            tags = tags,
+            excludeTags = excludeTags
         )
         val useFallback = fallbackEnabled.getOrElse(true) && !cliSuccessful
 
@@ -122,6 +134,8 @@ open class PullTranslationTask : DefaultTask() {
                     languages = languages?.joinToString(separator = ",")?.ifBlank { null },
                     states = states?.joinToString(separator = ",") { it.value }?.ifBlank { null },
                     namespaces = namespaces?.joinToString(separator = ",")?.ifBlank { null },
+                    tags = tags?.joinToString(separator = ",")?.ifBlank { null },
+                    excludeTags = excludeTags?.joinToString(separator = ",")?.ifBlank { null },
                     zip = true
                 )
 
@@ -160,6 +174,8 @@ open class PullTranslationTask : DefaultTask() {
         languages.set(extension.languages)
         states.set(extension.states)
         namespaces.set(extension.namespaces)
+        tags.set(extension.tags)
+        excludeTags.set(extension.excludeTags)
     }
 
     companion object {

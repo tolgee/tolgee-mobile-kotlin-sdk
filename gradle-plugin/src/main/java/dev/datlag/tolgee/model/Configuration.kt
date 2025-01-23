@@ -59,6 +59,8 @@ internal data class Configuration(
         @SerialName("languages") private val _languages: List<String> = emptyList(),
         @SerialName("namespaces") private val _namespaces: List<String> = emptyList(),
         @SerialName("states") private val _states: List<String> = emptyList(),
+        @SerialName("tags") private val _tags: List<String> = emptyList(),
+        @SerialName("excludeTags") private val _excludeTags: List<String> = emptyList(),
     ) {
         @Transient
         val path: String? = _path?.ifBlank { null }?.trim()
@@ -70,13 +72,24 @@ internal data class Configuration(
         val namespaces: List<String> = _namespaces.mapNotNull { it.ifBlank { null } }
 
         @Transient
-        val states: Set<State> = _states.map(State::from).toSet()
+        val states: Set<State> = _states.filterNot { it.isBlank() }.map(State::from).toSet()
+
+        @Transient
+        val tags: List<String> = _tags.mapNotNull { it.ifBlank { null } }
+
+        @Transient
+        val excludeTags: List<String> = _excludeTags.mapNotNull { it.ifBlank { null } }
 
         /**
          * De-serialization may succeed even if it should not because all values are optional, resulting in an empty object.
          */
         fun isNull(): Boolean {
-            return path.isNullOrBlank() && languages.isEmpty() && namespaces.isEmpty() && states.isEmpty()
+            return path.isNullOrBlank()
+                    && languages.isEmpty()
+                    && namespaces.isEmpty()
+                    && states.isEmpty()
+                    && tags.isEmpty()
+                    && excludeTags.isEmpty()
         }
     }
 

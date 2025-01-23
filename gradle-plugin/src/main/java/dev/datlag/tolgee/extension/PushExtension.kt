@@ -1,5 +1,6 @@
 package dev.datlag.tolgee.extension
 
+import dev.datlag.tolgee.common.lazyMap
 import dev.datlag.tolgee.model.push.Mode
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
@@ -18,14 +19,8 @@ open class PushExtension(objectFactory: ObjectFactory) : BaseTolgeeExtension(obj
         super.setupConvention(project, inherit)
 
         format.convention(null)
-        forceMode.convention(configuration.map {
-            it.push?.forceMode ?: Mode.NoForce
-        })
-        languages.convention(configuration.map {
-            it.push?.languages ?: emptyList()
-        })
-        namespaces.convention(configuration.map {
-            it.push?.namespaces ?: emptyList()
-        })
+        forceMode.convention(configuration.lazyMap(project = project, map = { it?.push?.forceMode }) { Mode.NoForce })
+        languages.convention(configuration.lazyMap(project = project, map = { it?.push?.languages }) { null })
+        namespaces.convention(configuration.lazyMap(project = project, map = { it?.push?.namespaces }) { null })
     }
 }
