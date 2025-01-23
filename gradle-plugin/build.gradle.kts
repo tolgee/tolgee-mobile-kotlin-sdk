@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.serialization)
     alias(libs.plugins.vanniktech.publish)
     `maven-publish`
     signing
@@ -37,6 +38,9 @@ dependencies {
     implementation(libs.ktor.okhttp)
     implementation(libs.ktorfit)
     implementation(libs.semver)
+    implementation(libs.serialization)
+    implementation(libs.serialization.json)
+    implementation(libs.serialization.kaml)
     implementation(libs.tooling)
 }
 

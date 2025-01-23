@@ -72,4 +72,13 @@ sealed class Format(open val value: String) : CharSequence {
      * @property value The custom string representation of the format.
      */
     data class Custom(override val value: String) : Format(value)
+
+    companion object {
+        fun from(value: String): Format = when {
+            value.equals(ComposeXML.value, ignoreCase = true) -> ComposeXML
+            value.equals(AndroidXML.value, ignoreCase = true) -> AndroidXML
+            value.equals(Po.value, ignoreCase = true) -> Po
+            else -> Custom(value)
+        }
+    }
 }

@@ -9,6 +9,7 @@ compose = "1.7.3"
 datetime = "0.6.1"
 dokka = "2.0.0"
 immutable = "0.3.8"
+kaml = "0.67.0"
 kodein = "7.24.1"
 kommand = "2.3.0"
 kotlin = "2.1.0"
@@ -36,6 +37,7 @@ locale = { group = "com.vanniktech", name = "multiplatform-locale", version.ref 
 semver = { group = "io.github.z4kn4fein", name = "semver", version.ref = "semver" }
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+serialization-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
 
 [plugins]
