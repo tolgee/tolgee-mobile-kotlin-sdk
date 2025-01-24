@@ -28,25 +28,7 @@ import org.gradle.kotlin.dsl.support.unzipTo
 import java.io.File
 import javax.inject.Inject
 
-open class PullTranslationTask : DefaultTask() {
-
-    @get:Optional
-    @get:Input
-    open val fallbackEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
-
-    @get:Optional
-    @get:Input
-    open val apiUrl: Property<String> = project.objects.property(String::class.java)
-
-    @get:Input
-    open val projectId: Property<String> = project.objects.property(String::class.java)
-
-    @get:Optional
-    @get:Input
-    open val apiKey: Property<String> = project.objects.property(String::class.java)
-
-    @get:Input
-    open val format: Property<Format> = project.objects.property(Format::class.java)
+open class PullTranslationTask : BaseTolgeeTask() {
 
     @get:Optional
     @get:InputDirectory
@@ -76,22 +58,15 @@ open class PullTranslationTask : DefaultTask() {
     open val projectLayout = project.layout
 
     init {
-        group = "tolgee"
         description = "Pulls the translations from Tolgee"
     }
 
     @TaskAction
     fun pull() {
-        val apiUrl = apiUrl.orNull?.ifBlank { null }?.let {
-            if (it == BaseTolgeeExtension.DEFAULT_API_URL || "$it/" == BaseTolgeeExtension.DEFAULT_API_URL) {
-                null // Let the CLI handle the base URL
-            } else {
-                it
-            }
-        }
-        val projectId = projectId.orNull?.ifBlank { null } ?: return
-        val apiKey = apiKey.orNull?.ifBlank { null }
-        val format = format.getOrElse(Format.ComposeXML)
+        val apiUrl = resolveApiUrl()
+        val projectId = resolveProjectId() ?: return
+        val apiKey = resolveApiKey()
+        val format = resolveFormat(Format.ComposeXML)
         val path = path.orNull?.asFile ?: projectLayout.projectDirectory.dir(PullExtension.COMMON_RESOURCES_PATH).asFile
         val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }
         val states = states.orNull?.filterNotNull()
@@ -111,7 +86,7 @@ open class PullTranslationTask : DefaultTask() {
             tags = tags,
             excludeTags = excludeTags
         )
-        val useFallback = fallbackEnabled.getOrElse(true) && !cliSuccessful
+        val useFallback = resolveFallbackEnabled(true) && !cliSuccessful
 
         if (useFallback) {
             logger.warn("Could not use CLI, falling back to REST API.")
@@ -164,11 +139,7 @@ open class PullTranslationTask : DefaultTask() {
     }
 
     fun apply(project: Project, extension: PullExtension = project.tolgeeExtension.pull) {
-        fallbackEnabled.set(extension.fallbackEnabled)
-        apiUrl.set(extension.apiUrl)
-        projectId.set(extension.projectId)
-        apiKey.set(extension.apiKey)
-        format.set(extension.format)
+        this.apply(extension)
 
         path.set(extension.path)
         languages.set(extension.languages)
