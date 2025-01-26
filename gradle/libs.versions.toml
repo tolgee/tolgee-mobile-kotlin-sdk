@@ -5,6 +5,7 @@
 [versions]
 library = "1.0.2-SNAPSHOT"
 android = "8.4.2"
+atomicfu = "0.27.0"
 compose = "1.7.3"
 datetime = "0.6.1"
 dokka = "2.0.0"
@@ -42,6 +43,7 @@ tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = 
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "android" }
+atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

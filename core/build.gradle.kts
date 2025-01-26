@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.serialization)
 }
@@ -11,10 +12,10 @@ kotlin {
         publishAllLibraryVariants()
     }
 
-    /*androidNativeX64()
+    androidNativeX64()
     androidNativeX86()
     androidNativeArm64()
-    androidNativeArm32()*/
+    androidNativeArm32()
 
     jvm()
 
@@ -58,7 +59,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.immutable)
             implementation(libs.ktor)
-            implementation(libs.ktorfit)
+            implementation(libs.serialization.json)
             implementation(libs.tooling)
         }
     }
