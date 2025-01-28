@@ -1,6 +1,7 @@
 package dev.datlag.tolgee.cli
 
 import com.kgit2.kommand.process.Stdio
+import dev.datlag.tolgee.common.fullPathSafely
 import dev.datlag.tolgee.model.Format
 import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tolgee.model.push.Mode
@@ -42,6 +43,7 @@ internal object TolgeeCLI : Node() {
         apiKey: String?,
         format: Format,
         path: File,
+        config: File?,
         languages: Collection<String>?,
         states: Collection<State>?,
         namespaces: Collection<String>?,
@@ -77,6 +79,9 @@ internal object TolgeeCLI : Node() {
                 if (!excludeTags.isNullOrEmpty()) {
                     args("--exclude-tags", excludeTags.joinToString(" "))
                 }
+                config?.fullPathSafely()?.let {
+                    args("--config", it)
+                }
             }
             .stdout(Stdio.Inherit)
             .spawn()
@@ -89,6 +94,7 @@ internal object TolgeeCLI : Node() {
         apiKey: String?,
         format: Format?,
         mode: Mode,
+        config: File?,
         languages: Collection<String>?,
         namespaces: Collection<String>?,
     ): Boolean = installed && scopeCatching {
@@ -115,6 +121,9 @@ internal object TolgeeCLI : Node() {
                 }
                 if (!namespaces.isNullOrEmpty()) {
                     args("--namespaces", namespaces.joinToString(" "))
+                }
+                config?.fullPathSafely()?.let {
+                    args("--config", it)
                 }
             }
             .stdout(Stdio.Inherit)

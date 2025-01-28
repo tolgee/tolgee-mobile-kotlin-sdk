@@ -8,6 +8,8 @@ import dev.datlag.tooling.existsSafely
 import dev.datlag.tooling.scopeCatching
 import dev.datlag.tooling.systemEnv
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import java.io.File
@@ -29,6 +31,8 @@ import java.util.*
  * @property format The format used by Tolgee for localization files. For example: `COMPOSE_XML` or `ANDROID_XML`.
  */
 open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
+
+    open val config: RegularFileProperty = objectFactory.fileProperty()
 
     internal val configuration: Property<Configuration> = objectFactory.property(Configuration::class.java)
 
@@ -54,7 +58,11 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     @JvmOverloads
     open fun setupConvention(project: Project, inherit: BaseTolgeeExtension? = null) {
         if (inherit == null) {
-            configuration.convention(project.provider { loadConfiguration(project) })
+            config.convention(project.provider { defaultConfigurationFile(project) })
+            configuration.convention(config.lazyMap(
+                project = project,
+                map = { it?.let(Configuration::from) }
+            ))
             fallbackEnabled.convention(true)
             apiUrl.convention(configuration.map { it.apiUrl ?: "" })
             projectId.convention(configuration.map { it.projectId ?: "" })
@@ -121,7 +129,7 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
         }
     }
 
-    internal fun loadConfiguration(project: Project): Configuration? {
+    private fun defaultConfigurationFile(project: Project): RegularFile? {
         val supportedNames = setOf(
             ".tolgeerc",
             ".tolgeerc.json",
@@ -136,17 +144,11 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
             "tolgee.config"
         )
 
-        val configFile = supportedNames.map { name ->
-            project.layout.projectDirectory.file(name).asFile
-        }.firstOrNull {
-            it.existsSafely()
-        } ?: supportedNames.map { name ->
-            project.rootProject.layout.projectDirectory.file(name).asFile
-        }.firstOrNull {
-            it.existsSafely()
-        }
-
-        return configFile?.let(Configuration::from)
+        return supportedNames.map { name ->
+            project.layout.projectDirectory.file(name)
+        }.firstOrNull { it.asFile.existsSafely() } ?: supportedNames.map { name ->
+            project.rootProject.layout.projectDirectory.file(name)
+        }.firstOrNull { it.asFile.existsSafely() }
     }
 
     companion object {

@@ -18,11 +18,11 @@ fun <T> HasMultipleValues<T>.set(vararg elements: T & Any) {
     this.set(elements.toList())
 }
 
-internal fun <T> Property<Configuration>.lazyMap(
+internal fun <T, R> Property<T>.lazyMap(
     project: Project,
-    map: (Configuration?) -> T?,
-    fallback: (Configuration?) -> T?
-): Provider<T> {
+    map: (T?) -> R?,
+    fallback: (T?) -> R? = { null }
+): Provider<R> {
     return project.provider {
         val config = this@lazyMap.orNull
         map(config) ?: fallback(config)
