@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TolgeePagedResponse<T>(
+internal data class TolgeePagedResponse<T>(
     @SerialName("_embedded") @Contextual val embedded: T,
     @SerialName("_links") val links: Links? = null,
     @SerialName("page") val page: Page? = null

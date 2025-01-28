@@ -38,7 +38,7 @@ kotlin {
     macosArm64()
 
     linuxX64()
-    linuxArm64()
+    // linuxArm64()
 
     mingwX64()
 
@@ -64,6 +64,12 @@ kotlin {
             implementation(libs.ktorfit)
             implementation(libs.serialization.json)
             implementation(libs.tooling)
+
+            // implementation(libs.i18n4k)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.ktor.okhttp)
         }
     }
 }
