@@ -51,14 +51,18 @@ data class TolgeeTranslation internal constructor(
 
     fun localized(key: String, vararg args: Any): String? {
         return groupedProviders.firstNotNullOfOrNull { it.indexOfKey(key) }?.let { index ->
-            getLocalizedStringN(
-                key = key,
-                index = index,
-                parameters = MessageParametersList(
-                    parameters = args.toList(),
-                    nameMapper = NameToIndexMapperNumbersFrom0
+            if (args.isEmpty()) {
+                getLocalizedString0(key, index)
+            } else {
+                getLocalizedStringN(
+                    key = key,
+                    index = index,
+                    parameters = MessageParametersList(
+                        parameters = args.toList(),
+                        nameMapper = NameToIndexMapperNumbersFrom0
+                    )
                 )
-            )
+            }
         }?.invoke()
     }
 
