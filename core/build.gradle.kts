@@ -65,7 +65,7 @@ kotlin {
             implementation(libs.serialization.json)
             implementation(libs.tooling)
 
-            // implementation(libs.i18n4k)
+            implementation(libs.i18n4k)
         }
 
         jvmMain.dependencies {

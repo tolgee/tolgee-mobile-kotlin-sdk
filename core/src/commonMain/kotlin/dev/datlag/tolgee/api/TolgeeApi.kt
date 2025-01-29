@@ -5,6 +5,7 @@ import dev.datlag.tolgee.api.responses.TolgeePagedResponse
 import dev.datlag.tolgee.model.TolgeeConfig
 import dev.datlag.tolgee.model.TolgeeKey
 import dev.datlag.tolgee.model.TolgeeProjectLanguage
+import dev.datlag.tolgee.model.TolgeeTranslation
 import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
 import io.ktor.client.statement.*
@@ -39,7 +40,7 @@ internal data object TolgeeApi {
         client: HttpClient,
         config: TolgeeConfig,
         currentLanguage: String?
-    ): ImmutableList<TolgeeKey> {
+    ): TolgeeTranslation {
         if (config.useCDN) {
             // return getTranslationsFromCDN(client, config, currentLanguage)
         }
@@ -79,7 +80,7 @@ internal data object TolgeeApi {
             currentPage++
         }
 
-        return allTranslations.toImmutableList()
+        return TolgeeTranslation(allTranslations.toImmutableList())
     }
 
     suspend fun getTranslationsFromCDN(
