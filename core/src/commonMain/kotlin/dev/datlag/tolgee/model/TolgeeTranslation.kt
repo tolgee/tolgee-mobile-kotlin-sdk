@@ -11,7 +11,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 data class TolgeeTranslation internal constructor(
-    private val keys: ImmutableList<TolgeeKey>
+    private val keys: ImmutableList<TolgeeKey>,
+    private val currentLocale: Locale?,
 ) : MessageBundle() {
 
     @Transient
@@ -63,7 +64,7 @@ data class TolgeeTranslation internal constructor(
                     )
                 )
             }
-        }?.invoke()
+        }?.toString(currentLocale)
     }
 
     @Serializable

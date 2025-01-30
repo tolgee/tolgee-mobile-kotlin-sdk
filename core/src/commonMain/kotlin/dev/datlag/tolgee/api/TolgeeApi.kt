@@ -1,8 +1,9 @@
 package dev.datlag.tolgee.api
 
+import de.comahe.i18n4k.createLocale
 import de.jensklingenberg.ktorfit.ktorfit
+import dev.datlag.tolgee.Tolgee
 import dev.datlag.tolgee.api.responses.TolgeePagedResponse
-import dev.datlag.tolgee.model.TolgeeConfig
 import dev.datlag.tolgee.model.TolgeeKey
 import dev.datlag.tolgee.model.TolgeeProjectLanguage
 import dev.datlag.tolgee.model.TolgeeTranslation
@@ -21,7 +22,7 @@ internal data object TolgeeApi {
         isLenient = true
     }
 
-    suspend fun getAllProjectLanguages(client: HttpClient, config: TolgeeConfig): List<TolgeeProjectLanguage> {
+    suspend fun getAllProjectLanguages(client: HttpClient, config: Tolgee.Config): List<TolgeeProjectLanguage> {
         val api = requestsInstance(client, config)
         val response = requestByIdOrApiKey(
             config = config,
@@ -38,12 +39,9 @@ internal data object TolgeeApi {
 
     suspend fun getTranslations(
         client: HttpClient,
-        config: TolgeeConfig,
+        config: Tolgee.Config,
         currentLanguage: String?
     ): TolgeeTranslation {
-        if (config.useCDN) {
-            // return getTranslationsFromCDN(client, config, currentLanguage)
-        }
 
         val api = requestsInstance(client, config)
         val allTranslations = mutableListOf<TolgeeKey>()
@@ -80,19 +78,24 @@ internal data object TolgeeApi {
             currentPage++
         }
 
-        return TolgeeTranslation(allTranslations.toImmutableList())
+        return TolgeeTranslation(
+            keys = allTranslations.toImmutableList(),
+            currentLocale = currentLanguage?.substringBefore(',')?.substringBefore('_')?.trim()?.takeIf {
+                it.length in 2..3
+            }?.let(::createLocale)
+        )
     }
 
     suspend fun getTranslationsFromCDN(
         client: HttpClient,
-        config: TolgeeConfig,
+        config: Tolgee.Config,
         currentLanguage: String?
     ) {
 
     }
 
     private suspend fun requestByIdOrApiKey(
-        config: TolgeeConfig,
+        config: Tolgee.Config,
         projectIdRequest: suspend (String) -> HttpResponse,
         fallbackRequest: suspend () -> HttpResponse
     ): HttpResponse? {
@@ -105,7 +108,7 @@ internal data object TolgeeApi {
         }.getOrNull()
     }
 
-    private fun requestsInstance(client: HttpClient, config: TolgeeConfig): TolgeeRequests {
+    private fun requestsInstance(client: HttpClient, config: Tolgee.Config): TolgeeRequests {
         return ktorfit {
             baseUrl(config.apiUrl)
 

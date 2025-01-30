@@ -4,7 +4,8 @@
 
 [versions]
 library = "1.0.2-SNAPSHOT"
-android = "8.4.2"
+android-core = "1.15.0"
+android-tools = "8.4.2"
 atomicfu = "0.27.0"
 compose = "1.7.3"
 datetime = "0.6.1"
@@ -25,7 +26,8 @@ serialization = "1.7.3"
 tooling = "1.7.0"
 
 [libraries]
-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android" }
+android = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
+android-tools = { group = "com.android.tools.build", name = "gradle", version.ref = "android-tools" }
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 i18n4k = { group = "de.comahe.i18n4k", name = "i18n4k-core", version.ref = "i18n4k" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
@@ -33,6 +35,9 @@ kodein-compose = { group = "org.kodein.di", name = "kodein-di-framework-compose"
 kommand = { group = "com.kgit2", name = "kommand", version.ref = "kommand" }
 kotlin-gradle-plugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor-java = { group = "io.ktor", name = "ktor-client-java", version.ref = "ktor" }
 ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfit" }
@@ -44,7 +49,7 @@ serialization-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.re
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
 
 [plugins]
-android-library = { id = "com.android.library", version.ref = "android" }
+android-library = { id = "com.android.library", version.ref = "android-tools" }
 atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

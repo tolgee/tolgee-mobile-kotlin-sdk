@@ -65,11 +65,25 @@ kotlin {
             implementation(libs.serialization.json)
             implementation(libs.tooling)
 
+            // Does not support androidNative and linuxArm64 yet (https://github.com/comahe-de/i18n4k/pull/75)
             implementation(libs.i18n4k)
         }
 
+        androidMain.dependencies {
+            implementation(libs.android)
+
+            // Can be used as it adds no other dependencies and just uses android utils under the hood
+            implementation(libs.ktor.android)
+        }
+
         jvmMain.dependencies {
-            implementation(libs.ktor.okhttp)
+            // Can be used as it adds no other dependencies and just uses java utils under the hood
+            implementation(libs.ktor.java)
+        }
+
+        appleMain.dependencies {
+            // Can be used as it adds no other dependencies and just uses apple utils under the hood
+            implementation(libs.ktor.darwin)
         }
     }
 }
