@@ -10,7 +10,7 @@ data class TolgeeAndroid internal constructor(
 
     fun getString(context: Context, @StringRes key: Int, vararg args: Any): String {
         return getKeyFromRes(context, key)?.let {
-            getTranslation(key = it, args = args)
+            getTranslationFromCache(key = it, args = args)
         } ?: context.getString(key, *args)
     }
 

@@ -1,11 +1,11 @@
 package dev.datlag.tolgee
 
 import de.comahe.i18n4k.Locale
-import de.comahe.i18n4k.systemLocale
 import dev.datlag.tolgee.common.createPlatformTolgee
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
 import io.ktor.client.*
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
@@ -15,7 +15,16 @@ open class Tolgee(
 ) {
 
     @JvmOverloads
-    open fun getTranslation(
+    open suspend fun getTranslation(
+        key: String,
+        locale: Locale = systemLocale,
+        vararg args: Any
+    ): String? = withContext(config.network.context) {
+        return@withContext null
+    }
+
+    @JvmOverloads
+    open fun getTranslationFromCache(
         key: String,
         locale: Locale = systemLocale,
         vararg args: Any
@@ -104,6 +113,9 @@ open class Tolgee(
     }
 
     companion object {
+        @JvmStatic
+        val systemLocale = de.comahe.i18n4k.systemLocale
+
         @JvmStatic
         fun init(config: Config) = createPlatformTolgee(config)
 
