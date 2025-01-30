@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
 internal data class TolgeePagedResponse<T>(
     @SerialName("_embedded") @Contextual val embedded: T,
     @SerialName("_links") val links: Links? = null,
-    @SerialName("page") val page: Page? = null
+    @SerialName("page") val page: Page? = null,
+    @SerialName("nextCursor") val nextCursor: String? = null,
 ) {
 
     @Serializable

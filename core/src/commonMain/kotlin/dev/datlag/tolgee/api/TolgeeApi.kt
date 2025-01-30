@@ -11,7 +11,6 @@ import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.json.Json
 

@@ -72,18 +72,31 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.android)
 
-            // Can be used as it adds no other dependencies and just uses android utils under the hood
             implementation(libs.ktor.android)
         }
 
         jvmMain.dependencies {
-            // Can be used as it adds no other dependencies and just uses java utils under the hood
             implementation(libs.ktor.java)
         }
 
         appleMain.dependencies {
-            // Can be used as it adds no other dependencies and just uses apple utils under the hood
             implementation(libs.ktor.darwin)
+        }
+
+        linuxMain.dependencies {
+            implementation(libs.ktor.curl)
+        }
+
+        mingwMain.dependencies {
+            implementation(libs.ktor.winhttp)
+        }
+
+        jsMain.dependencies {
+            implementation(libs.ktor.js)
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.js)
         }
     }
 }

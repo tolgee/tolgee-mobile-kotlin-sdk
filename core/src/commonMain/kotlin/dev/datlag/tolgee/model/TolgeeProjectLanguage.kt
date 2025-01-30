@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class TolgeeProjectLanguage(
+data class TolgeeProjectLanguage(
     @SerialName("name") val name: String,
     @SerialName("tag") val tag: String,
     @SerialName("originalName") val originalName: String? = null,
@@ -13,7 +13,7 @@ internal data class TolgeeProjectLanguage(
 ) {
 
     @Serializable
-    data class PagedWrapper(
+    internal data class PagedWrapper(
         @SerialName("languages") val languages: List<TolgeeProjectLanguage>
     )
 }

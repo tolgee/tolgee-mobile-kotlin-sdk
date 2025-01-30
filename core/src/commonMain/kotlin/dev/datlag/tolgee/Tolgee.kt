@@ -1,19 +1,26 @@
 package dev.datlag.tolgee
 
+import de.comahe.i18n4k.Locale
+import de.comahe.i18n4k.systemLocale
 import dev.datlag.tolgee.common.createPlatformTolgee
-import dev.datlag.tolgee.common.platformHttpClient
-import io.ktor.client.*
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
+import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
 
-abstract class Tolgee(
+open class Tolgee(
     open val config: Config
 ) {
 
-    abstract fun getString(key: String, vararg args: Any): String?
+    @JvmOverloads
+    open fun getTranslation(
+        key: String,
+        locale: Locale = systemLocale,
+        vararg args: Any
+    ): String? {
+        return null
+    }
 
-    data class Config(
+    @ExposedCopyVisibility
+    data class Config internal constructor(
         val apiKey: String,
         val apiUrl: String = DEFAULT_API_URL,
         val projectId: String? = null,
