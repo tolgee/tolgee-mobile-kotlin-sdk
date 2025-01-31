@@ -8,22 +8,22 @@ data class TolgeeAndroid internal constructor(
     override val config: Config
 ) : Tolgee(config) {
 
-    suspend fun getString(context: Context, @StringRes key: Int, vararg args: Any): String {
-        return getKeyFromRes(context, key)?.let {
-            getTranslation(key = it, args = args)
-        } ?: getStringFromCache(context, key, *args)
+    suspend fun getString(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
+        return getKeyFromRes(context, id)?.let {
+            translation(key = it, formatArgs = formatArgs)
+        } ?: getStringFromCache(context, id, *formatArgs)
     }
 
-    fun getStringFromCache(context: Context, @StringRes key: Int, vararg args: Any): String {
-        return getKeyFromRes(context, key)?.let {
-            getTranslationFromCache(key = it, args = args)
-        } ?: context.getString(key, *args)
+    fun getStringFromCache(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
+        return getKeyFromRes(context, id)?.let {
+            translationFromCache(key = it, formatArgs = formatArgs)
+        } ?: context.getString(id, *formatArgs)
     }
 
     companion object {
-        internal fun getKeyFromRes(context: Context, @StringRes key: Int): String? {
+        fun getKeyFromRes(context: Context, @StringRes id: Int): String? {
             return scopeCatching {
-                context.resources.getResourceEntryName(key)
+                context.resources.getResourceEntryName(id)
             }.getOrNull()?.trim()?.ifBlank { null }
         }
     }

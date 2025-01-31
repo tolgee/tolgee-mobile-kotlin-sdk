@@ -15,5 +15,5 @@ plugins {
 dependencies {
     dokka(project(":compose"))
     dokka(project(":gradle-plugin"))
-    dokka(project(":kodein"))
+    dokka(project(":compose:kodein"))
 }

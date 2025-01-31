@@ -37,6 +37,6 @@ fun Context.getString(tolgee: Tolgee? = Tolgee.instance, @StringRes resId: Int, 
 
     return (instance as? TolgeeAndroid)?.getStringFromCache(this, resId, *formatArgs)
         ?: TolgeeAndroid.getKeyFromRes(this, resId)?.let {
-        instance.getTranslationFromCache(key = it, args = formatArgs)
+        instance.translationFromCache(key = it, formatArgs = formatArgs)
     } ?: this.getString(resId, *formatArgs)
 }

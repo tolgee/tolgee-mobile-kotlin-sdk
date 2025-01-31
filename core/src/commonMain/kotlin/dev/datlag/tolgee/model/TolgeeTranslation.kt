@@ -6,13 +6,13 @@ import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.NameToIndexMapperNumbersFrom0
 import de.comahe.i18n4k.messages.formatter.MessageParametersList
 import de.comahe.i18n4k.messages.providers.MessagesProvider
+import de.comahe.i18n4k.strings.LocalizedString
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 data class TolgeeTranslation internal constructor(
-    private val keys: ImmutableList<TolgeeKey>,
-    private val currentLocale: Locale?,
+    private val keys: ImmutableList<TolgeeKey>
 ) : MessageBundle() {
 
     @Transient
@@ -50,7 +50,7 @@ data class TolgeeTranslation internal constructor(
         }
     }
 
-    fun localized(key: String, vararg args: Any): String? {
+    fun localized(key: String, vararg args: Any): LocalizedString? {
         return groupedProviders.firstNotNullOfOrNull { it.indexOfKey(key) }?.let { index ->
             if (args.isEmpty()) {
                 getLocalizedString0(key, index)
@@ -64,7 +64,7 @@ data class TolgeeTranslation internal constructor(
                     )
                 )
             }
-        }?.toString(currentLocale)
+        }
     }
 
     fun hasLocale(locale: Locale): Boolean {

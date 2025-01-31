@@ -1,12 +1,21 @@
 package dev.datlag.tolgee
 
 import de.comahe.i18n4k.Locale
+import de.comahe.i18n4k.language
+import dev.datlag.tolgee.api.TolgeeApi
 import dev.datlag.tolgee.common.createPlatformTolgee
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
+import dev.datlag.tolgee.model.TolgeeProjectLanguage
+import dev.datlag.tolgee.model.TolgeeTranslation
+import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import kotlinx.atomicfu.atomic
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.jvm.JvmOverloads
@@ -16,25 +25,70 @@ open class Tolgee(
     open val config: Config
 ) {
 
-    @JvmOverloads
-    open suspend fun getTranslation(
-        key: String,
-        locale: Locale? = config.locale,
-        vararg args: Any
-    ): String? = withContext(config.network.context) {
-        // restrict fetching to config locale (api 'languages' query) or no restriction
-        // use locale in toString method, falls back to systemLocale anyway
-        return@withContext null
+    private val languagesMutex = Mutex()
+    private var cachedLanguages: ImmutableSet<TolgeeProjectLanguage> = persistentSetOf()
+
+    private val translationsMutex = Mutex()
+    private var cachedTranslation: TolgeeTranslation? = null
+
+    suspend fun allLanguages() = withContext(config.network.context) {
+        return@withContext cachedLanguages.ifEmpty {
+            suspendCatching {
+                languagesMutex.withLock {
+                    cachedLanguages.ifEmpty {
+                        TolgeeApi.getAllProjectLanguages(
+                            client = config.network.client,
+                            config = config
+                        ).also {
+                            cachedLanguages = it
+                        }
+                    }
+                }
+            }.getOrNull() ?: cachedLanguages
+        }
     }
 
-    @JvmOverloads
-    open fun getTranslationFromCache(
+    fun allCachedLanguages() = cachedLanguages
+
+    suspend fun translation(
         key: String,
         locale: Locale? = config.locale,
-        vararg args: Any
-    ): String? {
-        return null
+        vararg formatArgs: Any
+    ): String? = withContext(config.network.context) {
+        val translation = cachedTranslation ?: suspendCatching {
+            translationsMutex.withLock {
+                cachedTranslation ?: TolgeeApi.getTranslations(
+                    client = config.network.client,
+                    config = config,
+                    currentLanguage = config.locale?.language?.ifBlank { null },
+                ).also {
+                    cachedTranslation = it
+                }
+            }
+        }.getOrNull() ?: cachedTranslation ?: return@withContext null
+
+        return@withContext translation.localized(key, *formatArgs)?.toString(locale)
     }
+
+    suspend fun translation(
+        key: String,
+        vararg formatArgs: Any,
+    ) = translation(key, config.locale, *formatArgs)
+
+    fun translationFromCache(
+        key: String,
+        locale: Locale? = config.locale,
+        vararg formatArgs: Any
+    ): String? {
+        val translation = cachedTranslation ?: return null
+
+        return translation.localized(key, *formatArgs)?.toString(locale)
+    }
+
+    fun translationFromCache(
+        key: String,
+        vararg formatArgs: Any,
+    ) = translationFromCache(key, config.locale, *formatArgs)
 
     @ConsistentCopyVisibility
     data class Config internal constructor(

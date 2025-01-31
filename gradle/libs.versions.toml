@@ -9,6 +9,7 @@ android-tools = "8.4.2"
 atomicfu = "0.27.0"
 binary-compatibility = "0.17.0"
 compose = "1.7.3"
+coroutines = "1.10.1"
 datetime = "0.6.1"
 dokka = "2.0.0"
 i18n4k = "0.10.0"
@@ -29,6 +30,7 @@ tooling = "1.7.0"
 [libraries]
 android = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
 android-tools = { group = "com.android.tools.build", name = "gradle", version.ref = "android-tools" }
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 i18n4k = { group = "de.comahe.i18n4k", name = "i18n4k-core", version.ref = "i18n4k" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }

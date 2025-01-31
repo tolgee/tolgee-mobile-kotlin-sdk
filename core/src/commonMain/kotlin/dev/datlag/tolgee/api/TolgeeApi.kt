@@ -11,7 +11,10 @@ import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.serialization.json.Json
 
 internal data object TolgeeApi {
@@ -21,19 +24,19 @@ internal data object TolgeeApi {
         isLenient = true
     }
 
-    suspend fun getAllProjectLanguages(client: HttpClient, config: Tolgee.Config): List<TolgeeProjectLanguage> {
+    suspend fun getAllProjectLanguages(client: HttpClient, config: Tolgee.Config): ImmutableSet<TolgeeProjectLanguage> {
         val api = requestsInstance(client, config)
         val response = requestByIdOrApiKey(
             config = config,
             projectIdRequest = { api.allProjectLanguages(config.apiKey, it) },
             fallbackRequest = { api.allProjectLanguages(config.apiKey) }
-        ) ?: return emptyList()
+        ) ?: return persistentSetOf()
 
         return suspendCatching {
             json.decodeFromString<TolgeePagedResponse<TolgeeProjectLanguage.PagedWrapper>>(
                 response.bodyAsText()
             )
-        }.getOrNull()?.embedded?.languages ?: emptyList()
+        }.getOrNull()?.embedded?.languages?.toImmutableSet() ?: persistentSetOf()
     }
 
     suspend fun getTranslations(
@@ -78,17 +81,8 @@ internal data object TolgeeApi {
         }
 
         return TolgeeTranslation(
-            keys = allTranslations.toImmutableList(),
-            currentLocale = currentLanguage?.substringBefore(',')?.trim()?.let(::forLocaleTag)
+            keys = allTranslations.toImmutableList()
         )
-    }
-
-    suspend fun getTranslationsFromCDN(
-        client: HttpClient,
-        config: Tolgee.Config,
-        currentLanguage: String?
-    ) {
-
     }
 
     private suspend fun requestByIdOrApiKey(

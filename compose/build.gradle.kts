@@ -64,28 +64,12 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.components.resources)
 
-            implementation(libs.datetime)
-            implementation(libs.immutable)
-            implementation(libs.ktor)
-            implementation(libs.serialization)
-            implementation(libs.serialization.json)
-            implementation(libs.tooling)
+            implementation(libs.coroutines)
+            api(project(":core"))
         }
 
         androidMain.dependencies {
             implementation(compose.ui)
-        }
-
-        val localeMain by creating {
-            dependsOn(commonMain.get())
-
-            androidMain.orNull?.dependsOn(this)
-            jvmMain.orNull?.dependsOn(this)
-            iosMain.orNull?.dependsOn(this)
-
-            dependencies {
-                implementation(libs.locale)
-            }
         }
     }
 }
