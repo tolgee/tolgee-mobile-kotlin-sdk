@@ -5,6 +5,7 @@ import dev.datlag.tolgee.common.createPlatformTolgee
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
 import io.ktor.client.*
+import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.jvm.JvmOverloads
@@ -116,10 +117,42 @@ open class Tolgee(
         @JvmStatic
         val systemLocale = de.comahe.i18n4k.systemLocale
 
-        @JvmStatic
-        fun init(config: Config) = createPlatformTolgee(config)
+        private val _instance = atomic<Tolgee?>(null)
 
         @JvmStatic
-        fun init(builder: Config.Builder.() -> Unit) = init(Config.Builder().apply(builder).build())
+        val instance: Tolgee?
+            get() = _instance.value
+
+        @JvmStatic
+        @JvmOverloads
+        fun init(
+            global: Boolean = _instance.value == null,
+            config: Config
+        ) = createPlatformTolgee(config).also {
+            if (global) {
+                _instance.value = it
+            }
+        }
+
+        @JvmStatic
+        @JvmOverloads
+        fun init(
+            global: Boolean = _instance.value == null,
+            builder: Config.Builder.() -> Unit
+        ) = init(global, Config.Builder().apply(builder).build())
+
+        @JvmStatic
+        @JvmOverloads
+        fun instanceOrInit(
+            global: Boolean = _instance.value == null,
+            config: Config
+        ) = instance ?: init(global, config)
+
+        @JvmStatic
+        @JvmOverloads
+        fun instanceOrInit(
+            global: Boolean = _instance.value == null,
+            builder: Config.Builder.() -> Unit
+        ) = instance ?: init(global, builder)
     }
 }
