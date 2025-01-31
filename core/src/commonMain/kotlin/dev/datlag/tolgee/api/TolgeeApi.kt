@@ -1,6 +1,6 @@
 package dev.datlag.tolgee.api
 
-import de.comahe.i18n4k.createLocale
+import de.comahe.i18n4k.forLocaleTag
 import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.Tolgee
 import dev.datlag.tolgee.api.responses.TolgeePagedResponse
@@ -79,9 +79,7 @@ internal data object TolgeeApi {
 
         return TolgeeTranslation(
             keys = allTranslations.toImmutableList(),
-            currentLocale = currentLanguage?.substringBefore(',')?.substringBefore('_')?.trim()?.takeIf {
-                it.length in 2..3
-            }?.let(::createLocale)
+            currentLocale = currentLanguage?.substringBefore(',')?.trim()?.let(::forLocaleTag)
         )
     }
 

@@ -1,7 +1,7 @@
 package dev.datlag.tolgee.model
 
 import de.comahe.i18n4k.Locale
-import de.comahe.i18n4k.createLocale
+import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.NameToIndexMapperNumbersFrom0
 import de.comahe.i18n4k.messages.formatter.MessageParametersList
@@ -29,7 +29,7 @@ data class TolgeeTranslation internal constructor(
     @Transient
     private val groupedProviders = groupedKeysByLocale.map { (locale, translation) ->
         object : MessagesProvider {
-            override val locale: Locale = createLocale(locale)
+            override val locale: Locale = forLocaleTag(locale)
 
             override val size: Int
                 get() = translation.size
@@ -65,6 +65,10 @@ data class TolgeeTranslation internal constructor(
                 )
             }
         }?.toString(currentLocale)
+    }
+
+    fun hasLocale(locale: Locale): Boolean {
+        return locales.contains(locale)
     }
 
     @Serializable
