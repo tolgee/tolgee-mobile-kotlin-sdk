@@ -31,24 +31,36 @@ open class Tolgee(
     private val translationsMutex = Mutex()
     private var cachedTranslation: TolgeeTranslation? = null
 
+    private suspend fun loadLanguages() = languagesMutex.withLock {
+        cachedLanguages.ifEmpty {
+            TolgeeApi.getAllProjectLanguages(
+                client = config.network.client,
+                config = config
+            ).also {
+                cachedLanguages = it
+            }
+        }
+    }
+
     suspend fun allLanguages() = withContext(config.network.context) {
         return@withContext cachedLanguages.ifEmpty {
             suspendCatching {
-                languagesMutex.withLock {
-                    cachedLanguages.ifEmpty {
-                        TolgeeApi.getAllProjectLanguages(
-                            client = config.network.client,
-                            config = config
-                        ).also {
-                            cachedLanguages = it
-                        }
-                    }
-                }
+                loadLanguages()
             }.getOrNull() ?: cachedLanguages
         }
     }
 
-    fun allCachedLanguages() = cachedLanguages
+    fun allLanguagesFromCache() = cachedLanguages
+
+    private suspend fun loadTranslations() = translationsMutex.withLock {
+        cachedTranslation ?: TolgeeApi.getTranslations(
+            client = config.network.client,
+            config = config,
+            currentLanguage = config.locale?.language?.ifBlank { null },
+        ).also {
+            cachedTranslation = it
+        }
+    }
 
     suspend fun translation(
         key: String,
@@ -56,15 +68,7 @@ open class Tolgee(
         vararg formatArgs: Any
     ): String? = withContext(config.network.context) {
         val translation = cachedTranslation ?: suspendCatching {
-            translationsMutex.withLock {
-                cachedTranslation ?: TolgeeApi.getTranslations(
-                    client = config.network.client,
-                    config = config,
-                    currentLanguage = config.locale?.language?.ifBlank { null },
-                ).also {
-                    cachedTranslation = it
-                }
-            }
+            loadTranslations()
         }.getOrNull() ?: cachedTranslation ?: return@withContext null
 
         return@withContext translation.localized(key, *formatArgs)?.toString(locale)
@@ -89,6 +93,11 @@ open class Tolgee(
         key: String,
         vararg formatArgs: Any,
     ) = translationFromCache(key, config.locale, *formatArgs)
+
+    suspend fun preload() {
+        suspendCatching { loadLanguages() }
+        suspendCatching { loadTranslations() }
+    }
 
     @ConsistentCopyVisibility
     data class Config internal constructor(
