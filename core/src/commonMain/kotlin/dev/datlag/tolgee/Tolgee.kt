@@ -22,7 +22,7 @@ open class Tolgee(
         locale: Locale? = config.locale,
         vararg args: Any
     ): String? = withContext(config.network.context) {
-        // restrict fetching to locale (api 'languages' query) or no restriction
+        // restrict fetching to config locale (api 'languages' query) or no restriction
         // use locale in toString method, falls back to systemLocale anyway
         return@withContext null
     }

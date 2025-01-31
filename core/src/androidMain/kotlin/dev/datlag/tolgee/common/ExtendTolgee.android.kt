@@ -32,9 +32,11 @@ internal actual val platformNetworkContext: CoroutineContext
  * @return The string data associated with the resource, formatted and
  *         stripped of styled text information.
  */
-fun Context.getString(tolgee: Tolgee, @StringRes resId: Int, vararg formatArgs: Any): String {
-    return (tolgee as? TolgeeAndroid)?.getStringFromCache(this, resId, *formatArgs)
+fun Context.getString(tolgee: Tolgee? = Tolgee.instance, @StringRes resId: Int, vararg formatArgs: Any): String {
+    val instance = tolgee ?: Tolgee.instance ?: return this.getString(resId, *formatArgs)
+
+    return (instance as? TolgeeAndroid)?.getStringFromCache(this, resId, *formatArgs)
         ?: TolgeeAndroid.getKeyFromRes(this, resId)?.let {
-        tolgee.getTranslationFromCache(key = it, args = formatArgs)
+        instance.getTranslationFromCache(key = it, args = formatArgs)
     } ?: this.getString(resId, *formatArgs)
 }
