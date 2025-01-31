@@ -5,6 +5,7 @@ import dev.datlag.tolgee.common.createPlatformTolgee
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -18,16 +19,18 @@ open class Tolgee(
     @JvmOverloads
     open suspend fun getTranslation(
         key: String,
-        locale: Locale = systemLocale,
+        locale: Locale? = config.locale,
         vararg args: Any
     ): String? = withContext(config.network.context) {
+        // restrict fetching to locale (api 'languages' query) or no restriction
+        // use locale in toString method, falls back to systemLocale anyway
         return@withContext null
     }
 
     @JvmOverloads
     open fun getTranslationFromCache(
         key: String,
-        locale: Locale = systemLocale,
+        locale: Locale? = config.locale,
         vararg args: Any
     ): String? {
         return null
@@ -36,9 +39,10 @@ open class Tolgee(
     @ConsistentCopyVisibility
     data class Config internal constructor(
         val apiKey: String,
-        val apiUrl: String = DEFAULT_API_URL,
-        val projectId: String? = null,
-        val network: Network = Network()
+        val apiUrl: String,
+        val projectId: String?,
+        val locale: Locale?,
+        val network: Network
     ) {
 
         class Builder {
@@ -54,6 +58,8 @@ open class Tolgee(
                     field = value?.trim()?.ifBlank { null }
                 }
 
+            var locale: Locale? = null
+
             var network: Network = Network()
 
             fun apiKey(apiKey: String) = apply {
@@ -68,6 +74,10 @@ open class Tolgee(
                 this.projectId = projectId
             }
 
+            fun locale(locale: Locale) = apply {
+                this.locale = locale
+            }
+
             fun network(network: Network) = apply {
                 this.network = network
             }
@@ -80,6 +90,8 @@ open class Tolgee(
                 apiKey = apiKey,
                 apiUrl = apiUrl,
                 projectId = projectId,
+                locale = locale,
+                network = network
             )
         }
 
@@ -96,6 +108,22 @@ open class Tolgee(
                 fun client(client: HttpClient) = apply {
                     this.client = client
                 }
+
+                fun client(engine: HttpClientEngine) = client(HttpClient(engine))
+
+                fun <T : HttpClientEngineConfig> client(engineFactory: HttpClientEngineFactory<T>) = client(HttpClient(engineFactory))
+
+                fun client(config: HttpClientConfig<*>.() -> Unit) = client(HttpClient(config))
+
+                fun client(
+                    engine: HttpClientEngine,
+                    config: HttpClientConfig<*>.() -> Unit
+                ) = client(HttpClient(engine, config))
+
+                fun <T : HttpClientEngineConfig> client(
+                    engineFactory: HttpClientEngineFactory<T>,
+                    config: HttpClientConfig<T>.() -> Unit
+                ) = client(HttpClient(engineFactory, config))
 
                 fun context(context: CoroutineContext) = apply {
                     this.context = context
@@ -115,7 +143,8 @@ open class Tolgee(
 
     companion object {
         @JvmStatic
-        val systemLocale = de.comahe.i18n4k.systemLocale
+        val systemLocale
+            get() = de.comahe.i18n4k.systemLocale
 
         private val _instance = atomic<Tolgee?>(null)
 
