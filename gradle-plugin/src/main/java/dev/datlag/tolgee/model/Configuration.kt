@@ -4,6 +4,7 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.decodeFromStream
 import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tolgee.model.push.Mode
+import dev.datlag.tooling.existsRSafely
 import dev.datlag.tooling.scopeCatching
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,6 +12,8 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import org.gradle.api.file.RegularFile
+import org.gradle.api.file.RegularFileProperty
 import java.io.File
 import java.io.InputStream
 
@@ -139,6 +142,14 @@ internal data class Configuration(
             yamlParser.decodeFromStream<Configuration>(stream)
         }.getOrNull()?.toNullIfEmpty()
 
-        fun from(file: File): Configuration? = file.inputStream().use(::from) ?: from(file.readText())
+        fun from(file: File): Configuration? {
+            return if (file.existsRSafely()) {
+                file.inputStream().use(::from) ?: from(file.readText())
+            } else {
+                null
+            }
+        }
+
+        fun from(file: RegularFile): Configuration? = file.asFile.let(::from)
     }
 }

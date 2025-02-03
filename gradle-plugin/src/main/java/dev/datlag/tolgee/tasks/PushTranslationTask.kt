@@ -5,13 +5,19 @@ import dev.datlag.tolgee.common.tolgeeExtension
 import dev.datlag.tolgee.extension.PushExtension
 import dev.datlag.tolgee.model.push.Mode
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
 open class PushTranslationTask : BaseTolgeeTask() {
+
+    @get:Optional
+    @get:InputFile
+    open val config: RegularFileProperty = project.objects.fileProperty()
 
     @get:Optional
     @get:Input
@@ -45,6 +51,7 @@ open class PushTranslationTask : BaseTolgeeTask() {
             apiKey = apiKey,
             format = format,
             mode = mode,
+            config = config.orNull?.asFile,
             languages = languages,
             namespaces = namespaces,
         )
@@ -58,6 +65,7 @@ open class PushTranslationTask : BaseTolgeeTask() {
     fun apply(project: Project, extension: PushExtension = project.tolgeeExtension.push) {
         this.apply(extension)
 
+        config.set(extension.config)
         forceMode.set(extension.forceMode)
         languages.set(extension.languages)
         namespaces.set(extension.namespaces)
