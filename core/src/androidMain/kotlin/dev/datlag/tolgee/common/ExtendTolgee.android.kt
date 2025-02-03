@@ -32,11 +32,27 @@ internal actual val platformNetworkContext: CoroutineContext
  * @return The string data associated with the resource, formatted and
  *         stripped of styled text information.
  */
-fun Context.getString(tolgee: Tolgee? = Tolgee.instance, @StringRes resId: Int, vararg formatArgs: Any): String {
-    val instance = tolgee ?: Tolgee.instance ?: return this.getString(resId, *formatArgs)
-
-    return (instance as? TolgeeAndroid)?.getStringFromCache(this, resId, *formatArgs)
+fun Context.getString(tolgee: Tolgee, @StringRes resId: Int, vararg formatArgs: Any): String {
+    return (tolgee as? TolgeeAndroid)?.getStringFromCache(this, resId, *formatArgs)
         ?: TolgeeAndroid.getKeyFromRes(this, resId)?.let {
-        instance.translationFromCache(key = it, formatArgs = formatArgs)
+        tolgee.translationFromCache(key = it, formatArgs = formatArgs)
     } ?: this.getString(resId, *formatArgs)
+}
+
+/**
+ * Returns a localized formatted string from [Tolgee] cache or the application's package's
+ * default string table, substituting the format arguments as defined in
+ * [java.util.Formatter] and [java.lang.String.format].
+ *
+ * @param resId Resource id for the format string
+ * @param formatArgs The format arguments that will be used for
+ *                   substitution.
+ * @return The string data associated with the resource, formatted and
+ *         stripped of styled text information.
+ */
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+fun Context.getString(@StringRes resId: Int, vararg formatArgs: Any): String {
+    val instance = Tolgee.instance ?: return this.getString(resId, *formatArgs)
+
+    return this.getString(instance, resId, *formatArgs)
 }

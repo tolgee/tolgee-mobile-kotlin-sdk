@@ -15,8 +15,12 @@ fun Tolgee.stringResource(resource: StringResource, vararg formatArgs: Any): Str
 }
 
 @Composable
-fun stringResource(tolgee: Tolgee? = Tolgee.instance, resource: StringResource, vararg formatArgs: Any): String {
-    val instance = tolgee ?: Tolgee.instance ?: return org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
+fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: Any): String {
+    return tolgee.stringResource(resource, *formatArgs)
+}
 
-    return instance.stringResource(resource, *formatArgs)
+@Composable
+fun stringResource(resource: StringResource, vararg formatArgs: Any): String {
+    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
+    return stringResource(tolgee, resource, *formatArgs)
 }

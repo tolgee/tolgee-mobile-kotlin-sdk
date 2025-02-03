@@ -27,8 +27,13 @@ fun Tolgee.stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
 }
 
 @Composable
-fun stringResource(tolgee: Tolgee? = Tolgee.instance, @StringRes id: Int, vararg formatArgs: Any): String {
-    val instance = tolgee ?: Tolgee.instance ?: return androidx.compose.ui.res.stringResource(id, *formatArgs)
+fun stringResource(tolgee: Tolgee, @StringRes id: Int, vararg formatArgs: Any): String {
+    return tolgee.stringResource(id, *formatArgs)
+}
 
-    return instance.stringResource(id, *formatArgs)
+@Composable
+fun stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
+    val instance = Tolgee.instance ?: return androidx.compose.ui.res.stringResource(id, *formatArgs)
+
+    return stringResource(instance, id, *formatArgs)
 }
