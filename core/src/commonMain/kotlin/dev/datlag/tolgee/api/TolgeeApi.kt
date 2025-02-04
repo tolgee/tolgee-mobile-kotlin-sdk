@@ -1,9 +1,8 @@
 package dev.datlag.tolgee.api
 
-import de.comahe.i18n4k.forLocaleTag
 import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.Tolgee
-import dev.datlag.tolgee.api.responses.TolgeePagedResponse
+import dev.datlag.tolgee.model.TolgeePagedResponse
 import dev.datlag.tolgee.model.TolgeeKey
 import dev.datlag.tolgee.model.TolgeeProjectLanguage
 import dev.datlag.tolgee.model.TolgeeTranslation

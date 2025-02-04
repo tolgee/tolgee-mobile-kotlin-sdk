@@ -9,19 +9,19 @@ data class TolgeeAndroid internal constructor(
 ) : Tolgee(config) {
 
     suspend fun getString(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
-        return getKeyFromRes(context, id)?.let {
+        return keyFromStringResource(context, id)?.let {
             translation(key = it, formatArgs = formatArgs)
         } ?: getStringFromCache(context, id, *formatArgs)
     }
 
     fun getStringFromCache(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
-        return getKeyFromRes(context, id)?.let {
+        return keyFromStringResource(context, id)?.let {
             translationFromCache(key = it, formatArgs = formatArgs)
         } ?: context.getString(id, *formatArgs)
     }
 
     companion object {
-        fun getKeyFromRes(context: Context, @StringRes id: Int): String? {
+        fun keyFromStringResource(context: Context, @StringRes id: Int): String? {
             return scopeCatching {
                 context.resources.getResourceEntryName(id)
             }.getOrNull()?.trim()?.ifBlank { null }

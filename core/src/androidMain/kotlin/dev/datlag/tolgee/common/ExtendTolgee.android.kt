@@ -34,7 +34,7 @@ internal actual val platformNetworkContext: CoroutineContext
  */
 fun Context.getString(tolgee: Tolgee, @StringRes resId: Int, vararg formatArgs: Any): String {
     return (tolgee as? TolgeeAndroid)?.getStringFromCache(this, resId, *formatArgs)
-        ?: TolgeeAndroid.getKeyFromRes(this, resId)?.let {
+        ?: TolgeeAndroid.keyFromStringResource(this, resId)?.let {
         tolgee.translationFromCache(key = it, formatArgs = formatArgs)
     } ?: this.getString(resId, *formatArgs)
 }

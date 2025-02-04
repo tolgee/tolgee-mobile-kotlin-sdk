@@ -1,4 +1,4 @@
-package dev.datlag.tolgee.api.responses
+package dev.datlag.tolgee.model
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
@@ -9,6 +9,7 @@ internal data class TolgeePagedResponse<T>(
     @SerialName("_embedded") @Contextual val embedded: T,
     @SerialName("_links") val links: Links? = null,
     @SerialName("page") val page: Page? = null,
+    @SerialName("selectedLanguages") val selectedLanguages: Set<TolgeeProjectLanguage>? = null,
     @SerialName("nextCursor") val nextCursor: String? = null,
 ) {
 
