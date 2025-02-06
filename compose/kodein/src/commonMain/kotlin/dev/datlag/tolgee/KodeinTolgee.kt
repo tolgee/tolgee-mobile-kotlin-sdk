@@ -10,5 +10,7 @@ import org.kodein.di.instanceOrNull
 fun kodeinStringResource(res: StringResource, vararg formatArgs: Any): String {
     val instance by localDI().instanceOrNull<Tolgee>()
 
-    return (instance ?: Tolgee.instance)?.stringResource(res, *formatArgs) ?: stringResource(res, *formatArgs)
+    return (instance ?: Tolgee.instance)?.let {
+        stringResource(it, res, *formatArgs)
+    } ?: stringResource(res, *formatArgs)
 }

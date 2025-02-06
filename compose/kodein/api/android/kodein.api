@@ -1,0 +1,8 @@
+public final class dev/datlag/tolgee/KodeinTolgeeKt {
+	public static final fun kodeinStringResource (Lorg/jetbrains/compose/resources/StringResource;[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/KodeinTolgee_androidKt {
+	public static final fun kodeinStringResource (I[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+}
+
