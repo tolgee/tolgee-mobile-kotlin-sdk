@@ -7,11 +7,13 @@ import dev.datlag.tolgee.TolgeeAndroid
 import dev.datlag.tolgee.model.TolgeeMessageParams
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
+import io.ktor.client.plugins.cache.*
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
 internal actual val platformHttpClient: HttpClient = HttpClient(Android) {
     followRedirects = true
+    install(HttpCache)
 }
 
 internal actual fun createPlatformTolgee(config: Tolgee.Config): Tolgee {
