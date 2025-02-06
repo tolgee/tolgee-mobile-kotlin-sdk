@@ -1,10 +1,14 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
-module:compose
+module:Compose
 dev.datlag.tolgee
-module:kodein
+module:Kodein
 dev.datlag.tolgee
+module:Core
+dev.datlag.tolgee
+dev.datlag.tolgee.common
+dev.datlag.tolgee.model
 module:gradle-plugin
 dev.datlag.tolgee
 dev.datlag.tolgee.common
