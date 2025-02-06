@@ -13,36 +13,36 @@ data class TolgeeAndroid internal constructor(
     override val config: Config
 ) : Tolgee(config) {
 
-    fun translation(context: Context, @StringRes id: Int): Flow<String?> = flow {
+    fun translation(context: Context, @StringRes id: Int): Flow<String> = flow {
         emit(context.getString(id))
 
-        keyFromStringResource(context, id)?.let { key ->
+        getKeyFromStringResource(context, id)?.let { key ->
             emitAll(translation(key, TolgeeMessageParams.None).mapNotNull())
         }
     }
 
-    fun translation(context: Context, @StringRes id: Int, vararg formatArgs: Any): Flow<String?> = flow {
+    fun translation(context: Context, @StringRes id: Int, vararg formatArgs: Any): Flow<String> = flow {
         emit(context.getString(id, *formatArgs))
 
-        keyFromStringResource(context, id)?.let { key ->
+        getKeyFromStringResource(context, id)?.let { key ->
             emitAll(translation(key, TolgeeMessageParams.Indexed(*formatArgs)))
         }
     }
 
     fun instant(context: Context, @StringRes id: Int): String {
-        return keyFromStringResource(context, id)?.let { key ->
+        return getKeyFromStringResource(context, id)?.let { key ->
             instant(key)
         } ?: context.getString(id)
     }
 
     fun instant(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
-        return keyFromStringResource(context, id)?.let { key ->
+        return getKeyFromStringResource(context, id)?.let { key ->
             instant(key, TolgeeMessageParams.Indexed(*formatArgs))
         } ?: context.getString(id, *formatArgs)
     }
 
     companion object {
-        fun keyFromStringResource(context: Context, @StringRes id: Int): String? {
+        fun getKeyFromStringResource(context: Context, @StringRes id: Int): String? {
             return scopeCatching {
                 context.resources.getResourceEntryName(id)
             }.getOrNull()?.trim()?.ifBlank { null }

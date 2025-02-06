@@ -4,6 +4,7 @@ import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.language
 import dev.datlag.tolgee.api.TolgeeApi
 import dev.datlag.tolgee.common.createPlatformTolgee
+import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
 import dev.datlag.tolgee.model.TolgeeMessageParams
@@ -48,14 +49,28 @@ open class Tolgee(
      *
      * @return [TolgeeTranslation]
      */
-    private suspend fun loadTranslations() = translationsMutex.withLock {
-        cachedTranslation.value ?: withContext(config.network.context) {
+    private suspend fun loadTranslations(
+        locale: Locale? = localeFlow.value
+    ) = translationsMutex.withLock {
+        currentTranslation(locale) ?: withContext(config.network.context) {
             TolgeeApi.getTranslations(
                 client = config.network.client,
                 config = config,
-                currentLanguage = config.locale?.language?.ifBlank { null },
+                currentLanguage = locale?.language?.ifBlank { null },
             ).also {
                 cachedTranslation.value = it
+            }
+        }
+    }
+
+    private fun currentTranslation(
+        locale: Locale? = localeFlow.value,
+    ): TolgeeTranslation? {
+        return cachedTranslation.value?.takeIf {
+            if (locale != null) {
+                it.hasLocale(locale)
+            } else {
+                true
             }
         }
     }
@@ -70,13 +85,13 @@ open class Tolgee(
     fun translation(
         key: CharSequence,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
-    ): Flow<String?> = localeFlow.mapLatest { locale ->
-        val translation = cachedTranslation.value ?: suspendCatching {
+    ): Flow<String> = localeFlow.mapLatest { locale ->
+        val translation = currentTranslation() ?: suspendCatching {
             loadTranslations()
-        }.getOrNull() ?: cachedTranslation.value ?: return@mapLatest null
+        }.getOrNull() ?: currentTranslation() ?: return@mapLatest null
 
         return@mapLatest translation.localized(key.toString(), parameters)?.toString(locale)
-    }
+    }.mapNotNull()
 
     /**
      * Immediate Tolgee translation for key with parameters.
@@ -91,7 +106,7 @@ open class Tolgee(
         key: CharSequence,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): String? {
-        val translation = cachedTranslation.value ?: return null
+        val translation = currentTranslation() ?: return null
 
         return translation.localized(key.toString(), parameters)?.toString(localeFlow.value)
     }
