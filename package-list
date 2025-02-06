@@ -3,9 +3,8 @@ $dokka.linkExtension:html
 
 module:compose
 dev.datlag.tolgee
-dev.datlag.tolgee.kormatter
-dev.datlag.tolgee.kormatter.conversions
-dev.datlag.tolgee.kormatter.utils
+module:kodein
+dev.datlag.tolgee
 module:gradle-plugin
 dev.datlag.tolgee
 dev.datlag.tolgee.common
@@ -14,5 +13,3 @@ dev.datlag.tolgee.model
 dev.datlag.tolgee.model.pull
 dev.datlag.tolgee.model.push
 dev.datlag.tolgee.tasks
-module:kodein
-dev.datlag.tolgee
