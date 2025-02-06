@@ -4,6 +4,7 @@ import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.NameToIndexMapperNumbersFrom0
+import de.comahe.i18n4k.messages.formatter.MessageParameters
 import de.comahe.i18n4k.messages.formatter.MessageParametersList
 import de.comahe.i18n4k.messages.providers.MessagesProvider
 import de.comahe.i18n4k.strings.LocalizedString
@@ -50,20 +51,13 @@ data class TolgeeTranslation internal constructor(
         }
     }
 
-    fun localized(key: String, vararg args: Any): LocalizedString? {
+    fun localized(key: String, parameters: MessageParameters): LocalizedString? {
         return groupedProviders.firstNotNullOfOrNull { it.indexOfKey(key) }?.let { index ->
-            if (args.isEmpty()) {
-                getLocalizedString0(key, index)
-            } else {
-                getLocalizedStringN(
-                    key = key,
-                    index = index,
-                    parameters = MessageParametersList(
-                        parameters = args.toList(),
-                        nameMapper = NameToIndexMapperNumbersFrom0
-                    )
-                )
-            }
+            getLocalizedStringN(
+                key = key,
+                index = index,
+                parameters = parameters
+            )
         }
     }
 

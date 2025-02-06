@@ -6,6 +6,7 @@ import dev.datlag.tolgee.api.TolgeeApi
 import dev.datlag.tolgee.common.createPlatformTolgee
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
+import dev.datlag.tolgee.model.TolgeeMessageParams
 import dev.datlag.tolgee.model.TolgeeProjectLanguage
 import dev.datlag.tolgee.model.TolgeeTranslation
 import dev.datlag.tooling.async.suspendCatching
@@ -14,6 +15,8 @@ import io.ktor.client.engine.*
 import kotlinx.atomicfu.atomic
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -29,75 +32,75 @@ open class Tolgee(
     private var cachedLanguages: ImmutableSet<TolgeeProjectLanguage> = persistentSetOf()
 
     private val translationsMutex = Mutex()
-    private var cachedTranslation: TolgeeTranslation? = null
+    private val cachedTranslation = atomic<TolgeeTranslation?>(null)
 
-    private suspend fun loadLanguages() = languagesMutex.withLock {
-        cachedLanguages.ifEmpty {
-            TolgeeApi.getAllProjectLanguages(
+    /**
+     * Determines which locale is used for String fetched from Tolgee.
+     *
+     * Created lazily to support overriding config.
+     */
+    private val localeFlow by lazy {
+        MutableStateFlow(config.locale)
+    }
+
+    /**
+     * Loads the translations from Tolgee atomically.
+     *
+     * @return [TolgeeTranslation]
+     */
+    private suspend fun loadTranslations() = translationsMutex.withLock {
+        cachedTranslation.value ?: withContext(config.network.context) {
+            TolgeeApi.getTranslations(
                 client = config.network.client,
-                config = config
+                config = config,
+                currentLanguage = config.locale?.language?.ifBlank { null },
             ).also {
-                cachedLanguages = it
+                cachedTranslation.value = it
             }
         }
     }
 
-    suspend fun allLanguages() = withContext(config.network.context) {
-        return@withContext cachedLanguages.ifEmpty {
-            suspendCatching {
-                loadLanguages()
-            }.getOrNull() ?: cachedLanguages
-        }
-    }
-
-    fun allLanguagesFromCache() = cachedLanguages
-
-    private suspend fun loadTranslations() = translationsMutex.withLock {
-        cachedTranslation ?: TolgeeApi.getTranslations(
-            client = config.network.client,
-            config = config,
-            currentLanguage = config.locale?.language?.ifBlank { null },
-        ).also {
-            cachedTranslation = it
-        }
-    }
-
-    suspend fun translation(
-        key: String,
-        locale: Locale? = config.locale,
-        vararg formatArgs: Any
-    ): String? = withContext(config.network.context) {
-        val translation = cachedTranslation ?: suspendCatching {
+    /**
+     * Updating Tolgee translation for key with parameters.
+     *
+     * Respects locale changes from [setLocale].
+     */
+    @JvmOverloads
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun translation(
+        key: CharSequence,
+        parameters: TolgeeMessageParams = TolgeeMessageParams.None
+    ): Flow<String?> = localeFlow.mapLatest { locale ->
+        val translation = cachedTranslation.value ?: suspendCatching {
             loadTranslations()
-        }.getOrNull() ?: cachedTranslation ?: return@withContext null
+        }.getOrNull() ?: cachedTranslation.value ?: return@mapLatest null
 
-        return@withContext translation.localized(key, *formatArgs)?.toString(locale)
+        return@mapLatest translation.localized(key.toString(), parameters)?.toString(locale)
     }
 
-    suspend fun translation(
-        key: String,
-        vararg formatArgs: Any,
-    ) = translation(key, config.locale, *formatArgs)
-
-    fun translationFromCache(
-        key: String,
-        locale: Locale? = config.locale,
-        vararg formatArgs: Any
+    /**
+     * Immediate Tolgee translation for key with parameters.
+     *
+     * **Requires** calling [preload] or [translation] before.
+     * (Otherwise) May return null if no translations are loaded at time calling.
+     *
+     * Respects only the locale at time calling.
+     */
+    @JvmOverloads
+    fun instant(
+        key: CharSequence,
+        parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): String? {
-        val translation = cachedTranslation ?: return null
+        val translation = cachedTranslation.value ?: return null
 
-        return translation.localized(key, *formatArgs)?.toString(locale)
+        return translation.localized(key.toString(), parameters)?.toString(localeFlow.value)
     }
-
-    fun translationFromCache(
-        key: String,
-        vararg formatArgs: Any,
-    ) = translationFromCache(key, config.locale, *formatArgs)
 
     suspend fun preload() {
-        suspendCatching { loadLanguages() }
         suspendCatching { loadTranslations() }
     }
+
+    fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale }
 
     @ConsistentCopyVisibility
     data class Config internal constructor(
