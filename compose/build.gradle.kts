@@ -21,6 +21,7 @@ group = libGroup
 version = libVersion
 
 dokka {
+    moduleName.set("Compose")
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))

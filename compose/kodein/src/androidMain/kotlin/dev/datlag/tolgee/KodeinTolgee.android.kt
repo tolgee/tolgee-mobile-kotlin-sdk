@@ -7,6 +7,15 @@ import org.kodein.di.compose.localDI
 import org.kodein.di.instanceOrNull
 
 @Composable
+fun kodeinStringResource(@StringRes id: Int): String {
+    val instance by localDI().instanceOrNull<Tolgee>()
+
+    return (instance ?: Tolgee.instance)?.let {
+        stringResource(it, id)
+    } ?: stringResource(id)
+}
+
+@Composable
 fun kodeinStringResource(@StringRes id: Int, vararg formatArgs: Any): String {
     val instance by localDI().instanceOrNull<Tolgee>()
 

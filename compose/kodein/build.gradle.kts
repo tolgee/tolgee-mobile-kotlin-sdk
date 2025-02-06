@@ -20,10 +20,11 @@ group = libGroup
 version = libVersion
 
 dokka {
+    moduleName.set("Kodein")
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/kodein/src")
+            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/compose/kodein/src")
         }
     }
 }

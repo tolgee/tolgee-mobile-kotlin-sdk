@@ -4,9 +4,20 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.serialization)
+}
+
+dokka {
+    moduleName.set("Core")
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(file("src"))
+            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/core/src")
+        }
+    }
 }
 
 kotlin {
