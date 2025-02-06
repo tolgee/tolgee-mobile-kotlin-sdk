@@ -7,18 +7,13 @@ import dev.datlag.tolgee.model.TolgeeMessageParams
 import org.jetbrains.compose.resources.StringResource
 
 @Composable
-fun Tolgee.stringResource(resource: StringResource, vararg formatArgs: Any): String {
-    return this.translation(
+fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: Any): String {
+    return tolgee.translation(
         key = resource.key,
         parameters = TolgeeMessageParams.Indexed(*formatArgs)
     ).mapNotNull().collectAsState(
         initial = org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
     ).value
-}
-
-@Composable
-fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: Any): String {
-    return tolgee.stringResource(resource, *formatArgs)
 }
 
 @Composable

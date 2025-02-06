@@ -9,25 +9,20 @@ import dev.datlag.tolgee.model.TolgeeMessageParams
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun Tolgee.stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
+fun stringResource(tolgee: Tolgee, @StringRes id: Int, vararg formatArgs: Any): String {
     val context = LocalContext.current
     val key = remember(id) {
         TolgeeAndroid.getKeyFromStringResource(context, id)
     }
 
-    val translationFlow = (this as? TolgeeAndroid)?.translation(context, id, *formatArgs)
+    val translationFlow = (tolgee as? TolgeeAndroid)?.translation(context, id, *formatArgs)
         ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
-        this.translation(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
-    } ?: flowOf(androidx.compose.ui.res.stringResource(id, *formatArgs))
+            tolgee.translation(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
+        } ?: flowOf(androidx.compose.ui.res.stringResource(id, *formatArgs))
 
     return translationFlow.collectAsState(
         initial = androidx.compose.ui.res.stringResource(id, *formatArgs)
     ).value
-}
-
-@Composable
-fun stringResource(tolgee: Tolgee, @StringRes id: Int, vararg formatArgs: Any): String {
-    return tolgee.stringResource(id, *formatArgs)
 }
 
 @Composable

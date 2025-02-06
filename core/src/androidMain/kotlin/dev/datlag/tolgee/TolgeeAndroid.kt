@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
+@ConsistentCopyVisibility
 data class TolgeeAndroid internal constructor(
     override val config: Config
 ) : Tolgee(config) {

@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+@ConsistentCopyVisibility
 data class TolgeeTranslation internal constructor(
     private val keys: ImmutableList<TolgeeKey>
 ) : MessageBundle() {

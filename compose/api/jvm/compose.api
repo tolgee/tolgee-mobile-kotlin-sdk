@@ -1,0 +1,5 @@
+public final class dev/datlag/tolgee/ComposeTolgeeKt {
+	public static final fun stringResource (Ldev/datlag/tolgee/Tolgee;Lorg/jetbrains/compose/resources/StringResource;[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+	public static final fun stringResource (Lorg/jetbrains/compose/resources/StringResource;[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+}
+

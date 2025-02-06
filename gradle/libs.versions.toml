@@ -24,7 +24,7 @@ ktorfit = "2.2.0"
 locale = "0.8.0"
 publish = "0.30.0"
 semver = "2.0.0"
-serialization = "1.7.3"
+serialization = "1.8.0"
 tooling = "1.7.0"
 
 [libraries]
