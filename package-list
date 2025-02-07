@@ -3,8 +3,6 @@ $dokka.linkExtension:html
 
 module:Compose
 dev.datlag.tolgee
-module:Kodein
-dev.datlag.tolgee
 module:Core
 dev.datlag.tolgee
 dev.datlag.tolgee.common
