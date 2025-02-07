@@ -1,8 +1,3 @@
-public final class dev/datlag/tolgee/MainKt {
-	public static final fun main ()V
-	public static synthetic fun main ([Ljava/lang/String;)V
-}
-
 public class dev/datlag/tolgee/Tolgee {
 	public static final field Companion Ldev/datlag/tolgee/Tolgee$Companion;
 	public fun <init> (Ldev/datlag/tolgee/Tolgee$Config;)V
