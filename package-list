@@ -9,7 +9,7 @@ module:Core
 dev.datlag.tolgee
 dev.datlag.tolgee.common
 dev.datlag.tolgee.model
-module:gradle-plugin
+module:Gradle Plugin
 dev.datlag.tolgee
 dev.datlag.tolgee.common
 dev.datlag.tolgee.extension
