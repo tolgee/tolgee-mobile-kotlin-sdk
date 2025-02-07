@@ -1,6 +1,7 @@
 package dev.datlag.tolgee
 
 import de.comahe.i18n4k.Locale
+import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
 import dev.datlag.tolgee.api.TolgeeApi
 import dev.datlag.tolgee.common.createPlatformTolgee
@@ -44,6 +45,17 @@ open class Tolgee(
         MutableStateFlow(config.locale)
     }
 
+    private suspend fun loadLanguages() = languagesMutex.withLock {
+        cachedLanguages.ifEmpty { withContext(config.network.context) {
+            TolgeeApi.getAllProjectLanguages(
+                client = config.network.client,
+                config = config
+            ).also {
+                cachedLanguages = it
+            }
+        } }
+    }
+
     /**
      * Loads the translations from Tolgee atomically.
      *
@@ -74,6 +86,10 @@ open class Tolgee(
             }
         }
     }
+
+    suspend fun languages() = suspendCatching {
+        loadLanguages()
+    }.getOrNull() ?: cachedLanguages
 
     /**
      * Updating Tolgee translation for key with parameters.
@@ -112,10 +128,13 @@ open class Tolgee(
     }
 
     suspend fun preload() {
+        suspendCatching { loadLanguages() }
         suspendCatching { loadTranslations() }
     }
 
     fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale }
+    fun setLocale(locale: String) = setLocale(forLocaleTag(locale))
+    fun setLocale(language: TolgeeProjectLanguage) = setLocale(language.asLocale())
 
     @ConsistentCopyVisibility
     data class Config internal constructor(
