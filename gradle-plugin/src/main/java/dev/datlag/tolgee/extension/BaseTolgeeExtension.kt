@@ -2,6 +2,7 @@ package dev.datlag.tolgee.extension
 
 import dev.datlag.tolgee.common.isAndroidOnly
 import dev.datlag.tolgee.common.lazyMap
+import dev.datlag.tolgee.model.CLIOutput
 import dev.datlag.tolgee.model.Configuration
 import dev.datlag.tolgee.model.Format
 import dev.datlag.tooling.existsSafely
@@ -38,6 +39,8 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
 
     open val fallbackEnabled: Property<Boolean> = objectFactory.property(Boolean::class.java)
 
+    open val cliOutput: Property<CLIOutput> = objectFactory.property(CLIOutput::class.java)
+
     open val apiUrl: Property<String> = objectFactory.property(String::class.java)
 
     open val projectId: Property<String> = objectFactory.property(String::class.java)
@@ -64,6 +67,7 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
                 map = { it?.let(Configuration::from) }
             ))
             fallbackEnabled.convention(true)
+            cliOutput.convention(CLIOutput.Default)
             apiUrl.convention(configuration.map { it.apiUrl ?: "" })
             projectId.convention(configuration.map { it.projectId ?: "" })
             apiKey.convention(configuration.lazyMap(
@@ -107,6 +111,7 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
     private fun setupConvention(inherit: BaseTolgeeExtension) {
         configuration.convention(inherit.configuration)
         fallbackEnabled.convention(inherit.fallbackEnabled)
+        cliOutput.convention(inherit.cliOutput)
         apiUrl.convention(inherit.apiUrl)
         projectId.convention(inherit.projectId)
         apiKey.convention(inherit.apiKey)

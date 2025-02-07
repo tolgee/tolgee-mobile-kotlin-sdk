@@ -1,7 +1,8 @@
 package dev.datlag.tolgee.tasks
 
 import de.jensklingenberg.ktorfit.ktorfit
-import dev.datlag.tolgee.api.createTolgee
+import dev.datlag.tolgee.api.TolgeeApi
+import dev.datlag.tolgee.api.createTolgeeRequests
 import dev.datlag.tolgee.cli.TolgeeCLI
 import dev.datlag.tolgee.common.tolgeeExtension
 import dev.datlag.tolgee.extension.BaseTolgeeExtension
@@ -70,7 +71,7 @@ open class PullTranslationTask : BaseTolgeeTask() {
     @TaskAction
     fun pull() {
         val apiUrl = resolveApiUrl()
-        val projectId = resolveProjectId() ?: return
+        val projectId = resolveProjectId()
         val apiKey = resolveApiKey()
         val format = resolveFormat(Format.ComposeXML)
         val path = path.orNull?.asFile ?: projectLayout.projectDirectory.dir(PullExtension.COMMON_RESOURCES_PATH).asFile
@@ -91,7 +92,9 @@ open class PullTranslationTask : BaseTolgeeTask() {
             states = states,
             namespaces = namespaces,
             tags = tags,
-            excludeTags = excludeTags
+            excludeTags = excludeTags,
+            output = resolveCLIOutput(),
+            logger = logger
         )
         val useFallback = resolveFallbackEnabled(true) && !cliSuccessful
 
@@ -105,20 +108,20 @@ open class PullTranslationTask : BaseTolgeeTask() {
                     followRedirects = true
                 }
             }
-            val tolgee = ktor.createTolgee()
+            val tolgee = ktor.createTolgeeRequests()
             val outputDir = projectLayout.buildDirectory.dir("tolgee")
 
             runBlocking {
-                val response = tolgee.export(
+                val response = TolgeeApi.pull(
+                    api = tolgee,
                     apiKey = requiredApiKey,
                     projectId = projectId,
-                    format = format.value,
-                    languages = languages?.joinToString(separator = ",")?.ifBlank { null },
-                    states = states?.joinToString(separator = ",") { it.value }?.ifBlank { null },
-                    namespaces = namespaces?.joinToString(separator = ",")?.ifBlank { null },
-                    tags = tags?.joinToString(separator = ",")?.ifBlank { null },
-                    excludeTags = excludeTags?.joinToString(separator = ",")?.ifBlank { null },
-                    zip = true
+                    format = format,
+                    languages = languages,
+                    states = states,
+                    namespaces = namespaces,
+                    tags = tags,
+                    excludeTags = excludeTags,
                 )
 
                 if (response.status.isSuccess()) {

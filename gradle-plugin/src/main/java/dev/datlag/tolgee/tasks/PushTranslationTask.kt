@@ -38,7 +38,7 @@ open class PushTranslationTask : BaseTolgeeTask() {
     @TaskAction
     fun push() {
         val apiUrl = resolveApiUrl()
-        val projectId = resolveProjectId() ?: return
+        val projectId = resolveProjectId()
         val apiKey = resolveApiKey()
         val format = resolveFormat()
         val mode = forceMode.getOrElse(Mode.NoForce)
@@ -54,6 +54,8 @@ open class PushTranslationTask : BaseTolgeeTask() {
             config = config.orNull?.asFile,
             languages = languages,
             namespaces = namespaces,
+            output = resolveCLIOutput(),
+            logger = logger
         )
         val useFallback = resolveFallbackEnabled(true) && !cliSuccessful
 

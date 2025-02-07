@@ -1,0 +1,276 @@
+public class dev/datlag/tolgee/TolgeePlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class dev/datlag/tolgee/TolgeePluginExtension : dev/datlag/tolgee/extension/BaseTolgeeExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getPull ()Ldev/datlag/tolgee/extension/PullExtension;
+	public final fun getPush ()Ldev/datlag/tolgee/extension/PushExtension;
+	public final fun pull (Lgroovy/lang/Closure;)Ldev/datlag/tolgee/extension/PullExtension;
+	public final fun pull (Lorg/gradle/api/Action;)Ldev/datlag/tolgee/extension/PullExtension;
+	public final fun push (Lgroovy/lang/Closure;)Ldev/datlag/tolgee/extension/PushExtension;
+	public final fun push (Lorg/gradle/api/Action;)Ldev/datlag/tolgee/extension/PushExtension;
+	public fun setupConvention (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/BaseTolgeeExtension;)V
+}
+
+public final class dev/datlag/tolgee/common/ExtendCLIKt {
+	public static final fun handleOutput (Lcom/kgit2/kommand/io/Output;Ldev/datlag/tolgee/model/CLIOutput;Lorg/gradle/api/logging/Logger;)Lcom/kgit2/kommand/io/Output;
+}
+
+public final class dev/datlag/tolgee/common/ExtendPropertyKt {
+	public static final fun set (Lorg/gradle/api/provider/HasMultipleValues;[Ljava/lang/Object;)V
+}
+
+public class dev/datlag/tolgee/extension/BaseTolgeeExtension {
+	public static final field Companion Ldev/datlag/tolgee/extension/BaseTolgeeExtension$Companion;
+	public static final field DEFAULT_API_URL Ljava/lang/String;
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public fun getApiKey ()Lorg/gradle/api/provider/Property;
+	public fun getApiUrl ()Lorg/gradle/api/provider/Property;
+	public fun getCliOutput ()Lorg/gradle/api/provider/Property;
+	public fun getConfig ()Lorg/gradle/api/file/RegularFileProperty;
+	public fun getFallbackEnabled ()Lorg/gradle/api/provider/Property;
+	public fun getFormat ()Lorg/gradle/api/provider/Property;
+	public fun getProjectId ()Lorg/gradle/api/provider/Property;
+	protected final fun loadProperties (Ljava/io/File;)Ljava/util/Properties;
+	public final fun setupConvention (Lorg/gradle/api/Project;)V
+	public fun setupConvention (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/BaseTolgeeExtension;)V
+	public static synthetic fun setupConvention$default (Ldev/datlag/tolgee/extension/BaseTolgeeExtension;Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/BaseTolgeeExtension;ILjava/lang/Object;)V
+}
+
+public final class dev/datlag/tolgee/extension/BaseTolgeeExtension$Companion {
+}
+
+public class dev/datlag/tolgee/extension/PullExtension : dev/datlag/tolgee/extension/BaseTolgeeExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public fun getExcludeTags ()Lorg/gradle/api/provider/SetProperty;
+	public fun getLanguages ()Lorg/gradle/api/provider/SetProperty;
+	public fun getNamespaces ()Lorg/gradle/api/provider/SetProperty;
+	public fun getPath ()Lorg/gradle/api/file/DirectoryProperty;
+	public fun getStates ()Lorg/gradle/api/provider/SetProperty;
+	public fun getTags ()Lorg/gradle/api/provider/SetProperty;
+	public fun setupConvention (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/BaseTolgeeExtension;)V
+}
+
+public class dev/datlag/tolgee/extension/PushExtension : dev/datlag/tolgee/extension/BaseTolgeeExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public fun getForceMode ()Lorg/gradle/api/provider/Property;
+	public fun getLanguages ()Lorg/gradle/api/provider/SetProperty;
+	public fun getNamespaces ()Lorg/gradle/api/provider/SetProperty;
+	public fun setupConvention (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/BaseTolgeeExtension;)V
+}
+
+public abstract interface class dev/datlag/tolgee/model/CLIOutput {
+	public abstract fun getIo ()Lcom/kgit2/kommand/process/Stdio;
+}
+
+public final class dev/datlag/tolgee/model/CLIOutput$Default : dev/datlag/tolgee/model/CLIOutput {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/CLIOutput$Default;
+	public fun getIo ()Lcom/kgit2/kommand/process/Stdio;
+}
+
+public final class dev/datlag/tolgee/model/CLIOutput$Log : dev/datlag/tolgee/model/CLIOutput {
+	public fun <init> (Lorg/gradle/api/logging/LogLevel;)V
+	public fun <init> (Lorg/gradle/api/logging/LogLevel;Z)V
+	public synthetic fun <init> (Lorg/gradle/api/logging/LogLevel;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lorg/gradle/api/logging/LogLevel;
+	public final fun component2 ()Z
+	public final fun copy (Lorg/gradle/api/logging/LogLevel;Z)Ldev/datlag/tolgee/model/CLIOutput$Log;
+	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/CLIOutput$Log;Lorg/gradle/api/logging/LogLevel;ZILjava/lang/Object;)Ldev/datlag/tolgee/model/CLIOutput$Log;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getIo ()Lcom/kgit2/kommand/process/Stdio;
+	public final fun getLevel ()Lorg/gradle/api/logging/LogLevel;
+	public final fun getOverrideError ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/CLIOutput$None : dev/datlag/tolgee/model/CLIOutput {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/CLIOutput$None;
+	public fun getIo ()Lcom/kgit2/kommand/process/Stdio;
+}
+
+public final class dev/datlag/tolgee/model/CLIOutput$Print : dev/datlag/tolgee/model/CLIOutput {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/CLIOutput$Print;
+	public fun getIo ()Lcom/kgit2/kommand/process/Stdio;
+}
+
+public abstract class dev/datlag/tolgee/model/Format : java/lang/CharSequence {
+	public static final field Companion Ldev/datlag/tolgee/model/Format$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun charAt (I)C
+	public fun get (I)C
+	public fun getLength ()I
+	public fun getValue ()Ljava/lang/String;
+	public final fun length ()I
+	public fun subSequence (II)Ljava/lang/CharSequence;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/Format$AndroidXML : dev/datlag/tolgee/model/Format {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$AndroidXML;
+}
+
+public final class dev/datlag/tolgee/model/Format$Companion {
+	public final fun from (Ljava/lang/String;)Ldev/datlag/tolgee/model/Format;
+}
+
+public final class dev/datlag/tolgee/model/Format$ComposeXML : dev/datlag/tolgee/model/Format {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$ComposeXML;
+}
+
+public final class dev/datlag/tolgee/model/Format$Custom : dev/datlag/tolgee/model/Format {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/datlag/tolgee/model/Format$Custom;
+	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/Format$Custom;Ljava/lang/String;ILjava/lang/Object;)Ldev/datlag/tolgee/model/Format$Custom;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/Format$Po : dev/datlag/tolgee/model/Format {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$Po;
+}
+
+public abstract class dev/datlag/tolgee/model/pull/State : java/lang/CharSequence {
+	public static final field Companion Ldev/datlag/tolgee/model/pull/State$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun charAt (I)C
+	public fun get (I)C
+	public fun getLength ()I
+	public fun getValue ()Ljava/lang/String;
+	public final fun length ()I
+	public fun subSequence (II)Ljava/lang/CharSequence;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/pull/State$Companion {
+	public final fun from (Ljava/lang/String;)Ldev/datlag/tolgee/model/pull/State;
+}
+
+public final class dev/datlag/tolgee/model/pull/State$Custom : dev/datlag/tolgee/model/pull/State {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/datlag/tolgee/model/pull/State$Custom;
+	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/pull/State$Custom;Ljava/lang/String;ILjava/lang/Object;)Ldev/datlag/tolgee/model/pull/State$Custom;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/pull/State$Disabled : dev/datlag/tolgee/model/pull/State {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/pull/State$Disabled;
+}
+
+public final class dev/datlag/tolgee/model/pull/State$Reviewed : dev/datlag/tolgee/model/pull/State {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/pull/State$Reviewed;
+}
+
+public final class dev/datlag/tolgee/model/pull/State$Translated : dev/datlag/tolgee/model/pull/State {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/pull/State$Translated;
+}
+
+public final class dev/datlag/tolgee/model/pull/State$Untranslated : dev/datlag/tolgee/model/pull/State {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/pull/State$Untranslated;
+}
+
+public abstract class dev/datlag/tolgee/model/push/Mode : java/lang/CharSequence {
+	public static final field Companion Ldev/datlag/tolgee/model/push/Mode$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun charAt (I)C
+	public fun get (I)C
+	public fun getLength ()I
+	public fun getValue ()Ljava/lang/String;
+	public final fun length ()I
+	public fun subSequence (II)Ljava/lang/CharSequence;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/push/Mode$Companion {
+	public final fun from (Ljava/lang/String;)Ldev/datlag/tolgee/model/push/Mode;
+}
+
+public final class dev/datlag/tolgee/model/push/Mode$Custom : dev/datlag/tolgee/model/push/Mode {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/datlag/tolgee/model/push/Mode$Custom;
+	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/push/Mode$Custom;Ljava/lang/String;ILjava/lang/Object;)Ldev/datlag/tolgee/model/push/Mode$Custom;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/push/Mode$Keep : dev/datlag/tolgee/model/push/Mode {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/push/Mode$Keep;
+}
+
+public final class dev/datlag/tolgee/model/push/Mode$NoForce : dev/datlag/tolgee/model/push/Mode {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/push/Mode$NoForce;
+}
+
+public final class dev/datlag/tolgee/model/push/Mode$Override : dev/datlag/tolgee/model/push/Mode {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/push/Mode$Override;
+}
+
+public abstract class dev/datlag/tolgee/tasks/BaseTolgeeTask : org/gradle/api/DefaultTask {
+	public fun <init> ()V
+	protected final fun apply (Ldev/datlag/tolgee/extension/BaseTolgeeExtension;)V
+	public fun getApiKey ()Lorg/gradle/api/provider/Property;
+	public fun getApiUrl ()Lorg/gradle/api/provider/Property;
+	public fun getCliOutput ()Lorg/gradle/api/provider/Property;
+	public fun getFallbackEnabled ()Lorg/gradle/api/provider/Property;
+	public fun getFormat ()Lorg/gradle/api/provider/Property;
+	public fun getProjectId ()Lorg/gradle/api/provider/Property;
+	public fun resolveApiKey ()Ljava/lang/String;
+	public fun resolveApiKey (Ljava/lang/String;)Ljava/lang/String;
+	public fun resolveApiUrl ()Ljava/lang/String;
+	public fun resolveApiUrl (Ljava/lang/String;)Ljava/lang/String;
+	public fun resolveCLIOutput ()Ldev/datlag/tolgee/model/CLIOutput;
+	public fun resolveFallbackEnabled ()Ljava/lang/Boolean;
+	public fun resolveFallbackEnabled (Z)Z
+	public fun resolveFormat ()Ldev/datlag/tolgee/model/Format;
+	public fun resolveFormat (Ldev/datlag/tolgee/model/Format;)Ldev/datlag/tolgee/model/Format;
+	public fun resolveProjectId ()Ljava/lang/String;
+	public fun resolveProjectId (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public class dev/datlag/tolgee/tasks/PullTranslationTask : dev/datlag/tolgee/tasks/BaseTolgeeTask {
+	public static final field Companion Ldev/datlag/tolgee/tasks/PullTranslationTask$Companion;
+	public fun <init> ()V
+	public final fun apply (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/PullExtension;)V
+	public static synthetic fun apply$default (Ldev/datlag/tolgee/tasks/PullTranslationTask;Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/PullExtension;ILjava/lang/Object;)V
+	public fun getConfig ()Lorg/gradle/api/file/RegularFileProperty;
+	public fun getExcludeTags ()Lorg/gradle/api/provider/SetProperty;
+	public fun getLanguages ()Lorg/gradle/api/provider/SetProperty;
+	public fun getNamespaces ()Lorg/gradle/api/provider/SetProperty;
+	public fun getPath ()Lorg/gradle/api/file/DirectoryProperty;
+	public fun getProjectLayout ()Lorg/gradle/api/file/ProjectLayout;
+	public fun getStates ()Lorg/gradle/api/provider/SetProperty;
+	public fun getTags ()Lorg/gradle/api/provider/SetProperty;
+	public final fun pull ()V
+}
+
+public final class dev/datlag/tolgee/tasks/PullTranslationTask$Companion {
+}
+
+public class dev/datlag/tolgee/tasks/PushTranslationTask : dev/datlag/tolgee/tasks/BaseTolgeeTask {
+	public static final field Companion Ldev/datlag/tolgee/tasks/PushTranslationTask$Companion;
+	public fun <init> ()V
+	public final fun apply (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/PushExtension;)V
+	public static synthetic fun apply$default (Ldev/datlag/tolgee/tasks/PushTranslationTask;Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/PushExtension;ILjava/lang/Object;)V
+	public fun getConfig ()Lorg/gradle/api/file/RegularFileProperty;
+	public fun getForceMode ()Lorg/gradle/api/provider/Property;
+	public fun getLanguages ()Lorg/gradle/api/provider/SetProperty;
+	public fun getNamespaces ()Lorg/gradle/api/provider/SetProperty;
+	public final fun push ()V
+}
+
+public final class dev/datlag/tolgee/tasks/PushTranslationTask$Companion {
+}
+

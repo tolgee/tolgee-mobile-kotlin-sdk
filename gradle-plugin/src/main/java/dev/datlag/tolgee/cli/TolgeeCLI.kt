@@ -1,7 +1,8 @@
 package dev.datlag.tolgee.cli
 
-import com.kgit2.kommand.process.Stdio
 import dev.datlag.tolgee.common.fullPathSafely
+import dev.datlag.tolgee.common.handleOutput
+import dev.datlag.tolgee.model.CLIOutput
 import dev.datlag.tolgee.model.Format
 import dev.datlag.tolgee.model.pull.State
 import dev.datlag.tolgee.model.push.Mode
@@ -9,6 +10,7 @@ import dev.datlag.tooling.scopeCatching
 import io.github.z4kn4fein.semver.Version
 import io.github.z4kn4fein.semver.toVersion
 import io.github.z4kn4fein.semver.toVersionOrNull
+import org.gradle.api.logging.Logger
 import java.io.File
 
 internal object TolgeeCLI : Node() {
@@ -39,7 +41,7 @@ internal object TolgeeCLI : Node() {
      */
     fun pull(
         apiUrl: String?,
-        projectId: String,
+        projectId: String?,
         apiKey: String?,
         format: Format,
         path: File,
@@ -49,6 +51,8 @@ internal object TolgeeCLI : Node() {
         namespaces: Collection<String>?,
         tags: Collection<String>?,
         excludeTags: Collection<String>?,
+        output: CLIOutput,
+        logger: Logger
     ): Boolean = installed && scopeCatching {
         NodeCommand(app)
             .arg("pull")
@@ -59,8 +63,10 @@ internal object TolgeeCLI : Node() {
                 if (!apiKey.isNullOrBlank()) {
                     args("--api-key", apiKey)
                 }
+                if (!projectId.isNullOrBlank()) {
+                    args("--project-id", projectId)
+                }
             }
-            .args("--project-id", projectId)
             .args("--format", format.value)
             .args("--path", path.path)
             .apply {
@@ -83,20 +89,23 @@ internal object TolgeeCLI : Node() {
                     args("--config", it)
                 }
             }
-            .stdout(Stdio.Inherit)
+            .stdout(output.io)
             .spawn()
             .waitWithOutput()
+            .handleOutput(output, logger)
     }.getOrNull()?.status == 0
 
     fun push(
         apiUrl: String?,
-        projectId: String,
+        projectId: String?,
         apiKey: String?,
         format: Format?,
         mode: Mode,
         config: File?,
         languages: Collection<String>?,
         namespaces: Collection<String>?,
+        output: CLIOutput,
+        logger: Logger
     ): Boolean = installed && scopeCatching {
         NodeCommand(app)
             .arg("push")
@@ -107,8 +116,10 @@ internal object TolgeeCLI : Node() {
                 if (!apiKey.isNullOrBlank()) {
                     args("--api-key", apiKey)
                 }
+                if (!projectId.isNullOrBlank()) {
+                    args("--project-id", projectId)
+                }
             }
-            .args("--project-id", projectId)
             .apply {
                 if (format != null) {
                     args("--format", format.value)
@@ -126,9 +137,10 @@ internal object TolgeeCLI : Node() {
                     args("--config", it)
                 }
             }
-            .stdout(Stdio.Inherit)
+            .stdout(output.io)
             .spawn()
             .waitWithOutput()
+            .handleOutput(output, logger)
     }.getOrNull()?.status == 0
 
 }
