@@ -5,7 +5,7 @@ import dev.datlag.tolgee.model.CLIOutput
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.logging.Logger
 
-fun Output.handleOutput(config: CLIOutput, logger: Logger): Output = this.also {
+internal fun Output.handleOutput(config: CLIOutput, logger: Logger): Output = this.also {
     val stdout = it.stdout?.ifBlank { null }
     val stderr = it.stderr?.ifBlank { null }
 

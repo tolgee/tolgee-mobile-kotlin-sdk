@@ -3,7 +3,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-library = "1.0.2-SNAPSHOT"
+library = "1.0.3-SNAPSHOT"
 android-core = "1.15.0"
 android-tools = "8.4.2"
 atomicfu = "0.26.1"

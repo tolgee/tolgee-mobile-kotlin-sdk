@@ -20,6 +20,7 @@ group = libGroup
 version = libVersion
 
 dokka {
+    moduleName.set("Gradle Plugin")
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
