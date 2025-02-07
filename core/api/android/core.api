@@ -15,7 +15,10 @@ public class dev/datlag/tolgee/Tolgee {
 	public final fun instant (Ljava/lang/CharSequence;)Ljava/lang/String;
 	public final fun instant (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
 	public static synthetic fun instant$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun languages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setLocale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
+	public final fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public final fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public final fun translation (Ljava/lang/CharSequence;)Lkotlinx/coroutines/flow/Flow;
 	public final fun translation (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;

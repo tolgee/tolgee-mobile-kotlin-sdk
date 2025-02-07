@@ -15,10 +15,6 @@ public class dev/datlag/tolgee/TolgeePluginExtension : dev/datlag/tolgee/extensi
 	public fun setupConvention (Lorg/gradle/api/Project;Ldev/datlag/tolgee/extension/BaseTolgeeExtension;)V
 }
 
-public final class dev/datlag/tolgee/common/ExtendCLIKt {
-	public static final fun handleOutput (Lcom/kgit2/kommand/io/Output;Ldev/datlag/tolgee/model/CLIOutput;Lorg/gradle/api/logging/Logger;)Lcom/kgit2/kommand/io/Output;
-}
-
 public final class dev/datlag/tolgee/common/ExtendPropertyKt {
 	public static final fun set (Lorg/gradle/api/provider/HasMultipleValues;[Ljava/lang/Object;)V
 }
