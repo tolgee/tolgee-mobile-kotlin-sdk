@@ -43,17 +43,22 @@ jobs:
         continue-on-error: true
         run: ./gradlew core:linkDebugFrameworkNative
 
-      - name: Framework All
+      - name: Framework Tolgee
         continue-on-error: true
-        run: ./gradlew core:assembleXCFramework
+        run: ./gradlew core:assembleTolgeeXCFramework || ./gradlew core:assembleXCFramework
 
-      - name: Framework Release
+      - name: Framework Tolgee Release
         continue-on-error: true
-        run: ./gradlew core:assembleReleaseXCFramework
+        run: ./gradlew core:assembleTolgeeReleaseXCFramework || ./gradlew core:assembleReleaseXCFramework
 
-      - name: Framework Debug
+      - name: Framework Tolgee Debug
         continue-on-error: true
-        run: ./gradlew core:assembleDebugXCFramework
+        run: ./gradlew core:assembleTolgeeDebugXCFramework || ./gradlew core:assembleDebugXCFramework
 
       - name: Folder Structure
         run: tree core/build
+
+      - name: Upload core build directory
+        uses: actions/upload-artifact@v4
+        with:
+          path: core/build
