@@ -2,8 +2,6 @@ package dev.datlag.tolgee
 
 import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.model.TolgeeMessageParams
-import kotlinx.cinterop.BetaInteropApi
-import kotlinx.cinterop.ObjCObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -45,10 +43,9 @@ data class TolgeeApple internal constructor(
                 }?.localizedStringForKey(key, default?.ifBlank { null }, table).takeUnless { it == key }?.ifBlank { null }
         }
 
-        @OptIn(BetaInteropApi::class)
         fun getLocalizedStringFromBundleFormatted(key: String, default: String?, table: String?, vararg args: Any): String? {
             return (getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null })?.let { format ->
-                NSString.localizedStringWithFormat(format, *args.map { it as? ObjCObject }.toTypedArray())
+                NSString.localizedStringWithFormat(format, *arrayOf(*args))
             }
         }
     }
