@@ -46,7 +46,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     iosArm64 {
@@ -54,7 +53,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     iosSimulatorArm64 {
@@ -62,7 +60,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
 
@@ -71,7 +68,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     tvosArm64 {
@@ -79,7 +75,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     tvosSimulatorArm64 {
@@ -87,7 +82,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
 
@@ -96,7 +90,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     watchosArm64 {
@@ -104,7 +97,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     watchosArm32 {
@@ -112,7 +104,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     watchosSimulatorArm64 {
@@ -120,7 +111,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
 
@@ -129,7 +119,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
     macosArm64 {
@@ -137,7 +126,6 @@ kotlin {
             framework {
                 baseName = appleFramework
             }
-            executable()
         }
     }
 

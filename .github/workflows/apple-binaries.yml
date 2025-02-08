@@ -26,7 +26,7 @@ jobs:
         run: npm install --global @tolgee/cli
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew core:build
 
       - name: Linking Native
         continue-on-error: true
