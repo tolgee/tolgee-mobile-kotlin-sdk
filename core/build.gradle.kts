@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.android.library)
@@ -41,10 +42,12 @@ kotlin {
 
     jvm()
 
+    val xcf = XCFramework(appleFramework)
     iosX64 {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -52,6 +55,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -59,6 +63,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -67,6 +72,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -74,6 +80,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -81,6 +88,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -89,6 +97,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -96,6 +105,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -103,6 +113,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -110,6 +121,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -118,6 +130,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }
@@ -125,6 +138,7 @@ kotlin {
         binaries {
             framework {
                 baseName = appleFramework
+                xcf.add(this)
             }
         }
     }

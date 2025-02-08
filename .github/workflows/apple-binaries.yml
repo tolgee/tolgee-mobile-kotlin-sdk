@@ -43,6 +43,10 @@ jobs:
         continue-on-error: true
         run: ./gradlew core:linkDebugFrameworkNative
 
+      - name: Framework All
+        continue-on-error: true
+        run: ./gradlew core:assembleXCFramework
+
       - name: Framework Release
         continue-on-error: true
         run: ./gradlew core:assembleReleaseXCFramework
