@@ -1,6 +1,5 @@
 package dev.datlag.tolgee.api
 
-import de.jensklingenberg.ktorfit.ktorfit
 import dev.datlag.tolgee.Tolgee
 import dev.datlag.tolgee.model.TolgeePagedResponse
 import dev.datlag.tolgee.model.TolgeeKey
@@ -8,6 +7,7 @@ import dev.datlag.tolgee.model.TolgeeProjectLanguage
 import dev.datlag.tolgee.model.TolgeeTranslation
 import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
+import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.collections.immutable.ImmutableSet
@@ -24,12 +24,11 @@ internal data object TolgeeApi {
     }
 
     suspend fun getAllProjectLanguages(client: HttpClient, config: Tolgee.Config): ImmutableSet<TolgeeProjectLanguage> {
-        val api = requestsInstance(client, config)
-        val response = requestByIdOrApiKey(
-            config = config,
-            projectIdRequest = { api.allProjectLanguages(config.apiKey, it) },
-            fallbackRequest = { api.allProjectLanguages(config.apiKey) }
-        ) ?: return persistentSetOf()
+        val response = client.get(buildUrl(config.apiUrl, config.projectId, "projects/languages")) {
+            headers {
+                append("X-Api-Key", config.apiKey)
+            }
+        }.takeIf { it.status.isSuccess() } ?: return persistentSetOf()
 
         return suspendCatching {
             json.decodeFromString<TolgeePagedResponse<TolgeeProjectLanguage.PagedWrapper>>(
@@ -43,31 +42,26 @@ internal data object TolgeeApi {
         config: Tolgee.Config,
         currentLanguage: String?
     ): TolgeeTranslation {
-
-        val api = requestsInstance(client, config)
+        val baseUrl = buildUrl(config.apiUrl, config.projectId, "projects/translations")
         val allTranslations = mutableListOf<TolgeeKey>()
         var currentPage = 0
         var totalPages = 1
 
         while (currentPage < totalPages) {
-            val response = requestByIdOrApiKey(
-                config = config,
-                projectIdRequest = { api.translations(
-                    apiKey = config.apiKey,
-                    projectId = it,
-                    page = currentPage,
-                    size = 20,
-                    sort = "keyId,asc",
-                    languages = currentLanguage,
-                ) },
-                fallbackRequest = { api.translations(
-                    apiKey = config.apiKey,
-                    page = currentPage,
-                    size = 20,
-                    sort = "keyId,asc",
-                    languages = currentLanguage,
-                ) }
-            ) ?: break
+            val response = client.get(baseUrl) {
+                url {
+                    parameter("page", currentPage)
+                    parameter("size", 20)
+                    parameter("sort", "keyId,asc")
+                    currentLanguage?.let { parameter("languages", it) }
+                }
+                headers {
+                    append("X-Api-Key", config.apiKey)
+                }
+            }.takeIf {
+                println(it.request.url.toString())
+                it.status.isSuccess()
+            } ?: break
 
             suspendCatching {
                 json.decodeFromString<TolgeePagedResponse<TolgeeKey.PagedWrapper>>(response.bodyAsText())
@@ -84,25 +78,23 @@ internal data object TolgeeApi {
         )
     }
 
-    private suspend fun requestByIdOrApiKey(
-        config: Tolgee.Config,
-        projectIdRequest: suspend (String) -> HttpResponse,
-        fallbackRequest: suspend () -> HttpResponse
-    ): HttpResponse? {
-        return suspendCatching {
-            config.projectId?.let {
-                projectIdRequest(it).takeIf { res -> res.status.isSuccess() }
-            }
-        }.getOrNull() ?: suspendCatching {
-            fallbackRequest().takeIf { res -> res.status.isSuccess() }
-        }.getOrNull()
-    }
+    private fun buildUrl(base: String, projectId: String?, path: String): String {
+        val start = if (base.endsWith('/')) {
+            base
+        } else {
+            "$base/"
+        }
 
-    private fun requestsInstance(client: HttpClient, config: Tolgee.Config): TolgeeRequests {
-        return ktorfit {
-            baseUrl(config.apiUrl)
+        val project = if (projectId.isNullOrBlank()) {
+            start
+        } else {
+            "$start${projectId.encodeURLPath()}/"
+        }
 
-            httpClient(client)
-        }.createTolgeeRequests()
+        return if (path.startsWith('/')) {
+            "$project${path.substring(1)}"
+        } else {
+            "$project$path"
+        }
     }
 }

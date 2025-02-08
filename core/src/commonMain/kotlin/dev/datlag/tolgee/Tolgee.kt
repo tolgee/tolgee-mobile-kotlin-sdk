@@ -178,6 +178,10 @@ open class Tolgee(
                 this.locale = locale
             }
 
+            fun locale(locale: String) = locale(forLocaleTag(locale))
+
+            fun locale(language: TolgeeProjectLanguage) = locale(language.asLocale())
+
             fun network(network: Network) = apply {
                 this.network = network
             }

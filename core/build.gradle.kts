@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.ktorfit)
     alias(libs.plugins.serialization)
     alias(libs.plugins.vanniktech.publish)
     `maven-publish`
@@ -82,7 +80,6 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.immutable)
             implementation(libs.ktor)
-            implementation(libs.ktorfit)
             implementation(libs.serialization.json)
             implementation(libs.tooling)
 

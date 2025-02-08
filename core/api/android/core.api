@@ -70,6 +70,8 @@ public final class dev/datlag/tolgee/Tolgee$Config$Builder {
 	public final fun getLocale ()Ljava/util/Locale;
 	public final fun getNetwork ()Ldev/datlag/tolgee/Tolgee$Config$Network;
 	public final fun getProjectId ()Ljava/lang/String;
+	public final fun locale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
+	public final fun locale (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun locale (Ljava/util/Locale;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun network (Ldev/datlag/tolgee/Tolgee$Config$Network;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun network (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
