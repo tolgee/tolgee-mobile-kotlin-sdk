@@ -45,7 +45,19 @@ data class TolgeeApple internal constructor(
 
         fun getLocalizedStringFromBundleFormatted(key: String, default: String?, table: String?, vararg args: Any): String? {
             return (getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null })?.let { format ->
-                NSString.localizedStringWithFormat(format, *arrayOf(*args))
+                when (args.size) {
+                    0 -> NSString.localizedStringWithFormat(format)
+                    1 -> NSString.localizedStringWithFormat(format, args[0])
+                    2 -> NSString.localizedStringWithFormat(format, args[0], args[1])
+                    3 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2])
+                    4 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3])
+                    5 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3], args[4])
+                    6 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3], args[4], args[5])
+                    7 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+                    8 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
+                    9 -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
+                    else -> NSString.localizedStringWithFormat(format, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9])
+                }
             }
         }
     }
