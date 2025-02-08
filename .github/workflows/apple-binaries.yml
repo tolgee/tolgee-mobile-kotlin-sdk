@@ -1,0 +1,52 @@
+name: Apple Binaries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linking:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
+      - name: Install Tolgee CLI
+        run: npm install --global @tolgee/cli
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Linking Native
+        continue-on-error: true
+        run: ./gradlew core:linkNative
+
+      - name: Linking Release
+        continue-on-error: true
+        run: ./gradlew core:linkReleaseFrameworkNative
+
+      - name: Linking Debug
+        continue-on-error: true
+        run: ./gradlew core:linkDebugFrameworkNative
+
+      - name: Framework Release
+        continue-on-error: true
+        run: ./gradlew core:assembleReleaseXCFramework
+
+      - name: Framework Debug
+        continue-on-error: true
+        run: ./gradlew core:assembleDebugXCFramework
+
+      - name: Folder Structure
+        run: tree core/build

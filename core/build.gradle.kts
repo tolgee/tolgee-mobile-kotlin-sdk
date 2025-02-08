@@ -14,6 +14,7 @@ plugins {
 
 val libGroup = "dev.datlag.tolgee"
 val libName = "core"
+val appleFramework = "Tolgee"
 
 group = libGroup
 version = libVersion
@@ -40,21 +41,105 @@ kotlin {
 
     jvm()
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    iosX64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    iosArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    iosSimulatorArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
 
-    tvosX64()
-    tvosArm64()
-    tvosSimulatorArm64()
+    tvosX64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    tvosArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    tvosSimulatorArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
 
-    watchosX64()
-    watchosArm64()
-    watchosArm32()
-    watchosSimulatorArm64()
+    watchosX64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    watchosArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    watchosArm32 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    watchosSimulatorArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
 
-    macosX64()
-    macosArm64()
+    macosX64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
+    macosArm64 {
+        binaries {
+            framework {
+                baseName = appleFramework
+            }
+            executable()
+        }
+    }
 
     linuxX64()
     // linuxArm64()
