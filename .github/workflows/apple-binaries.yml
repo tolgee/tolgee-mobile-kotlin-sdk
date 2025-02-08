@@ -25,6 +25,9 @@ jobs:
       - name: Install Tolgee CLI
         run: npm install --global @tolgee/cli
 
+      - name: Install tree
+        run: brew install tree
+
       - name: Build
         run: ./gradlew core:build
 
