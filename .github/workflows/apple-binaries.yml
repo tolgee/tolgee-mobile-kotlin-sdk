@@ -31,18 +31,6 @@ jobs:
       - name: Build
         run: ./gradlew core:build
 
-      - name: Linking Native
-        continue-on-error: true
-        run: ./gradlew core:linkNative
-
-      - name: Linking Release
-        continue-on-error: true
-        run: ./gradlew core:linkReleaseFrameworkNative
-
-      - name: Linking Debug
-        continue-on-error: true
-        run: ./gradlew core:linkDebugFrameworkNative
-
       - name: Framework Tolgee
         continue-on-error: true
         run: ./gradlew core:assembleTolgeeXCFramework || ./gradlew core:assembleXCFramework

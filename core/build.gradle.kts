@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
+    alias(libs.plugins.cocoapods)
     alias(libs.plugins.dokka)
     alias(libs.plugins.serialization)
     alias(libs.plugins.vanniktech.publish)
@@ -43,6 +44,15 @@ kotlin {
     jvm()
 
     val xcf = XCFramework(appleFramework)
+    cocoapods {
+        name = appleFramework
+        version = libVersion
+
+        framework {
+            baseName = appleFramework
+        }
+    }
+
     iosX64 {
         binaries {
             framework {
