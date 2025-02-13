@@ -109,6 +109,19 @@ public final class dev/datlag/tolgee/model/Format$AndroidXML : dev/datlag/tolgee
 	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$AndroidXML;
 }
 
+public abstract class dev/datlag/tolgee/model/Format$Apple : dev/datlag/tolgee/model/Format {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getValue ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/Format$Apple$Strings : dev/datlag/tolgee/model/Format$Apple {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$Apple$Strings;
+}
+
+public final class dev/datlag/tolgee/model/Format$Apple$XLIFF : dev/datlag/tolgee/model/Format$Apple {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$Apple$XLIFF;
+}
+
 public final class dev/datlag/tolgee/model/Format$Companion {
 	public final fun from (Ljava/lang/String;)Ldev/datlag/tolgee/model/Format;
 }
@@ -128,8 +141,79 @@ public final class dev/datlag/tolgee/model/Format$Custom : dev/datlag/tolgee/mod
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/model/Format$Po : dev/datlag/tolgee/model/Format {
-	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$Po;
+public abstract class dev/datlag/tolgee/model/Format$JSON : dev/datlag/tolgee/model/Format {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getValue ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$C : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$C;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$I18Next : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$I18Next;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$ICU : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$ICU;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$Java : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$Java;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$PHP : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$PHP;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$Ruby : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$Ruby;
+}
+
+public final class dev/datlag/tolgee/model/Format$JSON$Tolgee : dev/datlag/tolgee/model/Format$JSON {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$JSON$Tolgee;
+}
+
+public abstract class dev/datlag/tolgee/model/Format$PO : dev/datlag/tolgee/model/Format {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getValue ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/Format$PO$C : dev/datlag/tolgee/model/Format$PO {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$PO$C;
+}
+
+public final class dev/datlag/tolgee/model/Format$PO$ICU : dev/datlag/tolgee/model/Format$PO {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$PO$ICU;
+}
+
+public final class dev/datlag/tolgee/model/Format$PO$Java : dev/datlag/tolgee/model/Format$PO {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$PO$Java;
+}
+
+public final class dev/datlag/tolgee/model/Format$PO$PHP : dev/datlag/tolgee/model/Format$PO {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$PO$PHP;
+}
+
+public final class dev/datlag/tolgee/model/Format$PO$Python : dev/datlag/tolgee/model/Format$PO {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$PO$Python;
+}
+
+public final class dev/datlag/tolgee/model/Format$PO$Ruby : dev/datlag/tolgee/model/Format$PO {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$PO$Ruby;
+}
+
+public abstract class dev/datlag/tolgee/model/Format$Properties : dev/datlag/tolgee/model/Format {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getValue ()Ljava/lang/String;
+}
+
+public final class dev/datlag/tolgee/model/Format$Properties$ICU : dev/datlag/tolgee/model/Format$Properties {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$Properties$ICU;
+}
+
+public final class dev/datlag/tolgee/model/Format$Properties$Java : dev/datlag/tolgee/model/Format$Properties {
+	public static final field INSTANCE Ldev/datlag/tolgee/model/Format$Properties$Java;
 }
 
 public abstract class dev/datlag/tolgee/model/pull/State : java/lang/CharSequence {

@@ -284,7 +284,7 @@ open class Tolgee(
      * @property projectId The unique identifier for the project within the system.
      * @property locale The target locale used for translations or project-specific setup.
      * @property network The network configuration used for executing HTTP requests and managing concurrency.
-     * @property cdn The CDN configuration for accessing and formatting content dynamically.
+     * @property contentDelivery The CDN configuration for accessing and formatting content dynamically.
      */
     @ConsistentCopyVisibility
     data class Config internal constructor(
@@ -293,7 +293,7 @@ open class Tolgee(
         val projectId: String?,
         val locale: Locale?,
         val network: Network,
-        val cdn: CDN,
+        val contentDelivery: ContentDelivery,
     ) {
 
         /**
@@ -369,7 +369,7 @@ open class Tolgee(
              * The value of this property is incorporated into the resulting configuration when the
              * `build()` method is invoked.
              */
-            var cdn: CDN = CDN()
+            var contentDelivery: ContentDelivery = ContentDelivery()
 
             /**
              * Configures the API key for the builder.
@@ -451,8 +451,8 @@ open class Tolgee(
              *            properties such as URL and formatting strategy used in the configuration.
              * @return The Builder instance with the configured CDN, allowing for method chaining.
              */
-            fun cdn(cdn: CDN) = apply {
-                this.cdn = cdn
+            fun contentDelivery(contentDelivery: ContentDelivery) = apply {
+                this.contentDelivery = contentDelivery
             }
 
             /**
@@ -467,8 +467,23 @@ open class Tolgee(
              *                for the CDN instance. Inside this lambda, you can call the available methods
              *                on `CDN.Builder` to set up the desired CDN properties.
              */
-            fun cdn(builder: CDN.Builder.() -> Unit) = apply {
-                this.cdn = CDN.Builder().apply(builder).build()
+            fun contentDelivery(builder: ContentDelivery.Builder.() -> Unit) = apply {
+                this.contentDelivery = ContentDelivery.Builder().apply(builder).build()
+            }
+
+            /**
+             * Configures the content delivery settings for the Builder instance.
+             *
+             * Sets up a Content Delivery Network (CDN) by providing a URL and a configuration lambda.
+             * The lambda uses a `CDN.Builder` receiver to apply various CDN settings, which are then
+             * built and assigned to the builder.
+             *
+             * @param url The URL for the Content Delivery Network to be used.
+             * @param builder A lambda with a receiver of type `CDN.Builder` to define the configuration
+             *                for the CDN. Inside this lambda, you can customize various CDN properties.
+             */
+            fun contentDelivery(url: String, builder: ContentDelivery.Builder.() -> Unit) = apply {
+                this.contentDelivery = ContentDelivery.Builder().url(url).apply(builder).build()
             }
 
             /**
@@ -482,7 +497,7 @@ open class Tolgee(
                 projectId = projectId,
                 locale = locale,
                 network = network,
-                cdn = cdn,
+                contentDelivery = contentDelivery,
             )
         }
 
@@ -604,7 +619,7 @@ open class Tolgee(
          * by utilizing the sealed `Formatter` interface.
          */
         @ConsistentCopyVisibility
-        data class CDN internal constructor(
+        data class ContentDelivery internal constructor(
             val url: String? = null,
             val formatter: Formatter = Formatter.ICU
         ) {
@@ -716,7 +731,7 @@ open class Tolgee(
                  * @return A `CDN` instance with the chosen configuration, including the resolved URL
                  *         and formatter.
                  */
-                fun build(): CDN = CDN(
+                fun build(): ContentDelivery = ContentDelivery(
                     url = url?.ifBlank { null } ?: id?.let {
                         combineUrlParts(baseUrl, it).trim()
                     }?.ifBlank { null },

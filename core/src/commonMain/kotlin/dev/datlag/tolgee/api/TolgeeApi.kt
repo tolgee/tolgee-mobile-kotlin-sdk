@@ -142,7 +142,7 @@ internal data object TolgeeApi {
         config: Tolgee.Config,
         currentLanguage: String?
     ): TolgeeTranslation {
-        val baseUrl = config.cdn.url?.ifBlank { null } ?: return TranslationEmpty
+        val baseUrl = config.contentDelivery.url?.ifBlank { null } ?: return TranslationEmpty
         val language = currentLanguage?.ifBlank { null }
             ?: config.locale?.language?.ifBlank { null }
             ?: Tolgee.systemLocale.language.ifBlank { null }
@@ -154,7 +154,7 @@ internal data object TolgeeApi {
         } ?: return TranslationEmpty
 
         val decoded = suspendCatching {
-            response.body<Map<String, JsonElement>>()
+            json.decodeFromString<Map<String, JsonElement>>(response.bodyAsText())
         }.getOrNull() ?: suspendCatching {
             json.decodeFromString<Map<String, JsonElement>>(response.readRawBytes().decodeToString())
         }.getOrNull() ?: return TranslationEmpty
@@ -167,7 +167,7 @@ internal data object TolgeeApi {
                     translations = mapOf(language to TolgeeKey.Translation(value.stringValue()))
                 )
             }.toImmutableList(),
-            formatter = config.cdn.formatter,
+            formatter = config.contentDelivery.formatter,
             usedLocale = forLocaleTag(language),
         )
     }
