@@ -182,6 +182,7 @@ kotlin {
 
             // Does not support androidNative and linuxArm64 yet (https://github.com/comahe-de/i18n4k/pull/75)
             implementation(libs.i18n4k)
+            implementation(libs.datetime)
         }
 
         androidMain.dependencies {

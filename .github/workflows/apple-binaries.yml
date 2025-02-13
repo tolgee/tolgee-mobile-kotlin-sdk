@@ -28,6 +28,9 @@ jobs:
       - name: Install tree
         run: brew install tree
 
+      - name: Install Cocoapods
+        run: brew install cocoapods
+
       - name: Build
         run: ./gradlew core:build
 

@@ -106,7 +106,7 @@ open class Tolgee(
             loadTranslations()
         }.getOrNull() ?: currentTranslation() ?: return@mapLatest null
 
-        return@mapLatest translation.localized(key.toString(), parameters)?.toString(locale)
+        return@mapLatest translation.localized(key.toString(), parameters, locale)
     }.mapNotNull()
 
     /**
@@ -124,7 +124,7 @@ open class Tolgee(
     ): String? {
         val translation = currentTranslation() ?: return null
 
-        return translation.localized(key.toString(), parameters)?.toString(localeFlow.value)
+        return translation.localized(key.toString(), parameters, localeFlow.value)
     }
 
     suspend fun preload() {
@@ -138,15 +138,16 @@ open class Tolgee(
 
     @ConsistentCopyVisibility
     data class Config internal constructor(
-        val apiKey: String,
+        val apiKey: String?,
         val apiUrl: String,
         val projectId: String?,
         val locale: Locale?,
-        val network: Network
+        val network: Network,
+        val cdn: CDN,
     ) {
 
         class Builder {
-            lateinit var apiKey: String
+            var apiKey: String? = null
 
             var apiUrl: String = DEFAULT_API_URL
                 set(value) {
@@ -161,6 +162,7 @@ open class Tolgee(
             var locale: Locale? = null
 
             var network: Network = Network()
+            var cdn: CDN = CDN()
 
             fun apiKey(apiKey: String) = apply {
                 this.apiKey = apiKey
@@ -190,12 +192,22 @@ open class Tolgee(
                 this.network = Network.Builder().apply(builder).build()
             }
 
+            fun cdn(cdn: CDN) = apply {
+                this.cdn = cdn
+            }
+
+            @JvmOverloads
+            fun cdn(use: Boolean = true, builder: CDN.Builder.() -> Unit) = apply {
+                this.cdn = CDN.Builder().use(use).apply(builder).build()
+            }
+
             fun build(): Config = Config(
                 apiKey = apiKey,
                 apiUrl = apiUrl,
                 projectId = projectId,
                 locale = locale,
-                network = network
+                network = network,
+                cdn = cdn,
             )
         }
 
@@ -240,9 +252,67 @@ open class Tolgee(
             }
         }
 
+        @ConsistentCopyVisibility
+        data class CDN internal constructor(
+            val use: Boolean = false,
+            val url: String? = null,
+            val formatter: Formatter = Formatter.ICU
+        ) {
+            class Builder {
+                var use: Boolean = false
+                var url: String? = null
+                private var baseUrl: String = DEFAULT_BASE_URL
+                private var id: String? = null
+                var formatter: Formatter = Formatter.ICU
+
+                fun use(use: Boolean) = apply {
+                    this.use = use
+                }
+
+                fun url(url: String) = apply {
+                    this.url = url
+                }
+
+                fun baseUrl(url: String) = apply {
+                    this.baseUrl = url
+                }
+
+                fun id(id: String?) = apply {
+                    this.id = id
+                }
+
+                fun formatter(formatter: Formatter) = apply {
+                    this.formatter = formatter
+                }
+
+                fun build(): CDN = CDN(
+                    use = use,
+                    url = url?.ifBlank { null } ?: id?.let {
+                        combineUrlParts(baseUrl, it).trim()
+                    }?.ifBlank { null },
+                    formatter = formatter
+                )
+            }
+
+            companion object {
+                internal const val DEFAULT_BASE_URL = "https://cdn.tolg.ee/"
+
+                private fun combineUrlParts(one: String, two: String): String {
+                    val start = if (one.endsWith('/')) one else "$one/"
+                    val end = if (two.startsWith('/')) two.substring(1) else two
+                    return "$start$end"
+                }
+            }
+        }
+
         companion object {
             internal const val DEFAULT_API_URL = "https://app.tolgee.io/v2/"
         }
+    }
+
+    sealed interface Formatter {
+        data object ICU : Formatter
+        data object Sprintf : Formatter
     }
 
     companion object {

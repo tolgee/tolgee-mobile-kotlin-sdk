@@ -10,6 +10,7 @@ import platform.Foundation.NSString
 import platform.Foundation.NSURL
 import platform.Foundation.localizedStringWithFormat
 
+@ConsistentCopyVisibility
 data class TolgeeApple internal constructor(
     override val config: Config
 ) : Tolgee(config) {

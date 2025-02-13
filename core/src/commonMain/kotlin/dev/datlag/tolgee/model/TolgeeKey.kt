@@ -11,6 +11,9 @@ internal data class TolgeeKey(
     @SerialName("translations") val translations: Map<String, Translation>
 ) {
 
+    internal fun translationForOrFirst(language: String?) = language?.ifBlank { null }?.let(translations::get)
+        ?: translations.firstNotNullOfOrNull { it.value }
+
     @Serializable
     internal data class Translation(
         @SerialName("text") val text: String?,
