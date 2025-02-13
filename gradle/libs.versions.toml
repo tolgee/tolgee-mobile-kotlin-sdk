@@ -26,6 +26,7 @@ publish = "0.30.0"
 semver = "2.0.0"
 serialization = "1.8.0"
 tooling = "1.7.0"
+versions = "0.52.0"
 
 [libraries]
 android = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
@@ -67,3 +68,4 @@ ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
