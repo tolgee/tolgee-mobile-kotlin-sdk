@@ -47,6 +47,9 @@ kotlin {
     cocoapods {
         name = appleFramework
         version = libVersion
+        license = "Apache License 2.0"
+        homepage = "https://github.com/DatL4g/compose-tolgee"
+        summary = "Kotlin Multiplatform localization wrapper for Tolgee"
 
         framework {
             baseName = appleFramework

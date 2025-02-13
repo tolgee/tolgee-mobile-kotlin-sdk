@@ -43,7 +43,7 @@ internal object TolgeeCLI : Node() {
         apiUrl: String?,
         projectId: String?,
         apiKey: String?,
-        format: Format,
+        format: Format?,
         path: File,
         config: File?,
         languages: Collection<String>?,
@@ -66,8 +66,10 @@ internal object TolgeeCLI : Node() {
                 if (!projectId.isNullOrBlank()) {
                     args("--project-id", projectId)
                 }
+                if (format != null) {
+                    args("--format", format.value)
+                }
             }
-            .args("--format", format.value)
             .args("--path", path.path)
             .apply {
                 if (!languages.isNullOrEmpty()) {
@@ -119,8 +121,6 @@ internal object TolgeeCLI : Node() {
                 if (!projectId.isNullOrBlank()) {
                     args("--project-id", projectId)
                 }
-            }
-            .apply {
                 if (format != null) {
                     args("--format", format.value)
                 }

@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'Tolgee'
     spec.version                  = '1.0.3-SNAPSHOT'
-    spec.homepage                 = ''
+    spec.homepage                 = 'https://github.com/DatL4g/compose-tolgee'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
-    spec.license                  = ''
-    spec.summary                  = ''
+    spec.license                  = 'Apache License 2.0'
+    spec.summary                  = 'Kotlin Multiplatform localization wrapper for Tolgee'
     spec.vendored_frameworks      = 'build/cocoapods/framework/Tolgee.framework'
     spec.libraries                = 'c++'
                 

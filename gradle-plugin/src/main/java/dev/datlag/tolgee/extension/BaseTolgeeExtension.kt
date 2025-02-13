@@ -99,8 +99,10 @@ open class BaseTolgeeExtension(objectFactory: ObjectFactory) {
             ) {
                 if (project.isAndroidOnly) {
                     Format.AndroidXML
-                } else {
+                } else if (project.plugins.hasPlugin("org.jetbrains.compose")) {
                     Format.ComposeXML
+                } else {
+                    null
                 }
             })
         } else {

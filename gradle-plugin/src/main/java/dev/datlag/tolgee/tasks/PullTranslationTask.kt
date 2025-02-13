@@ -73,7 +73,7 @@ open class PullTranslationTask : BaseTolgeeTask() {
         val apiUrl = resolveApiUrl()
         val projectId = resolveProjectId()
         val apiKey = resolveApiKey()
-        val format = resolveFormat(Format.ComposeXML)
+        val format = resolveFormat()
         val path = path.orNull?.asFile ?: projectLayout.projectDirectory.dir(PullExtension.COMMON_RESOURCES_PATH).asFile
         val languages = languages.orNull?.mapNotNull { it?.ifBlank { null } }
         val states = states.orNull?.filterNotNull()
@@ -116,7 +116,7 @@ open class PullTranslationTask : BaseTolgeeTask() {
                     api = tolgee,
                     apiKey = requiredApiKey,
                     projectId = projectId,
-                    format = format,
+                    format = format ?: return@runBlocking logger.error("Please specify a format to use pulling."),
                     languages = languages,
                     states = states,
                     namespaces = namespaces,
