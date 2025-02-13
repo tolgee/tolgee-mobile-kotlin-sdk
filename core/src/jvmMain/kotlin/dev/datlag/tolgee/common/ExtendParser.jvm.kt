@@ -8,6 +8,12 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
+/**
+ * Converts the given object to an instance of Instant.
+ *
+ * @return The converted Instant value from the given object.
+ * @throws IllegalArgumentException if the object cannot be converted to an Instant.
+ */
 internal actual fun Any.convertToInstant(): Instant = when (this) {
     is java.time.LocalDateTime -> Instant.fromEpochSeconds(
         this.atZone(ZoneId.systemDefault()).toEpochSecond()
@@ -18,6 +24,16 @@ internal actual fun Any.convertToInstant(): Instant = when (this) {
     else -> throw IllegalArgumentException("Can not convert to LocalDateTime: $this")
 }
 
+/**
+ * Formats the string using the specified arguments, similar to the C `sprintf` function.
+ *
+ * This method replaces placeholders in the string with the corresponding arguments provided,
+ * applying formatting rules defined within the string.
+ *
+ * @param args The arguments to be formatted and substituted into the string.
+ * @return A formatted string with placeholders replaced by the provided arguments,
+ *         or the original string if formatting fails.
+ */
 internal actual fun String.sprintf(vararg args: Any): String = scopeCatching {
     Sprintf(this, args.toImmutableList()).process().toString()
 }.getOrNull() ?: this.format(*args)

@@ -9,6 +9,14 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
+/**
+ * Converts the current object to an instance of [Instant]. This function handles various
+ * object types, such as [Date], [java.time.LocalDateTime], [ZonedDateTime], and [java.time.Instant],
+ * and converts them to [Instant] where applicable.
+ *
+ * @return The corresponding [Instant] for the current object.
+ * @throws IllegalArgumentException If the object type is not supported or cannot be converted.
+ */
 internal actual fun Any.convertToInstant(): Instant = when (this) {
     is Date -> Instant.fromEpochMilliseconds(this.time)
     else -> {
@@ -27,6 +35,13 @@ internal actual fun Any.convertToInstant(): Instant = when (this) {
     }
 }
 
+/**
+ * Formats the current string using the specified arguments, following a pattern similar to the C `sprintf` function.
+ * Allows for the substitution and formatting of placeholders within the string.
+ *
+ * @param args The arguments used to replace placeholders in the string format.
+ * @return A formatted string with placeholders replaced by the respective values from the provided arguments.
+ */
 internal actual fun String.sprintf(vararg args: Any): String = scopeCatching {
     Sprintf(this, args.toImmutableList()).process().toString()
 }.getOrNull() ?: this.format(*args)

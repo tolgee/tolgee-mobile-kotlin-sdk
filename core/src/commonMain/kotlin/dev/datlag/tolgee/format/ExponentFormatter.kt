@@ -6,6 +6,9 @@ import kotlin.math.log10
 import kotlin.math.pow
 import kotlin.math.roundToLong
 
+/**
+ * Mostly copied from https://github.com/sergeych/mp_stools
+ */
 internal data class ExponentFormatter(val value: Double) {
 
     var mantissa: Double

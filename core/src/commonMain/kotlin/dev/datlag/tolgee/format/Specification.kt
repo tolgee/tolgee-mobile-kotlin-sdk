@@ -8,6 +8,9 @@ import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.Serializable
 
+/**
+ * Mostly copied from https://github.com/sergeych/mp_stools
+ */
 @Serializable
 internal sealed interface Positioning {
 
@@ -21,6 +24,9 @@ internal sealed interface Positioning {
     data object Center : Positioning
 }
 
+/**
+ * Mostly copied from https://github.com/sergeych/mp_stools
+ */
 internal data class Specification(
     val parent: Sprintf,
     var index: Int

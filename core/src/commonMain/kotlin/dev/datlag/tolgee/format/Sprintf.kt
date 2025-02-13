@@ -9,6 +9,9 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toLocalDateTime
 
+/**
+ * Mostly copied from https://github.com/sergeych/mp_stools
+ */
 internal data class Sprintf(
     val format: String,
     val args: ImmutableList<Any>
