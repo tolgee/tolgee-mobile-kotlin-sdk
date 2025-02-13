@@ -47,10 +47,6 @@ internal data object TolgeeApi {
         config: Tolgee.Config,
         currentLanguage: String?
     ): TolgeeTranslation {
-        if (config.cdn.use) {
-            return getTranslationFromCDN(client, config, currentLanguage)
-        }
-
         val apiKey = config.apiKey ?: return getTranslationFromCDN(client, config, currentLanguage)
         val baseUrl = buildProjectUrl(config.apiUrl, config.projectId, "projects/translations")
         val allTranslations = mutableListOf<TolgeeKey>()
@@ -82,9 +78,11 @@ internal data object TolgeeApi {
             currentPage++
         }
 
-        return TranslationICU(
-            keys = allTranslations.toImmutableList()
-        )
+        return if (allTranslations.isEmpty()) {
+            getTranslationFromCDN(client, config, currentLanguage)
+        } else {
+            TranslationICU(keys = allTranslations.toImmutableList())
+        }
     }
 
     suspend fun getTranslationFromCDN(
@@ -92,10 +90,6 @@ internal data object TolgeeApi {
         config: Tolgee.Config,
         currentLanguage: String?
     ): TolgeeTranslation {
-        if (!config.cdn.use) {
-            return TranslationEmpty
-        }
-
         val baseUrl = config.cdn.url?.ifBlank { null } ?: return TranslationEmpty
         val language = currentLanguage?.ifBlank { null }
             ?: config.locale?.language?.ifBlank { null }
@@ -103,7 +97,7 @@ internal data object TolgeeApi {
             ?: return TranslationEmpty
 
         val start = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
-        val response = client.get("$start$language.json".also { println("Full URL: $it") }).takeIf {
+        val response = client.get("$start$language.json").takeIf {
             it.status.isSuccess()
         } ?: return TranslationEmpty
 

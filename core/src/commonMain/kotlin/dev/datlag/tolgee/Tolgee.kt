@@ -196,9 +196,8 @@ open class Tolgee(
                 this.cdn = cdn
             }
 
-            @JvmOverloads
-            fun cdn(use: Boolean = true, builder: CDN.Builder.() -> Unit) = apply {
-                this.cdn = CDN.Builder().use(use).apply(builder).build()
+            fun cdn(builder: CDN.Builder.() -> Unit) = apply {
+                this.cdn = CDN.Builder().apply(builder).build()
             }
 
             fun build(): Config = Config(
@@ -254,20 +253,14 @@ open class Tolgee(
 
         @ConsistentCopyVisibility
         data class CDN internal constructor(
-            val use: Boolean = false,
             val url: String? = null,
             val formatter: Formatter = Formatter.ICU
         ) {
             class Builder {
-                var use: Boolean = false
                 var url: String? = null
                 private var baseUrl: String = DEFAULT_BASE_URL
                 private var id: String? = null
                 var formatter: Formatter = Formatter.ICU
-
-                fun use(use: Boolean) = apply {
-                    this.use = use
-                }
 
                 fun url(url: String) = apply {
                     this.url = url
@@ -286,7 +279,6 @@ open class Tolgee(
                 }
 
                 fun build(): CDN = CDN(
-                    use = use,
                     url = url?.ifBlank { null } ?: id?.let {
                         combineUrlParts(baseUrl, it).trim()
                     }?.ifBlank { null },
