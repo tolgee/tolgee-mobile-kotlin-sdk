@@ -119,8 +119,10 @@ internal data object TolgeeApi {
             currentPage++
         }
 
-        return if (allTranslations.isEmpty()) {
-            getTranslationFromCDN(client, config, currentLanguage)
+        return if (currentPage < totalPages || allTranslations.isEmpty()) {
+            getTranslationFromCDN(client, config, currentLanguage).takeIf {
+                it !is TranslationEmpty
+            } ?: TranslationICU(keys = allTranslations.toImmutableList())
         } else {
             TranslationICU(keys = allTranslations.toImmutableList())
         }
