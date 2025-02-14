@@ -2,16 +2,16 @@ public class dev/datlag/tolgee/Tolgee {
 	public static final field Companion Ldev/datlag/tolgee/Tolgee$Companion;
 	public fun <init> (Ldev/datlag/tolgee/Tolgee$Config;)V
 	public fun getConfig ()Ldev/datlag/tolgee/Tolgee$Config;
-	public static final fun getInstance ()Ldev/datlag/tolgee/Tolgee;
+	public static final fun getInstance ()Ldev/datlag/tolgee/TolgeeAndroid;
 	public static final fun getSystemLocale ()Ljava/util/Locale;
-	public static final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun init (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun init (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun instanceOrInit (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public static final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
+	public static final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun init (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun init (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun instanceOrInit (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
 	public final fun instant (Ljava/lang/CharSequence;)Ljava/lang/String;
 	public final fun instant (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
 	public static synthetic fun instant$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
@@ -26,20 +26,20 @@ public class dev/datlag/tolgee/Tolgee {
 }
 
 public final class dev/datlag/tolgee/Tolgee$Companion {
-	public final fun getInstance ()Ldev/datlag/tolgee/Tolgee;
+	public final fun getInstance ()Ldev/datlag/tolgee/TolgeeAndroid;
 	public final fun getSystemLocale ()Ljava/util/Locale;
-	public final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public final fun init (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public final fun init (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public static synthetic fun init$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLdev/datlag/tolgee/Tolgee$Config;ILjava/lang/Object;)Ldev/datlag/tolgee/Tolgee;
-	public static synthetic fun init$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/Tolgee;
-	public final fun instanceOrInit (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/Tolgee;
-	public final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee;
-	public static synthetic fun instanceOrInit$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLdev/datlag/tolgee/Tolgee$Config;ILjava/lang/Object;)Ldev/datlag/tolgee/Tolgee;
-	public static synthetic fun instanceOrInit$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/Tolgee;
+	public final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun init (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun init (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static synthetic fun init$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLdev/datlag/tolgee/Tolgee$Config;ILjava/lang/Object;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static synthetic fun init$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun instanceOrInit (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static synthetic fun instanceOrInit$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLdev/datlag/tolgee/Tolgee$Config;ILjava/lang/Object;)Ldev/datlag/tolgee/TolgeeAndroid;
+	public static synthetic fun instanceOrInit$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/TolgeeAndroid;
 }
 
 public final class dev/datlag/tolgee/Tolgee$Config {
@@ -67,8 +67,10 @@ public final class dev/datlag/tolgee/Tolgee$Config$Builder {
 	public final fun apiUrl (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun build ()Ldev/datlag/tolgee/Tolgee$Config;
 	public final fun contentDelivery (Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
+	public final fun contentDelivery (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
+	public static synthetic fun contentDelivery$default (Ldev/datlag/tolgee/Tolgee$Config$Builder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
 	public final fun getApiKey ()Ljava/lang/String;
 	public final fun getApiUrl ()Ljava/lang/String;
 	public final fun getContentDelivery ()Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;
