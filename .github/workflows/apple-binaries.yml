@@ -1,6 +1,8 @@
 name: Apple Binaries
 
 on:
+  release:
+    types: [ published ]
   workflow_dispatch:
 
 jobs:
@@ -25,9 +27,6 @@ jobs:
       - name: Install Tolgee CLI
         run: npm install --global @tolgee/cli
 
-      - name: Install tree
-        run: brew install tree
-
       - name: Install Cocoapods
         run: brew install cocoapods
 
@@ -46,10 +45,23 @@ jobs:
         continue-on-error: true
         run: ./gradlew core:assembleTolgeeDebugXCFramework || ./gradlew core:assembleDebugXCFramework
 
-      - name: Folder Structure
-        run: tree core/build
+      - name: Create XCFramework Archive
+        run: |
+          tar -czf Tolgee-release.xcframework.tar.gz -C core/build/XCFrameworks/release/Tolgee.xcframework
+          tar -czf Tolgee-debug.xcframework.tar.gz -C core/build/XCFrameworks/debug/Tolgee.xcframework
 
-      - name: Upload core build directory
+      - name: Upload XCFramework to Release
+        if: ${{ github.event_name == 'release' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Tolgee-release.xcframework.tar.gz
+            Tolgee-debug.xcframework.tar.gz
+
+      - name: Upload XCFramework to action packages
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@v4
         with:
-          path: core/build
+          path: |
+            Tolgee-release.xcframework.tar.gz
+            Tolgee-debug.xcframework.tar.gz
