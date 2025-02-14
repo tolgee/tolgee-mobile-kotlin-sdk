@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'Tolgee'
-    spec.version                  = '1.0.3-SNAPSHOT'
+    spec.version                  = '2.0.0-RC'
     spec.homepage                 = 'https://github.com/DatL4g/compose-tolgee'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
