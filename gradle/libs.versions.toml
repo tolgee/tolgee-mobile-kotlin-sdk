@@ -3,7 +3,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-library = "1.0.3-SNAPSHOT"
+library = "2.0.0-RC"
 android-core = "1.15.0"
 android-tools = "8.7.3"
 atomicfu = "0.26.1"
@@ -15,13 +15,11 @@ dokka = "2.0.0"
 i18n4k = "0.10.0"
 immutable = "0.3.8"
 kaml = "0.72.0"
-kodein = "7.24.1"
 kommand = "2.3.0"
 kotlin = "2.1.10"
 ksp = "2.1.10-1.0.29"
 ktor = "3.1.0"
 ktorfit = "2.2.0"
-locale = "0.8.0"
 publish = "0.30.0"
 semver = "2.0.0"
 serialization = "1.8.0"
@@ -35,7 +33,6 @@ coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core"
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 i18n4k = { group = "de.comahe.i18n4k", name = "i18n4k-core", version.ref = "i18n4k" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
-kodein-compose = { group = "org.kodein.di", name = "kodein-di-framework-compose", version.ref = "kodein" }
 kommand = { group = "com.kgit2", name = "kommand", version.ref = "kommand" }
 kotlin-gradle-plugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
@@ -48,7 +45,6 @@ ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "k
 ktor-winhttp = { group = "io.ktor", name = "ktor-client-winhttp", version.ref = "ktor" }
 ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfit" }
-locale = { group = "com.vanniktech", name = "multiplatform-locale", version.ref = "locale" }
 semver = { group = "io.github.z4kn4fein", name = "semver", version.ref = "semver" }
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
