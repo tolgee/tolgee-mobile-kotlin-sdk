@@ -29,7 +29,7 @@ internal actual val platformHttpClient: HttpClient = HttpClient(Darwin) {
  * @param config Configuration object used to initialize the Tolgee instance.
  * @return A platform-specific Tolgee instance.
  */
-internal actual fun createPlatformTolgee(config: Tolgee.Config): Tolgee {
+internal actual fun createPlatformTolgee(config: Tolgee.Config): PlatformTolgee {
     return TolgeeApple(config)
 }
 
@@ -41,3 +41,10 @@ internal actual fun createPlatformTolgee(config: Tolgee.Config): Tolgee {
  */
 internal actual val platformNetworkContext: CoroutineContext
     get() = Dispatchers.IO
+
+/**
+ * Provides a platform-specific type alias for the Tolgee localization framework implementation.
+ * On Apple platforms, `PlatformTolgee` is resolved to `TolgeeApple`, which handles localization
+ * functionality specific to Apple environments.
+ */
+actual typealias PlatformTolgee = TolgeeApple

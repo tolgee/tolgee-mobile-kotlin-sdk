@@ -13,8 +13,8 @@ import kotlin.coroutines.CoroutineContext
  * @param config The configuration object to initialize the Tolgee instance.
  * @return A platform-specific instance of Tolgee.
  */
-internal actual fun createPlatformTolgee(config: Tolgee.Config): Tolgee {
-    return Tolgee(config)
+internal actual fun createPlatformTolgee(config: Tolgee.Config): PlatformTolgee {
+    return PlatformTolgee(config)
 }
 
 /**
@@ -46,3 +46,15 @@ internal actual val platformHttpClient: HttpClient = HttpClient(Js) {
  */
 internal actual val platformNetworkContext: CoroutineContext
     get() = Dispatchers.Default
+
+/**
+ * A platform-specific implementation of the `Tolgee` class.
+ *
+ * This class provides platform-specific configuration and behavior for Tolgee functionalities
+ * and extends the core `Tolgee` class by implementing platform-targeted logic.
+ *
+ * @constructor Creates an instance of `PlatformTolgee` with the provided configuration.
+ * @param config The configuration used to initialize the Tolgee instance.
+ */
+@ConsistentCopyVisibility
+actual data class PlatformTolgee internal constructor(override val config: Config) : Tolgee(config)

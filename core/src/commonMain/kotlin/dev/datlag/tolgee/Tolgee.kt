@@ -4,8 +4,8 @@ import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
 import dev.datlag.tolgee.api.TolgeeApi
+import dev.datlag.tolgee.common.*
 import dev.datlag.tolgee.common.createPlatformTolgee
-import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.common.platformHttpClient
 import dev.datlag.tolgee.common.platformNetworkContext
 import dev.datlag.tolgee.model.TolgeeMessageParams
@@ -482,7 +482,8 @@ open class Tolgee(
              * @param builder A lambda with a receiver of type `CDN.Builder` to define the configuration
              *                for the CDN. Inside this lambda, you can customize various CDN properties.
              */
-            fun contentDelivery(url: String, builder: ContentDelivery.Builder.() -> Unit) = apply {
+            @JvmOverloads
+            fun contentDelivery(url: String, builder: ContentDelivery.Builder.() -> Unit = { }) = apply {
                 this.contentDelivery = ContentDelivery.Builder().url(url).apply(builder).build()
             }
 
@@ -856,7 +857,7 @@ open class Tolgee(
          * through methods such as `init` or `instanceOrInit`. The default value is `null` and should
          * only be updated with a properly instantiated `Tolgee` object.
          */
-        private val _instance = atomic<Tolgee?>(null)
+        private val _instance = atomic<PlatformTolgee?>(null)
 
         /**
          * Provides the singleton instance of the `Tolgee` class.
@@ -869,7 +870,7 @@ open class Tolgee(
          * a new instance if required via supporting functions.
          */
         @JvmStatic
-        val instance: Tolgee?
+        val instance: PlatformTolgee?
             get() = _instance.value
 
         /**

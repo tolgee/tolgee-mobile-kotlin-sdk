@@ -14,7 +14,7 @@ import kotlin.coroutines.CoroutineContext
  *               project-specific settings, and other customization options.
  * @return A platform-specific instance of the Tolgee class, initialized with the given configuration.
  */
-internal expect fun createPlatformTolgee(config: Tolgee.Config): Tolgee
+internal expect fun createPlatformTolgee(config: Tolgee.Config): PlatformTolgee
 
 /**
  * Platform-specific instance of [HttpClient] used for making HTTP requests.
@@ -30,3 +30,11 @@ internal expect val platformHttpClient: HttpClient
  * It is typically used as the default context for executing coroutines in networking scenarios.
  */
 internal expect val platformNetworkContext: CoroutineContext
+
+/**
+ * Platform-specific implementation of the Tolgee interface.
+ * This class is expected to provide platform-dependent functionalities
+ * for the Tolgee library, enabling internationalization and
+ * localization features.
+ */
+expect class PlatformTolgee : Tolgee

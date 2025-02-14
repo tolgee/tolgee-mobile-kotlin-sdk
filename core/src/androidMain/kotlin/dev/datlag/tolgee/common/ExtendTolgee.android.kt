@@ -29,7 +29,7 @@ internal actual val platformHttpClient: HttpClient = HttpClient(Android) {
  * @param config The configuration object required to initialize Tolgee.
  * @return A platform-specific implementation of the Tolgee library.
  */
-internal actual fun createPlatformTolgee(config: Tolgee.Config): Tolgee {
+internal actual fun createPlatformTolgee(config: Tolgee.Config): PlatformTolgee {
     return TolgeeAndroid(config)
 }
 
@@ -81,3 +81,13 @@ fun Context.getStringInstant(@StringRes resId: Int, vararg formatArgs: Any): Str
     val instance = Tolgee.instance ?: return this.getString(resId, *formatArgs)
     return this.getStringInstant(instance, resId, *formatArgs)
 }
+
+/**
+ * Typealias representing a platform-specific implementation of the Tolgee class for Android.
+ *
+ * This alias maps `PlatformTolgee` to `TolgeeAndroid` on the Android platform, allowing platform
+ * dependency abstraction in multi-platform projects. The actual implementation, `TolgeeAndroid`,
+ * provides Android-specific utilities for managing translations and localization tasks using
+ * string resources.
+ */
+actual typealias PlatformTolgee = TolgeeAndroid
