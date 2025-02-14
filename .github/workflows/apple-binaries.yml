@@ -46,6 +46,7 @@ jobs:
         run: ./gradlew core:assembleTolgeeDebugXCFramework || ./gradlew core:assembleDebugXCFramework
 
       - name: Create XCFramework Archive
+        continue-on-error: true
         run: |
           tar -czf Tolgee-release.xcframework.tar.gz -C core/build/XCFrameworks/release/Tolgee.xcframework
           tar -czf Tolgee-debug.xcframework.tar.gz -C core/build/XCFrameworks/debug/Tolgee.xcframework
@@ -65,3 +66,4 @@ jobs:
           path: |
             Tolgee-release.xcframework.tar.gz
             Tolgee-debug.xcframework.tar.gz
+            core/build
