@@ -1,6 +1,8 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:dev.datlag.tolgee.common/PlatformTolgee/config/#/PointingToDeclaration/Core/dev.datlag.tolgee.common/-platform-tolgee/[wasm-js]config.html
+module:Compiler Plugin
+dev.datlag.tolgee
 module:Compose
 dev.datlag.tolgee
 module:Core
