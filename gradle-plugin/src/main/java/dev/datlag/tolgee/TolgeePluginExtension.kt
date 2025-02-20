@@ -1,6 +1,7 @@
 package dev.datlag.tolgee
 
 import dev.datlag.tolgee.extension.BaseTolgeeExtension
+import dev.datlag.tolgee.extension.CompilerPluginExtension
 import dev.datlag.tolgee.extension.PullExtension
 import dev.datlag.tolgee.extension.PushExtension
 import groovy.lang.Closure
@@ -23,6 +24,12 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
      * Configuration for handling push action.
      */
     lateinit var push: PushExtension
+        private set
+
+    /**
+     * Configuration for handling compiler plugin.
+     */
+    lateinit var compilerPlugin: CompilerPluginExtension
         private set
 
     /**
@@ -53,6 +60,20 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         return Actions.with(push, action)
     }
 
+    /**
+     * Change how the compiler plugin is handled.
+     */
+    fun compilerPlugin(closure: Closure<in CompilerPluginExtension>): CompilerPluginExtension {
+        return compilerPlugin(ConfigureUtil.configureUsing(closure))
+    }
+
+    /**
+     * Change how the compiler plugin is handled.
+     */
+    fun compilerPlugin(action: Action<in CompilerPluginExtension>): CompilerPluginExtension {
+        return Actions.with(compilerPlugin, action)
+    }
+
     override fun setupConvention(project: Project, inherit: BaseTolgeeExtension?) {
         super.setupConvention(project, inherit)
 
@@ -61,6 +82,9 @@ open class TolgeePluginExtension @Inject constructor(objectFactory: ObjectFactor
         }
         push = PushExtension(project.objects).also {
             it.setupConvention(project, this)
+        }
+        compilerPlugin = CompilerPluginExtension(project.objects).also {
+            it.setupConvention(project)
         }
     }
 

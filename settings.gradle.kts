@@ -26,5 +26,6 @@ pluginManagement {
 include(":core")
 include(":compose")
 include(":gradle-plugin")
+include(":compiler-plugin")
 
 rootProject.name = "compose-tolgee"

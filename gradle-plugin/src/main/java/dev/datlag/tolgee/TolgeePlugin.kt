@@ -18,5 +18,7 @@ open class TolgeePlugin : Plugin<Project> {
         target.tasks.maybeCreate(PushTranslationTask.NAME, PushTranslationTask::class).also { task ->
             task.apply(target, extension.push)
         }
+
+        target.pluginManager.apply(TolgeeCompilerSubPlugin::class.java)
     }
 }

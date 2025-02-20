@@ -54,6 +54,37 @@ internal actual val platformNetworkContext: CoroutineContext
  *
  * @param tolgee The [Tolgee] instance to get the cached string from.
  * @param resId Resource id for the format string
+ * @return The string data associated with the resource, formatted and
+ *         stripped of styled text information.
+ */
+fun Context.getStringInstant(tolgee: Tolgee, @StringRes resId: Int): String {
+    return (tolgee as? TolgeeAndroid)?.instant(this, resId)
+        ?: TolgeeAndroid.getKeyFromStringResource(this, resId)?.let {
+            tolgee.instant(key = it, parameters = TolgeeMessageParams.None)
+        } ?: this.getString(resId)
+}
+
+/**
+ * Returns a localized formatted string from [Tolgee] cache or the application's package's
+ * default string table, substituting the format arguments as defined in
+ * [java.util.Formatter] and [java.lang.String.format].
+ *
+ * @param resId Resource id for the format string
+ * @return The string data associated with the resource, formatted and
+ *         stripped of styled text information.
+ */
+fun Context.getStringInstant(@StringRes resId: Int): String {
+    val instance = Tolgee.instance ?: return this.getString(resId)
+    return this.getStringInstant(instance, resId)
+}
+
+/**
+ * Returns a localized formatted string from [Tolgee] cache or the application's package's
+ * default string table, substituting the format arguments as defined in
+ * [java.util.Formatter] and [java.lang.String.format].
+ *
+ * @param tolgee The [Tolgee] instance to get the cached string from.
+ * @param resId Resource id for the format string
  * @param formatArgs The format arguments that will be used for
  *                   substitution.
  * @return The string data associated with the resource, formatted and
