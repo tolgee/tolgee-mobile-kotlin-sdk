@@ -2,6 +2,7 @@ package dev.datlag.tolgee
 
 import com.google.auto.service.AutoService
 import dev.datlag.tolgee.transformer.AndroidTransformer
+import dev.datlag.tolgee.transformer.ComposeTransformer
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
@@ -42,6 +43,11 @@ class TolgeeComponentRegistrar : CompilerPluginRegistrar() {
             override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
                 moduleFragment.transform(
                     transformer = AndroidTransformer(config, pluginContext),
+                    data = null
+                )
+
+                moduleFragment.transform(
+                    transformer = ComposeTransformer(config, pluginContext),
                     data = null
                 )
             }

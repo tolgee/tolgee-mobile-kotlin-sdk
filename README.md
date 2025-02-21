@@ -1,19 +1,16 @@
-# Compose Tolgee
+# Tolgee
 
 [![Tolgee](https://img.shields.io/badge/Tolgee-f06695?style=for-the-badge)](https://tolgee.io/) ![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-Supported-green?style=for-the-badge) ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Supported-green?style=for-the-badge)
 
-A flexable Gradle plugin and runtime library for integrating [Tolgee translations](https://tolgee.io) into **Compose Multiplatform** (and Jetpack Compose) and other Gradle based projects.
+A flexible Gradle plugin and runtime library for integrating [Tolgee translations](https://tolgee.io) into **Kotlin Multiplatform** and **Compose** projects.
 
 ## Gradle plugin
 
-You are **NOT REQUIRED** to use the Gradle plugin, it just comes with a convenient task to pull your latest translations directly into your resources folder.  
-This is also compose **independent**, means you can use it in any project which uses Gradle.
+Comes with a convenient task to pull your latest translations directly into your resources folder.
 
 ### Setup
 
-**Version Catalog**
-
-Don't forget to apply it in your module.
+Using Version Catalog is highly recommended to keep your versions aligned.
 
 ```toml
 [plugins]
@@ -28,61 +25,88 @@ You can change the plugin behavior to your needs:
 tolgee {
     // REQUIRED
     apiKey.set("<YOUR TOLGEE APIKEY WITH TRANSLATION READ ACCESS>") // or use the 'tolgee.apikey=' property instead
-    projectId.set("<YOUR TOLGEE PROJECT ID>")
     
-    // and more options
+    // more options
+    pull { ... }
+    push { ... }
+    
+    // change compile time behavior
+    compilerPlugin {
+        android {
+            // Replaces Context.getString occurrences with Context.getStringInstant
+            replaceGetString.set(false) // default true
+        }
+    }
 }
 ```
 
 ### Usage
 
-After properly configuring the plugin you just call the `pullTranslation` Gradle task and your resources will be updated.
+Pull translations from Tolgee using the `pullTranslation` Gradle task.  
+Push local translations to Tolgee using the `pushTranslation` Gradle task.
 
-## Compose
+## Core
 
-This library provides runtime support for Tolgee translations in your app.  
-No longer creating a new release just to update your strings, thanks to Tolgee content delivery.
-
-### Requirements
-
-You have to enable content delivery in your project on Tolgee.  
-
-#### Supported formats
-
-- Structured Json
-  - Java `String.format` (C-sprintf should work as well)
-  - Other formats require your own `I18N.Format.Custom` implementation
-- Flat Json
-  - Formatting requires your own `I18N.Format.Custom` implementation
+This Kotlin Multiplatform library provides runtime support for Tolgee translations in your app.  
+No longer creating a new release just to update your strings.
 
 ###  Setup
 
+Using Version Catalog is highly recommended to keep your versions aligned.
+
 ```toml
 [libraries]
-tolgee-compose = { group = "dev.datlag.tolgee", name = "compose", version.ref = "tolgee" }
+tolgee = { group = "dev.datlag.tolgee", name = "core", version.ref = "tolgee" }
 ```
 
 ### Usage
 
-Simply call the `I18N.stringResource` instead of the default `stringResource` method and the library takes care of fetching, caching and even formatting.  
-Of course it uses your local resources as default and fallback if fetching fails.
+Simply create a `Tolgee` singleton or multiple instances, using an API Key and/or a content delivery url.
+
+#### Content Delivery
+
+Content Delivery supports JSON only and can be used with any formatting option.
 
 ```kotlin
-val i18n = I18N {
-    config {
-        client(ktorClient)
+/** Thread safe: Retrieve the current singleton or create one. */
+val tolgee = Tolgee.instanceOrInit {
+    apiKey = "<API KEY>"
+    contentDelivery("<ContentDelivery URL>") {
+        format(Tolgee.Formatter.ICU) // default formatting
+        format(Tolgee.Formatter.Sprintf) // for sprintf or Java.format formatting
     }
-    contentDelivery("<YOUR TOLGEE CONTENT DELIVERY URL>")
 }
 
+/** Updates the text automatically when loaded from API or locale changed. */
+val updatingText: Flow<String> = tolgee.translation("key")
+
+/** Returns the text that's currently loaded from API. */
+/** Requires `tolgee.preload` or `tolgee.translation` call else always null. */
+val currentText: String? = tolgee.instant("key")
+```
+
+## Compose
+
+###  Setup
+
+Using Version Catalog is highly recommended to keep your versions aligned.
+
+```toml
+[libraries]
+tolgee = { group = "dev.datlag.tolgee", name = "compose", version.ref = "tolgee" }
+```
+
+### Usage
+
+```
 @Composable
 fun SimpleText() {
-    Text(text = i18n.stringResource(Res.string.about))
+    Text(text = stringResource(tolgee, Res.string.about))
 }
 
 @Composable
 fun ArgsSupported(vararg args: Any) {
-    Text(text = i18n.stringResource(Res.string.about, *args))
+    Text(text = stringResource(tolgee, Res.string.about, *args))
 }
 ```
 
@@ -102,39 +126,6 @@ fun AndroidWithArgs(vararg args: Any) {
     Text(text = i18n.stringResource(R.string.android_string, *args))
 }
 ```
-
-## Kodein
-
-Are you using [Kodein](https://github.com/kosi-libs/Kodein) as dependency injection? Perfect!  
-
-###  Setup
-
-```toml
-[libraries]
-tolgee-kodein = { group = "dev.datlag.tolgee", name = "compose-kodein", version.ref = "tolgee" }
-```
-
-### Usage
-
-Just bind an instance in your container (preferably singleton to take advantage of caching) and let the library handle everything else.
-
-```kotlin
-@Composable
-fun SimpleText() {
-    Text(text = kodeinStringResource(Res.string.about))
-}
-
-@Composable
-fun ArgsSupported(vararg args: Any) {
-    Text(text = kodeinStringResource(Res.string.about, *args))
-}
-```
-
-> [!NOTE]
-> Why `kodeinStringResource` instead of `i18nStringResource`?
->
-> Calling `kodeinStringResource` may be confusing first but is based on the decision to be compatible to other dependecy injections.
-> If you migrate from one DI to another it's hard to tell which one is used when both expose an `i18nStringResource`.
 
 ## Support the project
 

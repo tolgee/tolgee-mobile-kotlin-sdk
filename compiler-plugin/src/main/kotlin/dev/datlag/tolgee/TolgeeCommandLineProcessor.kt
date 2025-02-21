@@ -38,6 +38,12 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
             valueDescription = "<true|false>",
             description = "Enable or disable getString replacements on Android.",
             required = false
+        ),
+        CliOption(
+            optionName = KEY_COMPOSE_STRING_RESOURCE_ENABLED.toString(),
+            valueDescription = "<true|false>",
+            description = "Enable or disable stringResource replacements for Compose.",
+            required = false
         )
     )
 
@@ -55,6 +61,7 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
 
         when (option.optionName) {
             KEY_ANDROID_GET_STRING_ENABLED.toString() -> configuration.put(KEY_ANDROID_GET_STRING_ENABLED, value.toBoolean())
+            KEY_COMPOSE_STRING_RESOURCE_ENABLED.toString() -> configuration.put(KEY_COMPOSE_STRING_RESOURCE_ENABLED, value.toBoolean())
         }
     }
 
@@ -63,6 +70,11 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
          * A compiler configuration key for enabling or disabling `getString` replacements.
          */
         val KEY_ANDROID_GET_STRING_ENABLED = CompilerConfigurationKey<Boolean>("tolgee.android.getString")
+
+        /**
+         * A compiler configuration key for enabling or disabling `stringResource` replacements.
+         */
+        val KEY_COMPOSE_STRING_RESOURCE_ENABLED = CompilerConfigurationKey<Boolean>("tolgee.compose.stringResource")
 
         /**
          * Retrieves the plugin configuration based on the provided compiler configuration.
@@ -74,6 +86,9 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
             return Config(
                 android = Config.Android(
                     getStringReplacement = configuration[KEY_ANDROID_GET_STRING_ENABLED, true]
+                ),
+                compose = Config.Compose(
+                    stringResourceReplacement = configuration[KEY_COMPOSE_STRING_RESOURCE_ENABLED, true]
                 )
             )
         }
