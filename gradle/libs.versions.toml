@@ -17,6 +17,7 @@ dokka = "2.0.0"
 i18n4k = "0.10.0"
 immutable = "0.3.8"
 kaml = "0.72.0"
+kctfork = "0.7.0"
 kommand = "2.3.0"
 kotlin = "2.1.10"
 ksp = "2.1.10-1.0.29"
@@ -41,6 +42,7 @@ immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immut
 kommand = { group = "com.kgit2", name = "kommand", version.ref = "kommand" }
 kotlin-gradle-plugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-compiler-embeddable = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
+kotlin-compiler-testing = { group = "dev.zacsweers.kctfork", name = "core", version.ref = "kctfork" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-curl = { group = "io.ktor", name = "ktor-client-curl", version.ref = "ktor" }
