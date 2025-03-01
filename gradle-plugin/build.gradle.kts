@@ -29,6 +29,10 @@ dokka {
     }
 }
 
+ktorfit {
+    kotlinVersion.set("-")
+}
+
 dependencies {
     implementation(kotlin("gradle-plugin"))
     testImplementation(kotlin("test"))
