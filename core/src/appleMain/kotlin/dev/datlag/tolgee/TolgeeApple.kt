@@ -1,5 +1,6 @@
 package dev.datlag.tolgee
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.model.TolgeeMessageParams
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,7 @@ data class TolgeeApple internal constructor(
      * @param table The name of the table where the key is searched for, or null to use the default table.
      * @return A flow that emits localized strings corresponding to the given key.
      */
+    @NativeCoroutines
     fun translation(key: String, default: String?, table: String? = null): Flow<String> = flow {
         emit(getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null })
 
@@ -49,6 +51,7 @@ data class TolgeeApple internal constructor(
      * @param args A variable number of arguments for formatting the localized string.
      * @return A flow that emits localized and formatted string values corresponding to the given key and arguments.
      */
+    @NativeCoroutines
     fun translation(key: String, default: String?, table: String? = null, vararg args: Any): Flow<String> = flow {
         emit(getLocalizedStringFromBundleFormatted(key, default, table, *args))
 

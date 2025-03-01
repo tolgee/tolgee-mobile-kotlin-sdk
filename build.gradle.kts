@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.ktorfit) apply false
     alias(libs.plugins.multiplatform) apply false
+    alias(libs.plugins.native.coroutines) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.vanniktech.publish) apply false
     alias(libs.plugins.versions)

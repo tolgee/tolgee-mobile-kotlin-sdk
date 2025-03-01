@@ -1,5 +1,6 @@
 package dev.datlag.tolgee
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
@@ -193,7 +194,8 @@ open class Tolgee(
      *
      * @return A list of available languages or the locally cached languages if the retrieval fails.
      */
-    suspend fun languages() = suspendCatching {
+    @NativeCoroutines
+    open suspend fun languages() = suspendCatching {
         loadLanguages()
     }.getOrNull() ?: cachedLanguages
 
@@ -204,7 +206,8 @@ open class Tolgee(
      */
     @JvmOverloads
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun translation(
+    @NativeCoroutines
+    open fun translation(
         key: CharSequence,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): Flow<String> = localeFlow.mapLatest { locale ->
@@ -224,7 +227,7 @@ open class Tolgee(
      * Respects only the locale at time calling.
      */
     @JvmOverloads
-    fun instant(
+    open fun instant(
         key: CharSequence,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): String? {
@@ -246,7 +249,8 @@ open class Tolgee(
      * This method is coroutine-safe and utilizes structured concurrency to manage asynchronous
      * operations.
      */
-    suspend fun preload() {
+    @NativeCoroutines
+    open suspend fun preload() {
         suspendCatching { loadLanguages() }
         suspendCatching { loadTranslations() }
     }
@@ -256,14 +260,14 @@ open class Tolgee(
      *
      * @param locale The locale to be set for translations and related operations.
      */
-    fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale }
+    open fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale }
 
     /**
      * Adjusts the current locale used for translations.
      *
      * @param locale A string representation of the desired locale.
      */
-    fun setLocale(locale: String) = setLocale(forLocaleTag(locale))
+    open fun setLocale(locale: String) = setLocale(forLocaleTag(locale))
 
     /**
      * Sets the current locale using the specified language configuration.
@@ -274,7 +278,7 @@ open class Tolgee(
      * @param language The `TolgeeProjectLanguage` instance representing the language configuration
      * to set as the current locale.
      */
-    fun setLocale(language: TolgeeProjectLanguage) = setLocale(language.asLocale())
+    open fun setLocale(language: TolgeeProjectLanguage) = setLocale(language.asLocale())
 
     /**
      * Represents the configuration used for API integration and content management.

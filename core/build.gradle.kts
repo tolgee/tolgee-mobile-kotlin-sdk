@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.native.coroutines)
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.dokka)
     alias(libs.plugins.serialization)
@@ -177,6 +179,10 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     sourceSets {
+        all {
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+        }
+
         commonMain.dependencies {
             implementation(libs.immutable)
             implementation(libs.ktor)
