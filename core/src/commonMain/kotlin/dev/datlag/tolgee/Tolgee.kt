@@ -195,7 +195,7 @@ open class Tolgee(
      * @return A list of available languages or the locally cached languages if the retrieval fails.
      */
     @NativeCoroutines
-    open suspend fun languages() = suspendCatching {
+    open suspend fun languages(): Collection<TolgeeProjectLanguage> = suspendCatching {
         loadLanguages()
     }.getOrNull() ?: cachedLanguages
 

@@ -13,15 +13,15 @@ public class dev/datlag/tolgee/Tolgee {
 	public static final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/TolgeeAndroid;
 	public static final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/TolgeeAndroid;
 	public final fun instant (Ljava/lang/CharSequence;)Ljava/lang/String;
-	public final fun instant (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
+	public fun instant (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
 	public static synthetic fun instant$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
-	public final fun languages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun setLocale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
-	public final fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
-	public final fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
+	public fun languages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun setLocale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
+	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
+	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public final fun translation (Ljava/lang/CharSequence;)Lkotlinx/coroutines/flow/Flow;
-	public final fun translation (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
+	public fun translation (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
 	public static synthetic fun translation$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 }
 
@@ -188,7 +188,9 @@ public final class dev/datlag/tolgee/common/ExtendCoroutinesKt {
 }
 
 public final class dev/datlag/tolgee/common/ExtendTolgee_androidKt {
+	public static final fun getStringInstant (Landroid/content/Context;I)Ljava/lang/String;
 	public static final fun getStringInstant (Landroid/content/Context;I[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getStringInstant (Landroid/content/Context;Ldev/datlag/tolgee/Tolgee;I)Ljava/lang/String;
 	public static final fun getStringInstant (Landroid/content/Context;Ldev/datlag/tolgee/Tolgee;I[Ljava/lang/Object;)Ljava/lang/String;
 }
 
