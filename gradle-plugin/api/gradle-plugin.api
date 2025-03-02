@@ -1,3 +1,18 @@
+public final class dev/datlag/tolgee/TolgeeCompilerSubPlugin : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
+	public static final field Companion Ldev/datlag/tolgee/TolgeeCompilerSubPlugin$Companion;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+	public fun applyToCompilation (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Lorg/gradle/api/provider/Provider;
+	public fun getCompilerPluginId ()Ljava/lang/String;
+	public fun getPluginArtifact ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
+	public fun getPluginArtifactForNative ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
+	public fun isApplicable (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Z
+}
+
+public final class dev/datlag/tolgee/TolgeeCompilerSubPlugin$Companion {
+}
+
 public class dev/datlag/tolgee/TolgeePlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
@@ -6,6 +21,9 @@ public class dev/datlag/tolgee/TolgeePlugin : org/gradle/api/Plugin {
 
 public class dev/datlag/tolgee/TolgeePluginExtension : dev/datlag/tolgee/extension/BaseTolgeeExtension {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun compilerPlugin (Lgroovy/lang/Closure;)Ldev/datlag/tolgee/extension/CompilerPluginExtension;
+	public final fun compilerPlugin (Lorg/gradle/api/Action;)Ldev/datlag/tolgee/extension/CompilerPluginExtension;
+	public final fun getCompilerPlugin ()Ldev/datlag/tolgee/extension/CompilerPluginExtension;
 	public final fun getPull ()Ldev/datlag/tolgee/extension/PullExtension;
 	public final fun getPush ()Ldev/datlag/tolgee/extension/PushExtension;
 	public final fun pull (Lgroovy/lang/Closure;)Ldev/datlag/tolgee/extension/PullExtension;
@@ -37,6 +55,26 @@ public class dev/datlag/tolgee/extension/BaseTolgeeExtension {
 }
 
 public final class dev/datlag/tolgee/extension/BaseTolgeeExtension$Companion {
+}
+
+public class dev/datlag/tolgee/extension/CompilerPluginExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun android (Lgroovy/lang/Closure;)Ldev/datlag/tolgee/extension/CompilerPluginExtension$AndroidExtension;
+	public final fun android (Lorg/gradle/api/Action;)Ldev/datlag/tolgee/extension/CompilerPluginExtension$AndroidExtension;
+	public final fun compose (Lgroovy/lang/Closure;)Ldev/datlag/tolgee/extension/CompilerPluginExtension$ComposeExtension;
+	public final fun compose (Lorg/gradle/api/Action;)Ldev/datlag/tolgee/extension/CompilerPluginExtension$ComposeExtension;
+	public final fun getAndroid ()Ldev/datlag/tolgee/extension/CompilerPluginExtension$AndroidExtension;
+	public final fun getCompose ()Ldev/datlag/tolgee/extension/CompilerPluginExtension$ComposeExtension;
+}
+
+public class dev/datlag/tolgee/extension/CompilerPluginExtension$AndroidExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public fun getReplaceGetString ()Lorg/gradle/api/provider/Property;
+}
+
+public class dev/datlag/tolgee/extension/CompilerPluginExtension$ComposeExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public fun getReplaceStringResource ()Lorg/gradle/api/provider/Property;
 }
 
 public class dev/datlag/tolgee/extension/PullExtension : dev/datlag/tolgee/extension/BaseTolgeeExtension {
