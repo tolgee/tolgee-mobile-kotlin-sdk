@@ -20,8 +20,9 @@ public class dev/datlag/tolgee/Tolgee {
 	public fun setLocale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
-	public fun translation (Ljava/lang/CharSequence;)Lkotlinx/coroutines/flow/Flow;
+	public final fun translation (Ljava/lang/CharSequence;)Lkotlinx/coroutines/flow/Flow;
 	public fun translation (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun translation$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class dev/datlag/tolgee/Tolgee$Companion {

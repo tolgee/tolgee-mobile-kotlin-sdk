@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.native.coroutines)
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.dokka)
@@ -31,6 +30,10 @@ dokka {
             remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/core/src")
         }
     }
+}
+
+nativeCoroutines {
+    k2Mode = true
 }
 
 kotlin {
