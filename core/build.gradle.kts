@@ -33,10 +33,6 @@ dokka {
     }
 }
 
-nativeCoroutines {
-    k2Mode = true
-}
-
 kotlin {
     androidTarget {
         publishAllLibraryVariants()

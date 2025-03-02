@@ -204,12 +204,21 @@ open class Tolgee(
      *
      * Respects locale changes from [setLocale].
      */
-    @JvmOverloads
+    @NativeCoroutines
+    open fun translation(
+        key: CharSequence
+    ): Flow<String> = translation(key, TolgeeMessageParams.None)
+
+    /**
+     * Updating Tolgee translation for key with parameters.
+     *
+     * Respects locale changes from [setLocale].
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     @NativeCoroutines
     open fun translation(
         key: CharSequence,
-        parameters: TolgeeMessageParams = TolgeeMessageParams.None
+        parameters: TolgeeMessageParams
     ): Flow<String> = localeFlow.mapLatest { locale ->
         val translation = currentTranslation() ?: suspendCatching {
             loadTranslations()
