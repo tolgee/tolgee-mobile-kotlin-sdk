@@ -48,8 +48,13 @@ jobs:
       - name: Create XCFramework Archive
         continue-on-error: true
         run: |
-          tar -czf Tolgee-release.xcframework.tar.gz -C core/build/XCFrameworks/release/Tolgee.xcframework
-          tar -czf Tolgee-debug.xcframework.tar.gz -C core/build/XCFrameworks/debug/Tolgee.xcframework
+          cd core/build/XCFrameworks/release
+          tar -czf Tolgee-release.xcframework.tar.gz Tolgee.xcframework
+          cd ../debug
+          tar -czf Tolgee-debug.xcframework.tar.gz Tolgee.xcframework
+          cd ../../../../
+          mv core/build/XCFrameworks/release/Tolgee-release.xcframework.tar.gz .
+          mv core/build/XCFrameworks/debug/Tolgee-debug.xcframework.tar.gz .
 
       - name: Upload XCFramework to Release
         if: ${{ github.event_name == 'release' }}
@@ -66,4 +71,3 @@ jobs:
           path: |
             Tolgee-release.xcframework.tar.gz
             Tolgee-debug.xcframework.tar.gz
-            core/build
