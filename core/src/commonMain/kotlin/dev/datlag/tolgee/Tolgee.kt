@@ -265,9 +265,9 @@ open class Tolgee(
     /**
      * Adjusts the current locale used for translations.
      *
-     * @param locale A string representation of the desired locale.
+     * @param localeTag A string representation of the desired locale.
      */
-    open fun setLocale(locale: String) = setLocale(forLocaleTag(locale))
+    open fun setLocale(localeTag: String) = setLocale(forLocaleTag(localeTag))
 
     /**
      * Sets the current locale using the specified language configuration.
@@ -414,9 +414,9 @@ open class Tolgee(
             /**
              * Sets the locale for the configuration using the provided locale string.
              *
-             * @param locale The locale string in the format of a language tag (e.g., "en", "fr", "es").
+             * @param localeTag The locale string in the format of a language tag (e.g., "en", "fr", "es").
              */
-            fun locale(locale: String) = locale(forLocaleTag(locale))
+            fun locale(localeTag: String) = locale(forLocaleTag(localeTag))
 
             /**
              * Configures the locale for the builder using a `TolgeeProjectLanguage` instance.
@@ -451,7 +451,7 @@ open class Tolgee(
             /**
              * Sets the CDN configuration for the Builder instance.
              *
-             * @param cdn The CDN configuration to be applied. This parameter defines the content delivery network
+             * @param contentDelivery The CDN configuration to be applied. This parameter defines the content delivery network
              *            properties such as URL and formatting strategy used in the configuration.
              * @return The Builder instance with the configured CDN, allowing for method chaining.
              */
@@ -531,6 +531,7 @@ open class Tolgee(
                  * or left as the default platform HTTP client.
                  */
                 var client: HttpClient = platformHttpClient
+
                 /**
                  * The coroutine context used for executing network operations.
                  * Defaults to the platform-specific network context if not explicitly set.
