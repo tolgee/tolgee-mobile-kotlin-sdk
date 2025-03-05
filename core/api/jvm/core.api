@@ -12,17 +12,17 @@ public class dev/datlag/tolgee/Tolgee {
 	public static final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
 	public static final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
 	public static final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun instant (Ljava/lang/CharSequence;)Ljava/lang/String;
-	public fun instant (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
-	public static synthetic fun instant$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun instant (Ljava/lang/String;)Ljava/lang/String;
+	public fun instant (Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
+	public static synthetic fun instant$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
 	public fun languages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun setLocale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
-	public final fun translation (Ljava/lang/CharSequence;)Lkotlinx/coroutines/flow/Flow;
-	public fun translation (Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
-	public static synthetic fun translation$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/CharSequence;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public final fun translation (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public fun translation (Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun translation$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class dev/datlag/tolgee/Tolgee$Companion {
@@ -183,14 +183,14 @@ public abstract interface class dev/datlag/tolgee/model/TolgeeMessageParams : de
 }
 
 public final class dev/datlag/tolgee/model/TolgeeMessageParams$Indexed : dev/datlag/tolgee/model/TolgeeMessageParams {
-	public fun <init> (Ljava/util/Collection;)V
+	public fun <init> (Ljava/util/List;)V
 	public fun <init> ([Ljava/lang/Object;)V
-	public final fun component1 ()Ljava/util/Collection;
-	public final fun copy (Ljava/util/Collection;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;
-	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;Ljava/util/Collection;ILjava/lang/Object;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;
+	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;Ljava/util/List;ILjava/lang/Object;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun get (Ljava/lang/CharSequence;)Ljava/lang/Object;
-	public final fun getFormatArgs ()Ljava/util/Collection;
+	public final fun getArgList ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

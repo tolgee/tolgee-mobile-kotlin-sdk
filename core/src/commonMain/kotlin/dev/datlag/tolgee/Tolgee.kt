@@ -195,9 +195,9 @@ open class Tolgee(
      * @return A list of available languages or the locally cached languages if the retrieval fails.
      */
     @NativeCoroutines
-    open suspend fun languages(): Collection<TolgeeProjectLanguage> = suspendCatching {
-        loadLanguages()
-    }.getOrNull() ?: cachedLanguages
+    open suspend fun languages(): List<TolgeeProjectLanguage> = suspendCatching {
+        loadLanguages().toList()
+    }.getOrNull() ?: cachedLanguages.toList()
 
     /**
      * Updating Tolgee translation for key with parameters.
@@ -208,14 +208,14 @@ open class Tolgee(
     @OptIn(ExperimentalCoroutinesApi::class)
     @NativeCoroutines
     open fun translation(
-        key: CharSequence,
+        key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): Flow<String> = localeFlow.mapLatest { locale ->
         val translation = currentTranslation() ?: suspendCatching {
             loadTranslations()
         }.getOrNull() ?: currentTranslation() ?: return@mapLatest null
 
-        return@mapLatest translation.localized(key.toString(), parameters, locale)
+        return@mapLatest translation.localized(key, parameters, locale)
     }.mapNotNull()
 
     /**
@@ -228,12 +228,12 @@ open class Tolgee(
      */
     @JvmOverloads
     open fun instant(
-        key: CharSequence,
+        key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): String? {
         val translation = currentTranslation() ?: return null
 
-        return translation.localized(key.toString(), parameters, localeFlow.value)
+        return translation.localized(key, parameters, localeFlow.value)
     }
 
     /**

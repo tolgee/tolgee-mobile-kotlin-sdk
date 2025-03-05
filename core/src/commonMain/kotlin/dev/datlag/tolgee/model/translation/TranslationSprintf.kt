@@ -41,7 +41,7 @@ internal data class TranslationSprintf(
 
         val args = when (params) {
             is TolgeeMessageParams.None -> arrayOf<Any>()
-            is TolgeeMessageParams.Indexed -> params.formatArgs.toTypedArray()
+            is TolgeeMessageParams.Indexed -> params.argList.toTypedArray()
             else -> throw IllegalArgumentException("Only indexed or none parameters are supported when using sprintf format.")
         }
 

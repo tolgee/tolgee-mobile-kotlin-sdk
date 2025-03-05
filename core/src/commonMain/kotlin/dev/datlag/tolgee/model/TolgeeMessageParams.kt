@@ -50,10 +50,10 @@ sealed interface TolgeeMessageParams : MessageParameters {
      * This class is designed to handle indexed parameters for use in formatted strings.
      * It allows accessing the parameters by their position or name.
      *
-     * @property formatArgs A collection of arguments used for indexed formatting.
+     * @property argList A collection of arguments used for indexed formatting.
      */
     data class Indexed(
-        val formatArgs: Collection<Any>
+        val argList: List<Any>
     ) : TolgeeMessageParams {
 
         /**
@@ -79,7 +79,7 @@ sealed interface TolgeeMessageParams : MessageParameters {
          * - `IllegalArgumentException` if the parameter name is empty or cannot be converted to an integer.
          */
         private val listParameters = MessageParametersList(
-            parameters = formatArgs.toList(),
+            parameters = argList,
             nameMapper = object : NameToIndexMapper {
                 /**
                  * Retrieves the index corresponding to the given name.
