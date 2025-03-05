@@ -260,7 +260,7 @@ open class Tolgee(
      *
      * @param locale The locale to be set for translations and related operations.
      */
-    open fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale }
+    open fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale } ?: locale
 
     /**
      * Adjusts the current locale used for translations.
