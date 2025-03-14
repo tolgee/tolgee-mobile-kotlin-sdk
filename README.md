@@ -1,6 +1,6 @@
 # Kotlin Multiplatform and Android package for Tolgee
 
-This package is currently under heavy development and will be released under alpha versions until stable and properly tested by pilot users.
+🚨🚨🚨This package is currently under heavy development and will be released under alpha versions until stable and properly tested by pilot users.🚨🚨🚨
 
 [![Tolgee](https://img.shields.io/badge/Tolgee-f06695?style=for-the-badge)](https://tolgee.io/) ![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-Supported-green?style=for-the-badge) ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Supported-green?style=for-the-badge)
 
