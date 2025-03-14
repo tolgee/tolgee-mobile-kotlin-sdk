@@ -1,4 +1,4 @@
-# Tolgee (Kotlin Multiplatform and Android package)
+# Kotlin Multiplatform and Android package for Tolgee
 
 This package is currently under heavy development and will be released under alpha versions until stable and properly tested by pilot users.
 
