@@ -61,6 +61,7 @@ serialization-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.re
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
 
 [plugins]
+android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "android-tools" }
 android-library = { id = "com.android.library", version.ref = "android-tools" }
 atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfu" }
