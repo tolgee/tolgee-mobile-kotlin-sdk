@@ -27,4 +27,7 @@ android {
 dependencies {
     implementation(libs.android)
     implementation(libs.activity)
+
+    implementation(libs.coroutines.android)
+    implementation(project(":core"))
 }

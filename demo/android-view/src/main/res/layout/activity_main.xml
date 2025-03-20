@@ -12,7 +12,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Basic Text"
+        android:id="@+id/basic_text"
+        android:text="@string/description"
         android:textAlignment="center"
         android:textSize="20sp"
         android:layout_marginBottom="24dp" />
@@ -20,8 +21,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Parameterized Text"
+        android:id="@+id/parameterized_text"
+        android:text="@string/percentage_placeholder"
         android:textAlignment="center"
         android:textSize="20sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/button"
+        android:text="English"
+        android:textAlignment="center" />
 
 </LinearLayout>

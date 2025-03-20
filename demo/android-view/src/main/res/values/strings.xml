@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TolgeeView</string>
+    <string name="description">Basic Text</string>
+    <string name="percentage_placeholder">Parameterized Text</string>
 </resources>
