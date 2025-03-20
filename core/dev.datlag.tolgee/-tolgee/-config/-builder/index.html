@@ -45,6 +45,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":core/appleMain">apple</button>
                 <button class="platform-tag platform-selector common-like" data-active="" data-filter=":core/commonMain">common</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
@@ -54,6 +55,13 @@
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
                         </button>
                     </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":core/appleMain" data-filter=":core/appleMain">
+                                <span class="checkbox--icon"></span>
+                                apple
+                            </label>
+                        </li>
                         <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
                             <label class="checkbox">
                                 <input type="checkbox" class="checkbox--input" id=":core/commonMain" data-filter=":core/commonMain">
@@ -94,10 +102,10 @@
   <div class="breadcrumbs"><a href="../../../../index.html">Core</a><span class="delimiter">/</span><a href="../../../index.html">dev.datlag.tolgee</a><span class="delimiter">/</span><a href="../../index.html">Tolgee</a><span class="delimiter">/</span><a href="../index.html">Config</a><span class="delimiter">/</span><span class="current">Builder</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Builder</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/DatL4g/compose-tolgee/tree/master/core/src/commonMain/kotlin/dev/datlag/tolgee/Tolgee.kt#L308">source</a>)</span></span></div><p class="paragraph">Provides a builder pattern for constructing a <code class="lang-kotlin">Config</code> instance with customizable properties. Supports fluent method chaining to set various parameters such as API keys, URLs, project ID, locale, network configuration, and CDN settings.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/DatL4g/compose-tolgee/tree/master/core/src/commonMain/kotlin/dev/datlag/tolgee/Tolgee.kt#L316">source</a>)</span></span></div><p class="paragraph">Provides a builder pattern for constructing a <code class="lang-kotlin">Config</code> instance with customizable properties. Supports fluent method chaining to set various parameters such as API keys, URLs, project ID, locale, network configuration, and CDN settings.</p></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
@@ -285,6 +293,23 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="locale.html"><span class="token function">locale</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">locale<span class="token operator">: </span><span data-unresolved-link="de.comahe.i18n4k/Locale///PointingToDeclaration/">Locale</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Tolgee.Config.Builder</a></div><div class="brief "><p class="paragraph">Sets the locale configuration for the builder and returns the instance for further customization.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="locale.html"><span class="token function">locale</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">language<span class="token operator">: </span><a href="../../../../dev.datlag.tolgee.model/-tolgee-project-language/index.html">TolgeeProjectLanguage</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Tolgee.Config.Builder</a></div><div class="brief "><p class="paragraph">Configures the locale for the builder using a <code class="lang-kotlin">TolgeeProjectLanguage</code> instance.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="locale.html"><span class="token function">locale</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">localeTag<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Tolgee.Config.Builder</a></div><div class="brief "><p class="paragraph">Sets the locale for the configuration using the provided locale string.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-367419604%2FFunctions%2F-249949908" anchor-label="locale" id="-367419604%2FFunctions%2F-249949908" data-filterable-set=":core/appleMain"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":core/appleMain" data-filterable-set=":core/appleMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../../../dev.datlag.tolgee.common/locale.html"><span><span>locale</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-367419604%2FFunctions%2F-249949908"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/appleMain" data-filterable-set=":core/appleMain" data-active="" data-toggle=":core/appleMain">apple</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/appleMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html#-1253960279%2FMain%2F-249949908">Tolgee.Config.Builder</a><span class="token punctuation">.</span><a href="../../../../dev.datlag.tolgee.common/locale.html"><span class="token function">locale</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">nsLocale<span class="token operator">: </span><span data-unresolved-link="platform.Foundation/NSLocale///PointingToDeclaration/">NSLocale</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-1253960279%2FMain%2F-249949908">Tolgee.Config.Builder</a></div><div class="brief "><p class="paragraph">Sets the locale configuration for the builder and returns the instance for further customization.</p></div></div>                  </div>
                 </div>
               </div>
             </div>
