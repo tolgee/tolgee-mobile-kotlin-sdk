@@ -1,5 +1,6 @@
 package dev.datlag.tolgee.common
 
+import de.comahe.i18n4k.createLocale
 import dev.datlag.tolgee.Tolgee
 import dev.datlag.tolgee.TolgeeApple
 import io.ktor.client.*
@@ -7,6 +8,10 @@ import io.ktor.client.engine.darwin.Darwin
 import io.ktor.client.plugins.cache.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import platform.Foundation.NSLocale
+import platform.Foundation.countryCode
+import platform.Foundation.languageCode
+import platform.Foundation.variantCode
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -48,3 +53,16 @@ internal actual val platformNetworkContext: CoroutineContext
  * functionality specific to Apple environments.
  */
 actual typealias PlatformTolgee = TolgeeApple
+
+/**
+ * Sets the locale configuration for the builder and returns the instance for further customization.
+ *
+ * @param nsLocale The locale to be set for the builder.
+ */
+fun Tolgee.Config.Builder.locale(nsLocale: NSLocale) = locale(
+    createLocale(
+        language = nsLocale.languageCode,
+        country = nsLocale.countryCode?.ifBlank { null },
+        variant = nsLocale.variantCode?.ifBlank { null }
+    )
+)

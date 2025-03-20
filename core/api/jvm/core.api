@@ -3,6 +3,7 @@ public class dev/datlag/tolgee/Tolgee {
 	public fun <init> (Ldev/datlag/tolgee/Tolgee$Config;)V
 	public fun getConfig ()Ldev/datlag/tolgee/Tolgee$Config;
 	public static final fun getInstance ()Ldev/datlag/tolgee/common/PlatformTolgee;
+	public fun getLocale ()Ljava/util/Locale;
 	public static final fun getSystemLocale ()Ljava/util/Locale;
 	public static final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
 	public static final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;

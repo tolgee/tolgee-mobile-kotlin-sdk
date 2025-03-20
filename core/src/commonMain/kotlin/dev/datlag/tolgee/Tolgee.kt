@@ -18,6 +18,7 @@ import io.ktor.client.engine.*
 import kotlinx.atomicfu.atomic
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
@@ -196,8 +197,8 @@ open class Tolgee(
      */
     @NativeCoroutines
     open suspend fun languages(): List<TolgeeProjectLanguage> = suspendCatching {
-        loadLanguages().toList()
-    }.getOrNull() ?: cachedLanguages.toList()
+        loadLanguages().toImmutableList()
+    }.getOrNull() ?: cachedLanguages.toImmutableList()
 
     /**
      * Updating Tolgee translation for key with parameters.
@@ -279,6 +280,13 @@ open class Tolgee(
      * to set as the current locale.
      */
     open fun setLocale(language: TolgeeProjectLanguage) = setLocale(language.asLocale())
+
+    /**
+     * Gets the current locale for the Tolgee instance.
+     *
+     * Falls back to [systemLocale] if non set.
+     */
+    open fun getLocale() = localeFlow.value ?: systemLocale
 
     /**
      * Represents the configuration used for API integration and content management.

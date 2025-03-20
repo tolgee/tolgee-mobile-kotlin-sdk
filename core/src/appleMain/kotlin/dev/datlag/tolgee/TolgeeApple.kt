@@ -1,15 +1,21 @@
 package dev.datlag.tolgee
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
+import de.comahe.i18n4k.createLocale
+import dev.datlag.tolgee.common.fromRes
 import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.model.TolgeeMessageParams
+import dev.datlag.tolgee.common.localizedString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import platform.Foundation.NSBundle
+import platform.Foundation.NSLocale
 import platform.Foundation.NSString
-import platform.Foundation.NSURL
+import platform.Foundation.countryCode
+import platform.Foundation.languageCode
 import platform.Foundation.localizedStringWithFormat
+import platform.Foundation.variantCode
 
 /**
  * A data class representing the implementation of the Tolgee localization framework for Apple platforms.
@@ -20,6 +26,13 @@ import platform.Foundation.localizedStringWithFormat
 data class TolgeeApple internal constructor(
     override val config: Config
 ) : Tolgee(config) {
+
+    /**
+     * Returns the currently used language for Tolgee.
+     * Will be used to retrieve the correct language from the app bundle.
+     */
+    private val bundleRes: String?
+        get() = getLocale().getLanguage().ifBlank { null }
 
     /**
      * Provides a flow of localized strings based on the given key, default value, and optional table name.
@@ -33,7 +46,14 @@ data class TolgeeApple internal constructor(
      */
     @NativeCoroutines
     fun translation(key: String, default: String?, table: String? = null): Flow<String> = flow {
-        emit(getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null })
+        emit(
+            getLocalizedStringFromBundle(
+                bundleRes,
+                key,
+                default,
+                table
+            ) ?: default?.ifBlank { null }
+        )
 
         emitAll(translation(key, TolgeeMessageParams.None))
     }.mapNotNull()
@@ -53,7 +73,7 @@ data class TolgeeApple internal constructor(
      */
     @NativeCoroutines
     fun translation(key: String, default: String?, table: String? = null, vararg args: Any): Flow<String> = flow {
-        emit(getLocalizedStringFromBundleFormatted(key, default, table, *args))
+        emit(getLocalizedStringFromBundleFormatted(bundleRes, key, default, table, *args))
 
         emitAll(translation(key, TolgeeMessageParams.Indexed(*args)))
     }.mapNotNull()
@@ -68,7 +88,12 @@ data class TolgeeApple internal constructor(
      * @return The localized string if found, or the default value if provided. Returns null if none is available.
      */
     fun instant(key: String, default: String?, table: String? = null): String? {
-        return instant(key) ?: getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null }
+        return instant(key) ?: getLocalizedStringFromBundle(
+            bundleRes,
+            key,
+            default,
+            table
+        ) ?: default?.ifBlank { null }
     }
 
     /**
@@ -85,8 +110,21 @@ data class TolgeeApple internal constructor(
      */
     fun instant(key: String, default: String?, table: String? = null, vararg args: Any): String? {
         return instant(key, TolgeeMessageParams.Indexed(*args))
-            ?: getLocalizedStringFromBundleFormatted(key, default, table, *args)
+            ?: getLocalizedStringFromBundleFormatted(bundleRes, key, default, table, *args)
     }
+
+    /**
+     * Sets the current locale for the Tolgee instance, updating it in the reactive locale flow.
+     *
+     * @param nsLocale The locale to be set for translations and related operations.
+     */
+    fun setLocale(nsLocale: NSLocale) = setLocale(
+        createLocale(
+            language = nsLocale.languageCode,
+            country = nsLocale.countryCode?.ifBlank { null },
+            variant = nsLocale.variantCode?.ifBlank { null }
+        )
+    )
 
     /**
      * Contains utility methods for fetching localized strings from the main resource bundle
@@ -97,16 +135,21 @@ data class TolgeeApple internal constructor(
          * Retrieves a localized string for a given key from the main application bundle or a base resource bundle.
          * If the localized string is not found, the method returns a default string or null.
          *
+         * @param res The resource specification, usually a language code.
          * @param key The key for the localized string.
          * @param default The default string to return if the localized string is not found. If this value is blank, it will be treated as null.
          * @param table The table in which to search for the key. This can be null to use the default table.
          * @return The localized string if found, the default string if provided, or null if no match exists.
          */
-        fun getLocalizedStringFromBundle(key: String, default: String?, table: String?): String? {
-            return NSBundle.mainBundle.localizedStringForKey(key, default?.ifBlank { null }, table).takeUnless { it == key }?.ifBlank { null }
-                ?: NSBundle.mainBundle.pathForResource("Base", "lproj")?.let {
-                    NSBundle(NSURL(fileURLWithPath = it))
-                }?.localizedStringForKey(key, default?.ifBlank { null }, table).takeUnless { it == key }?.ifBlank { null }
+        fun getLocalizedStringFromBundle(
+            res: String?,
+            key: String,
+            default: String?,
+            table: String?
+        ): String? {
+            return NSBundle.fromRes(res, "lproj")?.localizedString(key, default, table)
+                ?: NSBundle.mainBundle.localizedString(key, default, table)
+                ?: NSBundle.fromRes("Base", "lproj")?.localizedString(key, default, table)
         }
 
         /**
@@ -114,14 +157,21 @@ data class TolgeeApple internal constructor(
          * Uses the provided `key`, `default` value, `table`, and any additional arguments for string formatting.
          * If no localized string is found, it falls back to the `default` value.
          *
+         * @param res The resource specification, usually a language code.
          * @param key The key associated with the localized string resource.
          * @param default The default string to use if the localized string is not found. Can be null.
          * @param table The name of the table (e.g., file) in the bundle containing the localization data. Can be null.
          * @param args The arguments to format the resulting string. Supports up to 10 arguments.
          * @return The localized and formatted string, or null if no string could be resolved.
          */
-        fun getLocalizedStringFromBundleFormatted(key: String, default: String?, table: String?, vararg args: Any): String? {
-            return (getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null })?.let { format ->
+        fun getLocalizedStringFromBundleFormatted(
+            res: String?,
+            key: String,
+            default: String?,
+            table: String?,
+            vararg args: Any
+        ): String? {
+            return (getLocalizedStringFromBundle(res, key, default, table) ?: default?.ifBlank { null })?.let { format ->
                 when (args.size) {
                     0 -> NSString.localizedStringWithFormat(format)
                     1 -> NSString.localizedStringWithFormat(format, args[0])
