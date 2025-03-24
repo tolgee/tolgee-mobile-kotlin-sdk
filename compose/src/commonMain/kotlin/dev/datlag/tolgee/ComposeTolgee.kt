@@ -2,6 +2,7 @@ package dev.datlag.tolgee
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.text.intl.Locale
 import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.model.TolgeeMessageParams
 import org.jetbrains.compose.resources.StringResource
@@ -71,3 +72,17 @@ fun stringResource(resource: StringResource, vararg formatArgs: Any): String {
     val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
     return stringResource(tolgee, resource, *formatArgs)
 }
+
+/**
+ * Sets the locale configuration for the builder and returns the instance for further customization.
+ *
+ * @param composeLocale The locale to be set for the builder.
+ */
+fun Tolgee.Config.Builder.locale(composeLocale: Locale) = locale(composeLocale.toLanguageTag())
+
+/**
+ * Sets the current locale for the Tolgee instance, updating it in the reactive locale flow.
+ *
+ * @param composeLocale The locale to be set for translations and related operations.
+ */
+fun Tolgee.setLocale(composeLocale: Locale) = setLocale(composeLocale.toLanguageTag())

@@ -16,9 +16,10 @@ import dev.datlag.tolgee.model.TolgeeMessageParams
 @Composable
 fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String? = null): String {
     val translationFlow = (tolgee as? TolgeeApple)?.translation(key, default, table) ?: tolgee.translation(key)
+    val res = tolgee.getLocale().getLanguage().ifBlank { null }
 
     return translationFlow.collectAsState(
-        initial = TolgeeApple.getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null } ?: ""
+        initial = TolgeeApple.getLocalizedStringFromBundle(res, key, default, table) ?: default?.ifBlank { null } ?: ""
     ).value
 }
 
@@ -35,7 +36,11 @@ fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String?
  */
 @Composable
 fun stringResource(key: String, default: String?, table: String? = null): String {
-    val instance = Tolgee.instance ?: return TolgeeApple.getLocalizedStringFromBundle(key, default, table) ?: default?.ifBlank { null } ?: ""
+    val instance = Tolgee.instance ?: return run {
+        val res = Tolgee.systemLocale.getLanguage().ifBlank { null }
+
+        TolgeeApple.getLocalizedStringFromBundle(res, key, default, table) ?: default?.ifBlank { null } ?: ""
+    }
 
     return stringResource(instance, key, default, table)
 }
@@ -56,9 +61,10 @@ fun stringResource(key: String, default: String?, table: String? = null): String
 fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String? = null, vararg args: Any): String {
     val translationFlow = (tolgee as? TolgeeApple)?.translation(key, default, table, *args)
         ?: tolgee.translation(key, TolgeeMessageParams.Indexed(*args))
+    val res = tolgee.getLocale().getLanguage().ifBlank { null }
 
     return translationFlow.collectAsState(
-        initial = TolgeeApple.getLocalizedStringFromBundleFormatted(key, default, table, *args) ?: ""
+        initial = TolgeeApple.getLocalizedStringFromBundleFormatted(res, key, default, table, *args) ?: ""
     ).value
 }
 
@@ -74,7 +80,11 @@ fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String?
  */
 @Composable
 fun stringResource(key: String, default: String?, table: String? = null, vararg args: Any): String {
-    val instance = Tolgee.instance ?: return TolgeeApple.getLocalizedStringFromBundleFormatted(key, default, table, *args) ?: ""
+    val instance = Tolgee.instance ?: return run {
+        val res = Tolgee.systemLocale.getLanguage().ifBlank { null }
+
+        TolgeeApple.getLocalizedStringFromBundleFormatted(res, key, default, table, *args) ?: ""
+    }
 
     return stringResource(instance, key, default, table, *args)
 }

@@ -63,14 +63,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
+            implementation(compose.ui)
             implementation(compose.components.resources)
 
             implementation(libs.coroutines)
             api(project(":core"))
-        }
-
-        androidMain.dependencies {
-            implementation(compose.ui)
         }
     }
 }
