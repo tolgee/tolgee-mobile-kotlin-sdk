@@ -58,10 +58,6 @@ private val Project.kotlinJsExtension: KotlinJsProjectExtension?
     get() = this.extensions.findByType<KotlinJsProjectExtension>()
         ?: this.extensions.findByName("kotlin") as? KotlinJsProjectExtension
 
-private val Project.kotlinJs2Extension: Kotlin2JsProjectExtension?
-    get() = this.extensions.findByType<Kotlin2JsProjectExtension>()
-        ?: this.extensions.findByName("kotlin") as? Kotlin2JsProjectExtension
-
 private val KotlinProjectExtension.allTargets: List<KotlinTarget>
     get() = when (this) {
         is KotlinSingleTargetExtension<*> -> listOfNotNull(this.target)
@@ -78,7 +74,7 @@ internal val Project.isAndroidOnly: Boolean
         val singleTarget = kotlinProjectExtension is KotlinSingleTargetExtension<*> || kotlinProjectExtension is KotlinSingleJavaTargetExtension
 
         return if (singleTarget) {
-            val usingJs = kotlinJsExtension != null || kotlinJs2Extension != null
+            val usingJs = kotlinJsExtension != null
 
             if (!usingJs) {
                 val usingJvm = kotlinJvmExtension != null || kotlinJvmProjectExtension != null
