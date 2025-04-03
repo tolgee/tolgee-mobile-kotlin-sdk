@@ -2,12 +2,15 @@ package dev.datlag.tolgee
 
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import dev.datlag.tolgee.common.mapNotNull
 import dev.datlag.tolgee.model.TolgeeMessageParams
 import dev.datlag.tooling.scopeCatching
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 /**
  * A specialized implementation of the Tolgee class for Android that provides methods for
@@ -88,6 +91,25 @@ data class TolgeeAndroid internal constructor(
         return getKeyFromStringResource(context, id)?.let { key ->
             instant(key, TolgeeMessageParams.Indexed(*formatArgs))
         } ?: context.getString(id, *formatArgs)
+    }
+
+    /**
+     * Preloads the required languages and their translations for the current Tolgee instance.
+     *
+     * This method ensures that both the list of available project languages and their
+     * corresponding translations are loaded into memory. It performs these operations atomically
+     * by utilizing mutex locks to prevent concurrent modifications.
+     *
+     * Must be called before accessing translation functionalities such as [instant] to ensure
+     * that translations are available and up-to-date.
+     *
+     * This method is coroutine-safe and utilizes structured concurrency to manage asynchronous
+     * operations.
+     *
+     * @param lifecycleOwner any [LifecycleOwner] to launch the coroutine from, e.g. Activity or Fragment
+     */
+    fun preload(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycleScope.launch {
+        preload()
     }
 
     /**

@@ -19,12 +19,18 @@ val libName = "gradle-plugin"
 group = libGroup
 version = libVersion
 
+tasks.jar {
+    manifest {
+        attributes["Implementation-Version"] = libVersion
+    }
+}
+
 dokka {
     moduleName.set("Gradle Plugin")
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/gradle-plugin/src")
+            remoteUrl("https://github.com/tolgee/compose-tolgee/tree/master/gradle-plugin/src")
         }
     }
 }
@@ -51,8 +57,8 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        website.set("https://github.com/DatL4g/compose-tolgee")
-        vcsUrl.set("https://github.com/DatL4g/compose-tolgee")
+        website.set("https://github.com/tolgee/compose-tolgee")
+        vcsUrl.set("https://github.com/tolgee/compose-tolgee")
 
         create("tolgeePlugin") {
             id = libGroup
@@ -77,7 +83,7 @@ mavenPublishing {
         name.set(libName)
 
         description.set("Compose Multiplatform localization wrapper for Tolgee")
-        url.set("https://github.com/DatL4g/compose-tolgee")
+        url.set("https://github.com/tolgee/compose-tolgee")
 
         licenses {
             license {
@@ -87,8 +93,8 @@ mavenPublishing {
         }
 
         scm {
-            url.set("https://github.com/DatL4g/compose-tolgee")
-            connection.set("scm:git:git://github.com/DatL4g/compose-tolgee.git")
+            url.set("https://github.com/tolgee/compose-tolgee")
+            connection.set("scm:git:git://github.com/tolgee/compose-tolgee.git")
         }
 
         developers {

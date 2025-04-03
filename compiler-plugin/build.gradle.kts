@@ -20,7 +20,7 @@ dokka {
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/compiler-plugin/src")
+            remoteUrl("https://github.com/tolgee/compose-tolgee/tree/master/compiler-plugin/src")
         }
     }
 }
@@ -46,7 +46,7 @@ mavenPublishing {
         name.set(libName)
 
         description.set("Compiler plugin for Tolgee translations.")
-        url.set("https://github.com/DatL4g/compose-tolgee")
+        url.set("https://github.com/tolgee/compose-tolgee")
 
         licenses {
             license {
@@ -56,8 +56,8 @@ mavenPublishing {
         }
 
         scm {
-            url.set("https://github.com/DatL4g/compose-tolgee")
-            connection.set("scm:git:git://github.com/DatL4g/compose-tolgee.git")
+            url.set("https://github.com/tolgee/compose-tolgee")
+            connection.set("scm:git:git://github.com/tolgee/compose-tolgee.git")
         }
 
         developers {

@@ -26,6 +26,17 @@ dependencies {
     dokka(project(":compiler-plugin"))
 }
 
+// Force new atomicfu version, compose uses 0.23.2
+allprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "org.jetbrains.kotlinx" && requested.name.startsWith("atomicfu")) {
+                useVersion(libs.versions.atomicfu.get())
+            }
+        }
+    }
+}
+
 tasks.withType<DependencyUpdatesTask> {
     outputFormatter {
         val updatable = this.outdated.dependencies

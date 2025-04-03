@@ -25,7 +25,7 @@ dokka {
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/DatL4g/compose-tolgee/tree/master/compose/src")
+            remoteUrl("https://github.com/tolgee/compose-tolgee/tree/master/compose/src")
         }
     }
 }
@@ -36,9 +36,10 @@ kotlin {
     }
     jvm {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
+    jvmToolchain(21)
 
     iosX64()
     iosArm64()
@@ -82,7 +83,7 @@ android {
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 
@@ -100,7 +101,7 @@ mavenPublishing {
         name.set(libName)
 
         description.set("Compose Multiplatform localization wrapper for Tolgee")
-        url.set("https://github.com/DatL4g/compose-tolgee")
+        url.set("https://github.com/tolgee/compose-tolgee")
 
         licenses {
             license {
@@ -110,8 +111,8 @@ mavenPublishing {
         }
 
         scm {
-            url.set("https://github.com/DatL4g/compose-tolgee")
-            connection.set("scm:git:git://github.com/DatL4g/compose-tolgee.git")
+            url.set("https://github.com/tolgee/compose-tolgee")
+            connection.set("scm:git:git://github.com/tolgee/compose-tolgee.git")
         }
 
         developers {

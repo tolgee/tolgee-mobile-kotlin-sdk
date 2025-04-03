@@ -21,4 +21,13 @@ open class TolgeePlugin : Plugin<Project> {
 
         target.pluginManager.apply(TolgeeCompilerSubPlugin::class.java)
     }
+
+    companion object {
+        // Separate variable so it can easily replaced by sed in CI/CD
+        private const val PACKAGE_VERSION = "0.1.0"
+
+        val version: String
+            get() = this::class.java.`package`?.implementationVersion?.ifBlank { null }
+                ?: PACKAGE_VERSION
+    }
 }
