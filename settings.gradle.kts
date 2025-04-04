@@ -28,6 +28,6 @@ include(":compose")
 include(":gradle-plugin")
 include(":compiler-plugin")
 
-include(":demo:android-view")
+include(":demo:android-view", ":demo:multiplatform-compose")
 
 rootProject.name = "compose-tolgee"

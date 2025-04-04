@@ -17,10 +17,7 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
 
     val tolgee = Tolgee.instanceOrInit {
-        contentDelivery {
-            id(System.getenv("TOLGEE_API_KEY"))
-            formatter(Tolgee.Formatter.Sprintf)
-        }
+        apiKey = System.getenv("TOLGEE_API_KEY")
     }
 
     override fun attachBaseContext(newBase: Context?) {

@@ -1,0 +1,4 @@
+<resources>
+    <string name="description">Basic Text</string>
+    <string name="percentage_placeholder">Parameterized Text</string>
+</resources>
