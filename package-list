@@ -1,19 +1,19 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-$dokka.location:dev.datlag.tolgee.common/PlatformTolgee/config/#/PointingToDeclaration/Core/dev.datlag.tolgee.common/-platform-tolgee/[wasm-js]config.html
+$dokka.location:io.tolgee.common/PlatformTolgee/config/#/PointingToDeclaration/Core/io.tolgee.common/-platform-tolgee/[wasm-js]config.html
 module:Compiler Plugin
-dev.datlag.tolgee
+io.tolgee
 module:Compose
-dev.datlag.tolgee
+io.tolgee
 module:Core
-dev.datlag.tolgee
-dev.datlag.tolgee.common
-dev.datlag.tolgee.model
+io.tolgee
+io.tolgee.common
+io.tolgee.model
 module:Gradle Plugin
-dev.datlag.tolgee
-dev.datlag.tolgee.common
-dev.datlag.tolgee.extension
-dev.datlag.tolgee.model
-dev.datlag.tolgee.model.pull
-dev.datlag.tolgee.model.push
-dev.datlag.tolgee.tasks
+io.tolgee
+io.tolgee.common
+io.tolgee.extension
+io.tolgee.model
+io.tolgee.model.pull
+io.tolgee.model.push
+io.tolgee.tasks

@@ -1,0 +1,311 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PushExtension</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../index.html">
+                    compose-tolgee
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gradle-plugin/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":gradle-plugin/main" data-filter=":gradle-plugin/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    compose-tolgee
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="Gradle Plugin::io.tolgee.extension/PushExtension///PointingToDeclaration//-937474457">
+  <div class="breadcrumbs"><a href="../../index.html">Gradle Plugin</a><span class="delimiter">/</span><a href="../index.html">io.tolgee.extension</a><span class="delimiter">/</span><span class="current">PushExtension</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Push</span><wbr><span><span>Extension</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="index.html">PushExtension</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">objectFactory<span class="token operator">: </span><span data-unresolved-link="org.gradle.api.model/ObjectFactory///PointingToDeclaration/">ObjectFactory</span></span></span><span class="token punctuation">)</span> : <a href="../-base-tolgee-extension/index.html">BaseTolgeeExtension</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tolgee/compose-tolgee/tree/master/gradle-plugin/src/main/java/io/tolgee/extension/PushExtension.kt#L10">source</a>)</span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="20485549%2FConstructors%2F-937474457" anchor-label="PushExtension" id="20485549%2FConstructors%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-push-extension.html"><span>Push</span><wbr><span><span>Extension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="20485549%2FConstructors%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">objectFactory<span class="token operator">: </span><span data-unresolved-link="org.gradle.api.model/ObjectFactory///PointingToDeclaration/">ObjectFactory</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1915987745%2FProperties%2F-937474457" anchor-label="apiKey" id="1915987745%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/api-key.html"><span>api</span><wbr><span><span>Key</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1915987745%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/api-key.html">apiKey</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The API key used to authenticate with Tolgee. The plugin will attempt to resolve     this value using default properties or a system environment variable if not explicitly provided.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1418554863%2FProperties%2F-937474457" anchor-label="apiUrl" id="-1418554863%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/api-url.html"><span>api</span><wbr><span><span>Url</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1418554863%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/api-url.html">apiUrl</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The base URL for the Tolgee API.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1673609645%2FProperties%2F-937474457" anchor-label="cliOutput" id="-1673609645%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/cli-output.html"><span>cli</span><wbr><span><span>Output</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1673609645%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/cli-output.html">cliOutput</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../../io.tolgee.model/-c-l-i-output/index.html">CLIOutput</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1812974492%2FProperties%2F-937474457" anchor-label="config" id="-1812974492%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/config.html"><span><span>config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1812974492%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/config.html">config</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-945930475%2FProperties%2F-937474457" anchor-label="fallbackEnabled" id="-945930475%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/fallback-enabled.html"><span>fallback</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-945930475%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/fallback-enabled.html">fallbackEnabled</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Determines whether the REST API is used as a fallback if the CLI fails.     Default is <code class="lang-kotlin">true</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1898934809%2FProperties%2F-937474457" anchor-label="forceMode" id="1898934809%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="force-mode.html"><span>force</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1898934809%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="force-mode.html">forceMode</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../../io.tolgee.model.push/-mode/index.html">Mode</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1528956239%2FProperties%2F-937474457" anchor-label="format" id="1528956239%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/format.html"><span><span>format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1528956239%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/format.html">format</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../../io.tolgee.model/-format/index.html">Format</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The format used by Tolgee for localization files. For example: <code class="lang-kotlin">COMPOSE_XML</code> or <code class="lang-kotlin">ANDROID_XML</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1119345100%2FProperties%2F-937474457" anchor-label="languages" id="1119345100%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="languages.html"><span><span>languages</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1119345100%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="languages.html">languages</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/SetProperty///PointingToDeclaration/">SetProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1787563077%2FProperties%2F-937474457" anchor-label="namespaces" id="-1787563077%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="namespaces.html"><span><span>namespaces</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1787563077%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="namespaces.html">namespaces</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/SetProperty///PointingToDeclaration/">SetProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="306175456%2FProperties%2F-937474457" anchor-label="projectId" id="306175456%2FProperties%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-base-tolgee-extension/project-id.html"><span>project</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="306175456%2FProperties%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-base-tolgee-extension/project-id.html">projectId</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The unique identifier for the Tolgee project.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="2141399336%2FFunctions%2F-937474457" anchor-label="setupConvention" id="2141399336%2FFunctions%2F-937474457" data-filterable-set=":gradle-plugin/main"></a>
+          <div class="table-row" data-filterable-current=":gradle-plugin/main" data-filterable-set=":gradle-plugin/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="setup-convention.html"><span>setup</span><wbr><span><span>Convention</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2141399336%2FFunctions%2F-937474457"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="setup-convention.html"><span class="token function">setupConvention</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="org.gradle.api/Project///PointingToDeclaration/">Project</span><span class="token punctuation">, </span></span><span class="parameter ">inherit<span class="token operator">: </span><a href="../-base-tolgee-extension/index.html">BaseTolgeeExtension</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Configures default values for the extensions properties by inheriting from another instance or reading available information from the Gradle project.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Copyright</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
