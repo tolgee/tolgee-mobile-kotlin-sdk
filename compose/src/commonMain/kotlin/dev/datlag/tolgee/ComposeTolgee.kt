@@ -18,7 +18,7 @@ import org.jetbrains.compose.resources.StringResource
 fun stringResource(tolgee: Tolgee, resource: StringResource): String {
     return tolgee.translation(
         key = resource.key,
-        parameters = TolgeeMessageParams.Indexed()
+        parameters = TolgeeMessageParams.None
     ).mapNotNull().collectAsState(
         initial = org.jetbrains.compose.resources.stringResource(resource)
     ).value

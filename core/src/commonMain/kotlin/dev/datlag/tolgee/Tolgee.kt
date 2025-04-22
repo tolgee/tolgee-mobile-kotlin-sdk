@@ -355,7 +355,7 @@ open class Tolgee(
              * A null value indicates that no specific locale has been set, and the default
              * locale behavior should be applied if required.
              */
-            var locale: Locale? = null
+            var locale: Locale? = systemLocale
 
             /**
              * Represents the network configuration used within the `Builder`.
