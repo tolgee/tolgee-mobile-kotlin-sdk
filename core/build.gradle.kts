@@ -15,7 +15,7 @@ plugins {
     signing
 }
 
-val libGroup = "dev.datlag.tolgee"
+val libGroup = "io.tolgee"
 val libName = "core"
 val appleFramework = "Tolgee"
 
@@ -194,7 +194,7 @@ kotlin {
             implementation(libs.tooling)
 
             // Does not support androidNative and linuxArm64 yet (https://github.com/comahe-de/i18n4k/pull/75)
-            implementation(libs.i18n4k)
+            api(libs.i18n4k)
             implementation(libs.datetime)
         }
 
@@ -232,7 +232,7 @@ kotlin {
 
 android {
     compileSdk = 35
-    namespace = "dev.datlag.tolgee.core"
+    namespace = "io.tolgee.core"
 
     defaultConfig {
         minSdk = 21

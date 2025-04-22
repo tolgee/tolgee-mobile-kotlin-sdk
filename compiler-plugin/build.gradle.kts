@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.vanniktech.publish)
 }
 
-val libGroup = "dev.datlag.tolgee"
+val libGroup = "io.tolgee"
 val libName = "compiler-plugin"
 
 group = libGroup

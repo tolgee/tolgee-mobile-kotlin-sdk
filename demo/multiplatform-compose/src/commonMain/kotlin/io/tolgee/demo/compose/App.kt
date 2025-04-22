@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import compose_tolgee.demo.multiplatform_compose.generated.resources.Res
 import compose_tolgee.demo.multiplatform_compose.generated.resources.description
 import compose_tolgee.demo.multiplatform_compose.generated.resources.percentage_placeholder
-import dev.datlag.tolgee.Tolgee
-import dev.datlag.tolgee.stringResource
+import io.tolgee.Tolgee
+import io.tolgee.stringResource
 // import org.jetbrains.compose.resources.stringResource
 
 @Composable

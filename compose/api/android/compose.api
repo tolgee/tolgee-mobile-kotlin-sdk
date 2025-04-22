@@ -1,14 +1,16 @@
-public final class dev/datlag/tolgee/ComposeTolgeeKt {
-	public static final fun stringResource (Ldev/datlag/tolgee/Tolgee;Lorg/jetbrains/compose/resources/StringResource;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
-	public static final fun stringResource (Ldev/datlag/tolgee/Tolgee;Lorg/jetbrains/compose/resources/StringResource;[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+public final class io/tolgee/ComposeTolgeeKt {
+	public static final fun locale (Lio/tolgee/Tolgee$Config$Builder;Landroidx/compose/ui/text/intl/Locale;)Lio/tolgee/Tolgee$Config$Builder;
+	public static final fun setLocale (Lio/tolgee/Tolgee;Landroidx/compose/ui/text/intl/Locale;)Ljava/util/Locale;
+	public static final fun stringResource (Lio/tolgee/Tolgee;Lorg/jetbrains/compose/resources/StringResource;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+	public static final fun stringResource (Lio/tolgee/Tolgee;Lorg/jetbrains/compose/resources/StringResource;[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
 	public static final fun stringResource (Lorg/jetbrains/compose/resources/StringResource;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
 	public static final fun stringResource (Lorg/jetbrains/compose/resources/StringResource;[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/ComposeTolgee_androidKt {
+public final class io/tolgee/ComposeTolgee_androidKt {
 	public static final fun stringResource (ILandroidx/compose/runtime/Composer;I)Ljava/lang/String;
 	public static final fun stringResource (I[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
-	public static final fun stringResource (Ldev/datlag/tolgee/Tolgee;ILandroidx/compose/runtime/Composer;I)Ljava/lang/String;
-	public static final fun stringResource (Ldev/datlag/tolgee/Tolgee;I[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
+	public static final fun stringResource (Lio/tolgee/Tolgee;ILandroidx/compose/runtime/Composer;I)Ljava/lang/String;
+	public static final fun stringResource (Lio/tolgee/Tolgee;I[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
 }
 

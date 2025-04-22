@@ -1,4 +1,4 @@
-import dev.datlag.tolgee.cli.TolgeeCLI
+import io.tolgee.cli.TolgeeCLI
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 

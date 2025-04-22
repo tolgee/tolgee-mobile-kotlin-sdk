@@ -1,129 +1,129 @@
-public class dev/datlag/tolgee/Tolgee {
-	public static final field Companion Ldev/datlag/tolgee/Tolgee$Companion;
-	public fun <init> (Ldev/datlag/tolgee/Tolgee$Config;)V
-	public fun getConfig ()Ldev/datlag/tolgee/Tolgee$Config;
-	public static final fun getInstance ()Ldev/datlag/tolgee/common/PlatformTolgee;
+public class io/tolgee/Tolgee {
+	public static final field Companion Lio/tolgee/Tolgee$Companion;
+	public fun <init> (Lio/tolgee/Tolgee$Config;)V
+	public fun getConfig ()Lio/tolgee/Tolgee$Config;
+	public static final fun getInstance ()Lio/tolgee/common/PlatformTolgee;
 	public fun getLocale ()Ljava/util/Locale;
 	public static final fun getSystemLocale ()Ljava/util/Locale;
-	public static final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun init (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun init (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun instanceOrInit (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
+	public static final fun init (Lio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun init (Lkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun init (ZLio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun init (ZLkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun instanceOrInit (Lio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun instanceOrInit (ZLio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public static final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
 	public final fun instant (Ljava/lang/String;)Ljava/lang/String;
-	public fun instant (Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
-	public static synthetic fun instant$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
+	public fun instant (Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
+	public static synthetic fun instant$default (Lio/tolgee/Tolgee;Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
 	public fun languages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun setLocale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
+	public fun setLocale (Lio/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public final fun translation (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
-	public fun translation (Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
-	public static synthetic fun translation$default (Ldev/datlag/tolgee/Tolgee;Ljava/lang/String;Ldev/datlag/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public fun translation (Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun translation$default (Lio/tolgee/Tolgee;Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Companion {
-	public final fun getInstance ()Ldev/datlag/tolgee/common/PlatformTolgee;
+public final class io/tolgee/Tolgee$Companion {
+	public final fun getInstance ()Lio/tolgee/common/PlatformTolgee;
 	public final fun getSystemLocale ()Ljava/util/Locale;
-	public final fun init (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun init (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun init (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun init (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static synthetic fun init$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLdev/datlag/tolgee/Tolgee$Config;ILjava/lang/Object;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static synthetic fun init$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun instanceOrInit (Ldev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun instanceOrInit (ZLdev/datlag/tolgee/Tolgee$Config;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static synthetic fun instanceOrInit$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLdev/datlag/tolgee/Tolgee$Config;ILjava/lang/Object;)Ldev/datlag/tolgee/common/PlatformTolgee;
-	public static synthetic fun instanceOrInit$default (Ldev/datlag/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/common/PlatformTolgee;
+	public final fun init (Lio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public final fun init (Lkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public final fun init (ZLio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public final fun init (ZLkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public static synthetic fun init$default (Lio/tolgee/Tolgee$Companion;ZLio/tolgee/Tolgee$Config;ILjava/lang/Object;)Lio/tolgee/common/PlatformTolgee;
+	public static synthetic fun init$default (Lio/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/tolgee/common/PlatformTolgee;
+	public final fun instanceOrInit (Lio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public final fun instanceOrInit (Lkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public final fun instanceOrInit (ZLio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
+	public final fun instanceOrInit (ZLkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
+	public static synthetic fun instanceOrInit$default (Lio/tolgee/Tolgee$Companion;ZLio/tolgee/Tolgee$Config;ILjava/lang/Object;)Lio/tolgee/common/PlatformTolgee;
+	public static synthetic fun instanceOrInit$default (Lio/tolgee/Tolgee$Companion;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/tolgee/common/PlatformTolgee;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config {
-	public static final field Companion Ldev/datlag/tolgee/Tolgee$Config$Companion;
+public final class io/tolgee/Tolgee$Config {
+	public static final field Companion Lio/tolgee/Tolgee$Config$Companion;
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/util/Locale;
-	public final fun component5 ()Ldev/datlag/tolgee/Tolgee$Config$Network;
-	public final fun component6 ()Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun component5 ()Lio/tolgee/Tolgee$Config$Network;
+	public final fun component6 ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getApiKey ()Ljava/lang/String;
 	public final fun getApiUrl ()Ljava/lang/String;
-	public final fun getContentDelivery ()Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun getLocale ()Ljava/util/Locale;
-	public final fun getNetwork ()Ldev/datlag/tolgee/Tolgee$Config$Network;
+	public final fun getNetwork ()Lio/tolgee/Tolgee$Config$Network;
 	public final fun getProjectId ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$Builder {
+public final class io/tolgee/Tolgee$Config$Builder {
 	public fun <init> ()V
-	public final fun apiKey (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun apiUrl (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun build ()Ldev/datlag/tolgee/Tolgee$Config;
-	public final fun contentDelivery (Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun contentDelivery (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun contentDelivery (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun contentDelivery (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public static synthetic fun contentDelivery$default (Ldev/datlag/tolgee/Tolgee$Config$Builder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
+	public final fun apiKey (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun apiUrl (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun build ()Lio/tolgee/Tolgee$Config;
+	public final fun contentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun contentDelivery (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun contentDelivery (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun contentDelivery (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
+	public static synthetic fun contentDelivery$default (Lio/tolgee/Tolgee$Config$Builder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun getApiKey ()Ljava/lang/String;
 	public final fun getApiUrl ()Ljava/lang/String;
-	public final fun getContentDelivery ()Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun getLocale ()Ljava/util/Locale;
-	public final fun getNetwork ()Ldev/datlag/tolgee/Tolgee$Config$Network;
+	public final fun getNetwork ()Lio/tolgee/Tolgee$Config$Network;
 	public final fun getProjectId ()Ljava/lang/String;
-	public final fun locale (Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun locale (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun locale (Ljava/util/Locale;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun network (Ldev/datlag/tolgee/Tolgee$Config$Network;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun network (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
-	public final fun projectId (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$Builder;
+	public final fun locale (Lio/tolgee/model/TolgeeProjectLanguage;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun locale (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun locale (Ljava/util/Locale;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun network (Lio/tolgee/Tolgee$Config$Network;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun network (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun projectId (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun setApiKey (Ljava/lang/String;)V
 	public final fun setApiUrl (Ljava/lang/String;)V
-	public final fun setContentDelivery (Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;)V
+	public final fun setContentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)V
 	public final fun setLocale (Ljava/util/Locale;)V
-	public final fun setNetwork (Ldev/datlag/tolgee/Tolgee$Config$Network;)V
+	public final fun setNetwork (Lio/tolgee/Tolgee$Config$Network;)V
 	public final fun setProjectId (Ljava/lang/String;)V
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$Companion {
+public final class io/tolgee/Tolgee$Config$Companion {
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$ContentDelivery {
-	public static final field Companion Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery$Companion;
+public final class io/tolgee/Tolgee$Config$ContentDelivery {
+	public static final field Companion Lio/tolgee/Tolgee$Config$ContentDelivery$Companion;
 	public fun <init> ()V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ldev/datlag/tolgee/Tolgee$Formatter;
+	public final fun component2 ()Lio/tolgee/Tolgee$Formatter;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getFormatter ()Ldev/datlag/tolgee/Tolgee$Formatter;
+	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
 	public final fun getUrl ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$ContentDelivery$Builder {
+public final class io/tolgee/Tolgee$Config$ContentDelivery$Builder {
 	public fun <init> ()V
-	public final fun baseUrl (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery$Builder;
-	public final fun build ()Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery;
-	public final fun formatter (Ldev/datlag/tolgee/Tolgee$Formatter;)Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery$Builder;
-	public final fun getFormatter ()Ldev/datlag/tolgee/Tolgee$Formatter;
+	public final fun baseUrl (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
+	public final fun build ()Lio/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun formatter (Lio/tolgee/Tolgee$Formatter;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
+	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
 	public final fun getUrl ()Ljava/lang/String;
-	public final fun id (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery$Builder;
-	public final fun setFormatter (Ldev/datlag/tolgee/Tolgee$Formatter;)V
+	public final fun id (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
+	public final fun setFormatter (Lio/tolgee/Tolgee$Formatter;)V
 	public final fun setUrl (Ljava/lang/String;)V
-	public final fun url (Ljava/lang/String;)Ldev/datlag/tolgee/Tolgee$Config$ContentDelivery$Builder;
+	public final fun url (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$ContentDelivery$Companion {
+public final class io/tolgee/Tolgee$Config$ContentDelivery$Companion {
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$Network {
+public final class io/tolgee/Tolgee$Config$Network {
 	public fun <init> ()V
 	public final fun component1 ()Lio/ktor/client/HttpClient;
 	public final fun component2 ()Lkotlin/coroutines/CoroutineContext;
@@ -134,61 +134,61 @@ public final class dev/datlag/tolgee/Tolgee$Config$Network {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Config$Network$Builder {
+public final class io/tolgee/Tolgee$Config$Network$Builder {
 	public fun <init> ()V
-	public final fun build ()Ldev/datlag/tolgee/Tolgee$Config$Network;
-	public final fun client (Lio/ktor/client/HttpClient;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
-	public final fun client (Lio/ktor/client/engine/HttpClientEngine;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
-	public final fun client (Lio/ktor/client/engine/HttpClientEngine;Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
-	public final fun client (Lio/ktor/client/engine/HttpClientEngineFactory;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
-	public final fun client (Lio/ktor/client/engine/HttpClientEngineFactory;Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
-	public final fun client (Lkotlin/jvm/functions/Function1;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
-	public final fun context (Lkotlin/coroutines/CoroutineContext;)Ldev/datlag/tolgee/Tolgee$Config$Network$Builder;
+	public final fun build ()Lio/tolgee/Tolgee$Config$Network;
+	public final fun client (Lio/ktor/client/HttpClient;)Lio/tolgee/Tolgee$Config$Network$Builder;
+	public final fun client (Lio/ktor/client/engine/HttpClientEngine;)Lio/tolgee/Tolgee$Config$Network$Builder;
+	public final fun client (Lio/ktor/client/engine/HttpClientEngine;Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Network$Builder;
+	public final fun client (Lio/ktor/client/engine/HttpClientEngineFactory;)Lio/tolgee/Tolgee$Config$Network$Builder;
+	public final fun client (Lio/ktor/client/engine/HttpClientEngineFactory;Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Network$Builder;
+	public final fun client (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Network$Builder;
+	public final fun context (Lkotlin/coroutines/CoroutineContext;)Lio/tolgee/Tolgee$Config$Network$Builder;
 	public final fun getClient ()Lio/ktor/client/HttpClient;
 	public final fun getContext ()Lkotlin/coroutines/CoroutineContext;
 	public final fun setClient (Lio/ktor/client/HttpClient;)V
 	public final fun setContext (Lkotlin/coroutines/CoroutineContext;)V
 }
 
-public abstract interface class dev/datlag/tolgee/Tolgee$Formatter {
+public abstract interface class io/tolgee/Tolgee$Formatter {
 }
 
-public final class dev/datlag/tolgee/Tolgee$Formatter$ICU : dev/datlag/tolgee/Tolgee$Formatter {
-	public static final field INSTANCE Ldev/datlag/tolgee/Tolgee$Formatter$ICU;
+public final class io/tolgee/Tolgee$Formatter$ICU : io/tolgee/Tolgee$Formatter {
+	public static final field INSTANCE Lio/tolgee/Tolgee$Formatter$ICU;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/Tolgee$Formatter$Sprintf : dev/datlag/tolgee/Tolgee$Formatter {
-	public static final field INSTANCE Ldev/datlag/tolgee/Tolgee$Formatter$Sprintf;
+public final class io/tolgee/Tolgee$Formatter$Sprintf : io/tolgee/Tolgee$Formatter {
+	public static final field INSTANCE Lio/tolgee/Tolgee$Formatter$Sprintf;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/common/ExtendCoroutinesKt {
+public final class io/tolgee/common/ExtendCoroutinesKt {
 	public static final fun mapNotNull (Lkotlinx/coroutines/flow/Flow;)Lkotlinx/coroutines/flow/Flow;
 }
 
-public final class dev/datlag/tolgee/common/PlatformTolgee : dev/datlag/tolgee/Tolgee {
-	public final fun component1 ()Ldev/datlag/tolgee/Tolgee$Config;
+public final class io/tolgee/common/PlatformTolgee : io/tolgee/Tolgee {
+	public final fun component1 ()Lio/tolgee/Tolgee$Config;
 	public fun equals (Ljava/lang/Object;)Z
-	public fun getConfig ()Ldev/datlag/tolgee/Tolgee$Config;
+	public fun getConfig ()Lio/tolgee/Tolgee$Config;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class dev/datlag/tolgee/model/TolgeeMessageParams : de/comahe/i18n4k/messages/formatter/MessageParameters {
+public abstract interface class io/tolgee/model/TolgeeMessageParams : de/comahe/i18n4k/messages/formatter/MessageParameters {
 	public abstract fun get (Ljava/lang/CharSequence;)Ljava/lang/Object;
 }
 
-public final class dev/datlag/tolgee/model/TolgeeMessageParams$Indexed : dev/datlag/tolgee/model/TolgeeMessageParams {
+public final class io/tolgee/model/TolgeeMessageParams$Indexed : io/tolgee/model/TolgeeMessageParams {
 	public fun <init> (Ljava/util/List;)V
 	public fun <init> ([Ljava/lang/Object;)V
 	public final fun component1 ()Ljava/util/List;
-	public final fun copy (Ljava/util/List;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;
-	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;Ljava/util/List;ILjava/lang/Object;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Indexed;
+	public final fun copy (Ljava/util/List;)Lio/tolgee/model/TolgeeMessageParams$Indexed;
+	public static synthetic fun copy$default (Lio/tolgee/model/TolgeeMessageParams$Indexed;Ljava/util/List;ILjava/lang/Object;)Lio/tolgee/model/TolgeeMessageParams$Indexed;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun get (Ljava/lang/CharSequence;)Ljava/lang/Object;
 	public final fun getArgList ()Ljava/util/List;
@@ -196,11 +196,11 @@ public final class dev/datlag/tolgee/model/TolgeeMessageParams$Indexed : dev/dat
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/model/TolgeeMessageParams$Mapped : dev/datlag/tolgee/model/TolgeeMessageParams {
+public final class io/tolgee/model/TolgeeMessageParams$Mapped : io/tolgee/model/TolgeeMessageParams {
 	public fun <init> (Ljava/util/Map;)V
 	public final fun component1 ()Ljava/util/Map;
-	public final fun copy (Ljava/util/Map;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Mapped;
-	public static synthetic fun copy$default (Ldev/datlag/tolgee/model/TolgeeMessageParams$Mapped;Ljava/util/Map;ILjava/lang/Object;)Ldev/datlag/tolgee/model/TolgeeMessageParams$Mapped;
+	public final fun copy (Ljava/util/Map;)Lio/tolgee/model/TolgeeMessageParams$Mapped;
+	public static synthetic fun copy$default (Lio/tolgee/model/TolgeeMessageParams$Mapped;Ljava/util/Map;ILjava/lang/Object;)Lio/tolgee/model/TolgeeMessageParams$Mapped;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun get (Ljava/lang/CharSequence;)Ljava/lang/Object;
 	public final fun getFormatArgs ()Ljava/util/Map;
@@ -208,16 +208,16 @@ public final class dev/datlag/tolgee/model/TolgeeMessageParams$Mapped : dev/datl
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/model/TolgeeMessageParams$None : dev/datlag/tolgee/model/TolgeeMessageParams {
-	public static final field INSTANCE Ldev/datlag/tolgee/model/TolgeeMessageParams$None;
+public final class io/tolgee/model/TolgeeMessageParams$None : io/tolgee/model/TolgeeMessageParams {
+	public static final field INSTANCE Lio/tolgee/model/TolgeeMessageParams$None;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun get (Ljava/lang/CharSequence;)Ljava/lang/Object;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/datlag/tolgee/model/TolgeeProjectLanguage {
-	public static final field Companion Ldev/datlag/tolgee/model/TolgeeProjectLanguage$Companion;
+public final class io/tolgee/model/TolgeeProjectLanguage {
+	public static final field Companion Lio/tolgee/model/TolgeeProjectLanguage$Companion;
 	public final fun asLocale ()Ljava/util/Locale;
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
@@ -234,17 +234,17 @@ public final class dev/datlag/tolgee/model/TolgeeProjectLanguage {
 	public fun toString ()Ljava/lang/String;
 }
 
-public synthetic class dev/datlag/tolgee/model/TolgeeProjectLanguage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Ldev/datlag/tolgee/model/TolgeeProjectLanguage$$serializer;
+public synthetic class io/tolgee/model/TolgeeProjectLanguage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lio/tolgee/model/TolgeeProjectLanguage$$serializer;
 	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/datlag/tolgee/model/TolgeeProjectLanguage;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/tolgee/model/TolgeeProjectLanguage;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/datlag/tolgee/model/TolgeeProjectLanguage;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/tolgee/model/TolgeeProjectLanguage;)V
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 }
 
-public final class dev/datlag/tolgee/model/TolgeeProjectLanguage$Companion {
+public final class io/tolgee/model/TolgeeProjectLanguage$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 

@@ -13,7 +13,7 @@ plugins {
     signing
 }
 
-val libGroup = "dev.datlag.tolgee"
+val libGroup = "io.tolgee"
 val libName = "gradle-plugin"
 
 group = libGroup
@@ -62,7 +62,7 @@ gradlePlugin {
 
         create("tolgeePlugin") {
             id = libGroup
-            implementationClass = "dev.datlag.tolgee.TolgeePlugin"
+            implementationClass = "io.tolgee.TolgeePlugin"
             displayName = "Tolgee Plugin"
             description = "Gradle Plugin for Tolgee"
         }

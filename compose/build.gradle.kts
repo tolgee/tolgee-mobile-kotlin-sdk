@@ -14,7 +14,7 @@ plugins {
     signing
 }
 
-val libGroup = "dev.datlag.tolgee"
+val libGroup = "io.tolgee"
 val libName = "compose"
 
 group = libGroup
@@ -75,7 +75,7 @@ kotlin {
 
 android {
     compileSdk = 35
-    namespace = "dev.datlag.tolgee.compose"
+    namespace = "io.tolgee.compose"
 
     defaultConfig {
         minSdk = 21

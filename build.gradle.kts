@@ -19,6 +19,13 @@ plugins {
     alias(libs.plugins.versions)
 }
 
+// Ignore API on demo projects
+apiValidation {
+    ignoredProjects.add("demo")
+    ignoredProjects.add("android-view")
+    ignoredProjects.add("multiplatform-compose")
+}
+
 dependencies {
     dokka(project(":core"))
     dokka(project(":compose"))

@@ -6,10 +6,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import dev.datlag.tolgee.Tolgee
-import dev.datlag.tolgee.TolgeeContextWrapper
+import io.tolgee.Tolgee
+import io.tolgee.TolgeeContextWrapper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
