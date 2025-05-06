@@ -46,11 +46,9 @@ internal data class TranslationSprintf(
         }
 
         return requestedKey.translationForOrFirst(
-            locale?.language?.ifBlank { null }
-                ?: this.usedLocale?.language?.ifBlank { null }
-        )?.let {
-            it.text?.sprintf(*args)
-        }
+                  locale?.language?.ifBlank { null }
+                      ?: this.usedLocale?.language?.ifBlank { null }
+              )?.sprintf(*args)
     }
 
     /**

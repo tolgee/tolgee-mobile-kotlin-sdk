@@ -4,24 +4,25 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
+import dev.datlag.tooling.async.suspendCatching
+import io.ktor.client.*
+import io.ktor.client.engine.*
+import io.tolgee.Tolgee.Companion.systemLocale
 import io.tolgee.api.TolgeeApi
+import io.tolgee.common.PlatformTolgee
 import io.tolgee.common.createPlatformTolgee
+import io.tolgee.common.mapNotNull
 import io.tolgee.common.platformHttpClient
 import io.tolgee.common.platformNetworkContext
 import io.tolgee.model.TolgeeMessageParams
 import io.tolgee.model.TolgeeProjectLanguage
 import io.tolgee.model.TolgeeTranslation
-import dev.datlag.tooling.async.suspendCatching
-import io.ktor.client.*
-import io.ktor.client.engine.*
-import io.tolgee.common.PlatformTolgee
-import io.tolgee.common.mapNotNull
 import kotlinx.atomicfu.atomic
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -72,19 +73,6 @@ open class Tolgee(
     private val languagesMutex = Mutex()
 
     /**
-     * Stores a cached set of `TolgeeProjectLanguage` objects for efficient access during operations.
-     *
-     * This property is intended to minimize redundant network calls by caching the list of project languages
-     * after they are initially retrieved from the Tolgee API. It ensures that frequently used language data
-     * is readily available, improving performance and reducing latency for subsequent requests.
-     *
-     * The cache is dynamically updated whenever the languages are reloaded, ensuring it remains consistent
-     * with the project configuration. Thread safety is maintained through the use of mutex locks in the
-     * associated methods.
-     */
-    private var cachedLanguages: ImmutableSet<TolgeeProjectLanguage> = persistentSetOf()
-
-    /**
      * A coroutine-safe mutex used to ensure thread safety when accessing
      * or modifying translations-related data.
      *
@@ -118,28 +106,6 @@ open class Tolgee(
      */
     private val localeFlow by lazy {
         MutableStateFlow(config.locale)
-    }
-
-    /**
-     * Loads project languages in a coroutine-safe manner using a mutex lock to ensure thread safety.
-     *
-     * This method attempts to retrieve languages from a cached list. If the cache is empty, it performs
-     * a network request using the configured API client to fetch all project languages. The fetched
-     * result is then cached for future use. Execution occurs within the defined coroutine context for
-     * network operations.
-     *
-     * This function is primarily used to ensure the availability of project languages for translation
-     * and localization-related tasks.
-     */
-    private suspend fun loadLanguages() = languagesMutex.withLock {
-        cachedLanguages.ifEmpty { withContext(config.network.context) {
-            TolgeeApi.getAllProjectLanguages(
-                client = config.network.client,
-                config = config
-            ).also {
-                cachedLanguages = it
-            }
-        } }
     }
 
 
@@ -184,22 +150,6 @@ open class Tolgee(
             }
         }
     }
-
-    /**
-     * Retrieves the list of available languages for the Tolgee instance in a coroutine-safe manner.
-     *
-     * The method attempts to load the languages from the network by calling [loadLanguages].
-     * If the network operation fails or returns null, it falls back to the cached languages.
-     *
-     * This function ensures thread safety by utilizing structured concurrency and handles exceptions
-     * gracefully using `suspendCatching`.
-     *
-     * @return A list of available languages or the locally cached languages if the retrieval fails.
-     */
-    @NativeCoroutines
-    open suspend fun languages(): List<TolgeeProjectLanguage> = suspendCatching {
-        loadLanguages().toImmutableList()
-    }.getOrNull() ?: cachedLanguages.toImmutableList()
 
     /**
      * Updating Tolgee translation for key with parameters.
@@ -253,7 +203,6 @@ open class Tolgee(
      */
     @NativeCoroutines
     open suspend fun preload() {
-        suspendCatching { loadLanguages() }
         suspendCatching { loadTranslations() }
     }
 
@@ -292,7 +241,6 @@ open class Tolgee(
     /**
      * Represents the configuration used for API integration and content management.
      *
-     * @property apiKey The API key used for authentication when interacting with the backend.
      * @property apiUrl The base URL of the API server.
      * @property projectId The unique identifier for the project within the system.
      * @property locale The target locale used for translations or project-specific setup.
@@ -301,7 +249,6 @@ open class Tolgee(
      */
     @ConsistentCopyVisibility
     data class Config internal constructor(
-        val apiKey: String?,
         val apiUrl: String,
         val projectId: String?,
         val locale: Locale?,
@@ -315,11 +262,6 @@ open class Tolgee(
          * locale, network configuration, and CDN settings.
          */
         class Builder {
-            /**
-             * Represents the API key used for authentication with the service.
-             * This property is nullable and can be set using the corresponding builder method.
-             */
-            var apiKey: String? = null
 
             /**
              * Represents the base URL of the API that the application will interact with.
@@ -383,15 +325,6 @@ open class Tolgee(
              * `build()` method is invoked.
              */
             var contentDelivery: ContentDelivery = ContentDelivery()
-
-            /**
-             * Configures the API key for the builder.
-             *
-             * @param apiKey The API key to be used for authentication.
-             */
-            fun apiKey(apiKey: String) = apply {
-                this.apiKey = apiKey
-            }
 
             /**
              * Sets the API URL for the builder instance.
@@ -506,7 +439,6 @@ open class Tolgee(
              * @return A Config instance populated with the values set in the Builder.
              */
             fun build(): Config = Config(
-                apiKey = apiKey,
                 apiUrl = apiUrl,
                 projectId = projectId,
                 locale = locale,
@@ -654,31 +586,6 @@ open class Tolgee(
                 var url: String? = null
 
                 /**
-                 * Represents the base URL used as a default for constructing CDN URLs.
-                 *
-                 * This variable holds the root URL which will be combined with additional
-                 * path segments (like `id`) to generate the complete CDN URL if no specific
-                 * URL is provided. By default, it is initialized to the value defined in
-                 * `DEFAULT_BASE_URL`.
-                 *
-                 * Can be updated through the `baseUrl()` function in the `Builder` class
-                 * to customize the base URL for a particular CDN instance during the build process.
-                 */
-                private var baseUrl: String = DEFAULT_BASE_URL
-
-                /**
-                 * Represents a unique identifier used to build the complete CDN URL.
-                 *
-                 * This variable is optional and serves as a customizable part of the URL construction
-                 * process. If provided, it will be combined with the base URL to generate a unique
-                 * CDN endpoint. Otherwise, the builder may rely on other URL inputs or defaults during
-                 * the `build` operation.
-                 *
-                 * Used internally by the `Builder` class to support dynamic URL construction.
-                 */
-                private var id: String? = null
-
-                /**
                  * Specifies the formatting strategy to be used for dynamic text translations.
                  *
                  * Determines how parameters within translation messages are rendered. The default value is
@@ -699,29 +606,6 @@ open class Tolgee(
                  */
                 fun url(url: String) = apply {
                     this.url = url
-                }
-
-                /**
-                 * Sets the base URL for the CDN configuration.
-                 *
-                 * @param url The base URL to be used for generating complete CDN URLs.
-                 *            This value overrides the default base URL.
-                 * @return The Builder instance for method chaining.
-                 */
-                fun baseUrl(url: String) = apply {
-                    this.baseUrl = url
-                }
-
-                /**
-                 * Sets the identifier that can be used as part of the CDN configuration.
-                 *
-                 * The specified ID is used in conjunction with the base URL to construct the final CDN URL.
-                 * Providing a null or blank ID will not modify the CDN URL.
-                 *
-                 * @param id The identifier to be used for the CDN. Can be null.
-                 */
-                fun id(id: String?) = apply {
-                    this.id = id
                 }
 
                 /**
@@ -747,9 +631,7 @@ open class Tolgee(
                  *         and formatter.
                  */
                 fun build(): ContentDelivery = ContentDelivery(
-                    url = url?.ifBlank { null } ?: id?.let {
-                        combineUrlParts(baseUrl, it).trim()
-                    }?.ifBlank { null },
+                    url = url?.ifBlank { null },
                     formatter = formatter
                 )
             }

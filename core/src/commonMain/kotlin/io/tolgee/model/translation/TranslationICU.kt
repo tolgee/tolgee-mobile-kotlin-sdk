@@ -39,8 +39,7 @@ internal data class TranslationICU(
         key.translations.map { (locale, translation) ->
             locale to MappedTranslation(
                 name = key.keyName,
-                description = key.keyDescription,
-                text = translation.text,
+                text = translation,
             )
         }
     }.groupBy({ it.first }, { it.second })
@@ -151,13 +150,11 @@ internal data class TranslationICU(
      * in processing and organizing translation content.
      *
      * @property name The name or key identifier for the translation.
-     * @property description An optional description providing additional context or details about the translation.
      * @property text The translated content, which may be `null` if no translation is available.
      */
     @Serializable
     internal data class MappedTranslation(
         val name: String,
-        val description: String?,
         val text: String?
     )
 }

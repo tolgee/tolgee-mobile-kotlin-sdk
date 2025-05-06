@@ -11,12 +11,12 @@ import io.tolgee.TolgeeContextWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
+import java.util.*
 
 class MainActivity : ComponentActivity() {
 
     val tolgee = Tolgee.instanceOrInit {
-        apiKey = System.getenv("TOLGEE_API_KEY")
+
     }
 
     override fun attachBaseContext(newBase: Context?) {

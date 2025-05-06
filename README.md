@@ -129,11 +129,6 @@ fun AndroidWithArgs(vararg args: Any) {
 }
 ```
 
-## Support the project
-
-[![Github-sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/DATL4G)
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/datlag)
-
 ### This is a non-profit project!
 
 Sponsoring to this project means sponsoring to all my projects!

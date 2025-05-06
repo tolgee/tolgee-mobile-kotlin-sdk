@@ -16,7 +16,6 @@ import io.tolgee.stringResource
 fun App() {
     // no remember required, using a singleton
     val tolgee = Tolgee.instanceOrInit {
-        apiKey = System.getenv("TOLGEE_API_KEY")
     }
 
     MaterialTheme {
