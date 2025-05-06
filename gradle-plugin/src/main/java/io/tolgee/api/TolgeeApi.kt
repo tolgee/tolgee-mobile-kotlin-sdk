@@ -3,6 +3,7 @@ package io.tolgee.api
 import io.tolgee.model.Format
 import io.tolgee.model.pull.State
 import io.ktor.client.statement.*
+import io.tolgee.TolgeePlugin
 
 internal object TolgeeApi {
 
@@ -26,6 +27,7 @@ internal object TolgeeApi {
         return projectId?.let {
             api.export(
                 apiKey = apiKey,
+                sdkVersion = TolgeePlugin.version,
                 projectId = it,
                 format = format.value,
                 languages = normalizedLanguages,
@@ -37,6 +39,7 @@ internal object TolgeeApi {
             )
         } ?: api.export(
             apiKey = apiKey,
+            sdkVersion = TolgeePlugin.version,
             format = format.value,
             languages = normalizedLanguages,
             states = normalizedStates,

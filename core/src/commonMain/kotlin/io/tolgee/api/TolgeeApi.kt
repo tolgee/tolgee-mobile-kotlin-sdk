@@ -53,6 +53,8 @@ internal data object TolgeeApi {
         val response = client.get(buildProjectUrl(config.apiUrl, config.projectId, "projects/languages")) {
             headers {
                 append("X-Api-Key", apiKey)
+                append("sdkType", Tolgee.TYPE_HEADER)
+                append("sdkVersion", Tolgee.VERSION_HEADER)
             }
         }.takeIf { it.status.isSuccess() } ?: return persistentSetOf()
 
@@ -100,6 +102,8 @@ internal data object TolgeeApi {
                 }
                 headers {
                     append("X-Api-Key", apiKey)
+                    append("sdkType", Tolgee.TYPE_HEADER)
+                    append("sdkVersion", Tolgee.VERSION_HEADER)
                 }
             }.takeIf {
                 it.status.isSuccess()
@@ -151,7 +155,12 @@ internal data object TolgeeApi {
             ?: return TranslationEmpty
 
         val start = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
-        val response = client.get("$start$language.json").takeIf {
+        val response = client.get("$start$language.json") {
+            headers {
+                append("sdkType", Tolgee.TYPE_HEADER)
+                append("sdkVersion", Tolgee.VERSION_HEADER)
+            }
+        }.takeIf {
             it.status.isSuccess()
         } ?: return TranslationEmpty
 
