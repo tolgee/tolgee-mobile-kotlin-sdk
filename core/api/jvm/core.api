@@ -16,7 +16,6 @@ public class io/tolgee/Tolgee {
 	public final fun instant (Ljava/lang/String;)Ljava/lang/String;
 	public fun instant (Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;)Ljava/lang/String;
 	public static synthetic fun instant$default (Lio/tolgee/Tolgee;Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Ljava/lang/String;
-	public fun languages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun setLocale (Lio/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
@@ -47,12 +46,10 @@ public final class io/tolgee/Tolgee$Config {
 	public static final field Companion Lio/tolgee/Tolgee$Config$Companion;
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/util/Locale;
-	public final fun component5 ()Lio/tolgee/Tolgee$Config$Network;
-	public final fun component6 ()Lio/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun component3 ()Ljava/util/Locale;
+	public final fun component4 ()Lio/tolgee/Tolgee$Config$Network;
+	public final fun component5 ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getApiKey ()Ljava/lang/String;
 	public final fun getApiUrl ()Ljava/lang/String;
 	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun getLocale ()Ljava/util/Locale;
@@ -64,7 +61,6 @@ public final class io/tolgee/Tolgee$Config {
 
 public final class io/tolgee/Tolgee$Config$Builder {
 	public fun <init> ()V
-	public final fun apiKey (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun apiUrl (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun build ()Lio/tolgee/Tolgee$Config;
 	public final fun contentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)Lio/tolgee/Tolgee$Config$Builder;
@@ -72,7 +68,6 @@ public final class io/tolgee/Tolgee$Config$Builder {
 	public final fun contentDelivery (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public static synthetic fun contentDelivery$default (Lio/tolgee/Tolgee$Config$Builder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/tolgee/Tolgee$Config$Builder;
-	public final fun getApiKey ()Ljava/lang/String;
 	public final fun getApiUrl ()Ljava/lang/String;
 	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun getLocale ()Ljava/util/Locale;
@@ -84,7 +79,6 @@ public final class io/tolgee/Tolgee$Config$Builder {
 	public final fun network (Lio/tolgee/Tolgee$Config$Network;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun network (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun projectId (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
-	public final fun setApiKey (Ljava/lang/String;)V
 	public final fun setApiUrl (Ljava/lang/String;)V
 	public final fun setContentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)V
 	public final fun setLocale (Ljava/util/Locale;)V
@@ -109,12 +103,10 @@ public final class io/tolgee/Tolgee$Config$ContentDelivery {
 
 public final class io/tolgee/Tolgee$Config$ContentDelivery$Builder {
 	public fun <init> ()V
-	public final fun baseUrl (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun build ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun formatter (Lio/tolgee/Tolgee$Formatter;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
 	public final fun getUrl ()Ljava/lang/String;
-	public final fun id (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun setFormatter (Lio/tolgee/Tolgee$Formatter;)V
 	public final fun setUrl (Ljava/lang/String;)V
 	public final fun url (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
