@@ -21,11 +21,11 @@ import kotlinx.coroutines.flow.flowOf
 fun stringResource(tolgee: Tolgee, @StringRes id: Int): String {
     val context = LocalContext.current
     val key = remember(id) {
-        TolgeeAndroid.getKeyFromStringResource(context, id)
+        TolgeeAndroid.getKeyFromResources(context, id)
     }
 
     val translationFlow = (tolgee as? TolgeeAndroid)?.translation(context, id)
-        ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
+        ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
             tolgee.translation(key = it)
         } ?: flowOf(androidx.compose.ui.res.stringResource(id))
 
@@ -64,11 +64,11 @@ fun stringResource(@StringRes id: Int): String {
 fun stringResource(tolgee: Tolgee, @StringRes id: Int, vararg formatArgs: Any): String {
     val context = LocalContext.current
     val key = remember(id) {
-        TolgeeAndroid.getKeyFromStringResource(context, id)
+        TolgeeAndroid.getKeyFromResources(context, id)
     }
 
     val translationFlow = (tolgee as? TolgeeAndroid)?.translation(context, id, *formatArgs)
-        ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
+        ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
             tolgee.translation(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
         } ?: flowOf(androidx.compose.ui.res.stringResource(id, *formatArgs))
 
@@ -96,11 +96,11 @@ fun stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
 fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int): String {
     val context = LocalContext.current
     val key = remember(id) {
-        TolgeeAndroid.getKeyFromStringResource(context, id)
+        TolgeeAndroid.getKeyFromResources(context, id)
     }
 
-    val translationFlow = (tolgee as? TolgeeAndroid)?.pluralTranslation(context, id, quantity)
-        ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
+    val translationFlow = (tolgee as? TolgeeAndroid)?.pluralTranslation(context.resources, id, quantity)
+        ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
             tolgee.translation(key = it, parameters = TolgeeMessageParams.Indexed(quantity))
         } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity))
 
@@ -120,11 +120,11 @@ fun pluralStringResource(@PluralsRes id: Int, quantity: Int): String {
 fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
     val context = LocalContext.current
     val key = remember(id) {
-        TolgeeAndroid.getKeyFromStringResource(context, id)
+        TolgeeAndroid.getKeyFromResources(context, id)
     }
 
-    val translationFlow = (tolgee as? TolgeeAndroid)?.pluralTranslation(context, id, quantity, *formatArgs)
-        ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
+    val translationFlow = (tolgee as? TolgeeAndroid)?.pluralTranslation(context.resources, id, quantity, *formatArgs)
+        ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
             tolgee.translation(key = it, parameters = TolgeeMessageParams.Indexed(quantity, *formatArgs))
         } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs))
 

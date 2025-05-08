@@ -28,14 +28,29 @@ internal class ComposeTransformer(
         callableName = Name.identifier("stringResource")
     )
 
+    private val androidPluralStringResourceCallableId = CallableId(
+        packageName = FqName("androidx.compose.ui.res"),
+        callableName = Name.identifier("pluralStringResource")
+    )
+
     private val multiplatformStringResourceCallableId = CallableId(
         packageName = FqName("org.jetbrains.compose.resources"),
         callableName = Name.identifier("stringResource")
     )
 
+    private val multiplatformPluralStringResourceCallableId = CallableId(
+        packageName = FqName("org.jetbrains.compose.resources"),
+        callableName = Name.identifier("pluralStringResource")
+    )
+
     private val multiplatformStringResourceClassId = ClassId(
         packageFqName = FqName("org.jetbrains.compose.resources"),
         topLevelName = Name.identifier("StringResource")
+    )
+
+    private val multiplatformPluralStringResourceClassId = ClassId(
+        packageFqName = FqName("org.jetbrains.compose.resources"),
+        topLevelName = Name.identifier("PluralStringResource")
     )
 
     private val tolgeeStringResourceFunctions = pluginContext.referenceFunctions(
@@ -45,14 +60,31 @@ internal class ComposeTransformer(
         )
     )
 
+    private val tolgeePluralStringResourceFunctions = pluginContext.referenceFunctions(
+        CallableId(
+            packageName = FqName("io.tolgee"),
+            callableName = Name.identifier("pluralStringResource")
+        )
+    )
+
     override fun visitCall(expression: IrCall): IrExpression {
-        if (!config.compose.stringResourceReplacement) {
-            return super.visitCall(expression)
+        if (config.compose.stringResourceReplacement) {
+            val result = visitAndroidString(expression) ?: visitMultiplatformString(expression)
+            result?.let {
+                return it
+            }
         }
-        return replaceAndroid(expression) ?: replaceMultiplatform(expression) ?: super.visitCall(expression)
+
+        if (config.compose.pluralStringReplacement) {
+            val result = visitAndroidPluralString(expression) ?: visitMultiplatformPluralString(expression)
+            result?.let {
+                return it
+            }
+        }
+        return super.visitCall(expression)
     }
 
-    private fun replaceAndroid(expression: IrCall): IrExpression? {
+    private fun visitAndroidString(expression: IrCall): IrExpression? {
         val function = expression.symbol.owner
 
         if (function.callableId == androidStringResourceCallableId) {
@@ -72,7 +104,7 @@ internal class ComposeTransformer(
         return null
     }
 
-    private fun replaceMultiplatform(expression: IrCall): IrExpression? {
+    private fun visitMultiplatformString(expression: IrCall): IrExpression? {
         val function = expression.symbol.owner
 
         if (function.callableId == multiplatformStringResourceCallableId) {
@@ -92,8 +124,54 @@ internal class ComposeTransformer(
         return null
     }
 
+    private fun visitAndroidPluralString(expression: IrCall): IrExpression? {
+        val function = expression.symbol.owner
+
+        if (function.callableId == androidPluralStringResourceCallableId) {
+            val argumentCount = function.valueParameters.size
+            val replacementMethod = tolgeePluralStringResourceFunctions.firstOrNull { tolgeeFunction ->
+                val tolgeeParams = tolgeeFunction.owner.valueParameters
+                val tolgeeFirstIsInt = tolgeeParams.firstOrNull()?.type?.isInt() == true
+                argumentCount == tolgeeParams.size && tolgeeFirstIsInt
+            } ?: return null
+
+            return DeclarationIrBuilder(pluginContext, function.symbol).irCall(replacementMethod).apply {
+                expression.valueArguments.forEachIndexed { index, arg ->
+                    putValueArgument(index, arg)
+                }
+            }
+        }
+
+        return null
+    }
+
+    private fun visitMultiplatformPluralString(expression: IrCall): IrExpression? {
+        val function = expression.symbol.owner
+
+        if (function.callableId == multiplatformPluralStringResourceCallableId) {
+            val argumentCount = function.valueParameters.size
+            val replacementMethod = tolgeePluralStringResourceFunctions.firstOrNull { tolgeeFunction ->
+                val tolgeeParams = tolgeeFunction.owner.valueParameters
+                val tolgeeFirstIsPluralStringRes = tolgeeParams.firstOrNull()?.type?.isPluralStringResourceType() == true
+                argumentCount == tolgeeParams.size && tolgeeFirstIsPluralStringRes
+            } ?: return null
+
+            return DeclarationIrBuilder(pluginContext, function.symbol).irCall(replacementMethod).apply {
+                expression.valueArguments.forEachIndexed { index, arg ->
+                    putValueArgument(index, arg)
+                }
+            }
+        }
+
+        return null
+    }
+
     private fun IrType.isStringResourceType(): Boolean {
         return classOrNull?.owner?.classId == multiplatformStringResourceClassId
+    }
+
+    private fun IrType.isPluralStringResourceType(): Boolean {
+        return classOrNull?.owner?.classId == multiplatformPluralStringResourceClassId
     }
 
 }

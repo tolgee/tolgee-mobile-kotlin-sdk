@@ -14,7 +14,9 @@ class TolgeeCompilerSubPlugin : KotlinCompilerPluginSupportPlugin {
 
             listOf(
                 SubpluginOption("tolgee.android.getString", config.android.replaceGetString.getOrElse(true).toString()),
+                SubpluginOption("tolgee.android.pluralString", config.android.replacePluralString.getOrElse(true).toString()),
                 SubpluginOption("tolgee.compose.stringResource", config.compose.replaceStringResource.getOrElse(true).toString()),
+                SubpluginOption("tolgee.compose.pluralStringResource", config.compose.replacePluralStringResource.getOrElse(true).toString())
             )
         }
     }

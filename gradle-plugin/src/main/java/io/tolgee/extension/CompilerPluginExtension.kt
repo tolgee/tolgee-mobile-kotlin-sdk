@@ -118,6 +118,8 @@ open class CompilerPluginExtension(objectFactory: ObjectFactory) {
          */
         open val replaceGetString: Property<Boolean> = objectFactory.property(Boolean::class.java)
 
+        open val replacePluralString: Property<Boolean> = objectFactory.property(Boolean::class.java)
+
         /**
          * Sets up default values for the Android extension.
          *
@@ -127,6 +129,7 @@ open class CompilerPluginExtension(objectFactory: ObjectFactory) {
          */
         internal fun setupConvention(project: Project) {
             replaceGetString.convention(true)
+            replacePluralString.convention(true)
         }
 
     }
@@ -149,6 +152,8 @@ open class CompilerPluginExtension(objectFactory: ObjectFactory) {
          */
         open val replaceStringResource: Property<Boolean> = objectFactory.property(Boolean::class.java)
 
+        open val replacePluralStringResource: Property<Boolean> = objectFactory.property(Boolean::class.java)
+
         /**
          * Sets up default values for the Compose extension.
          *
@@ -158,6 +163,7 @@ open class CompilerPluginExtension(objectFactory: ObjectFactory) {
          */
         internal fun setupConvention(project: Project) {
             replaceStringResource.convention(true)
+            replacePluralStringResource.convention(true)
         }
     }
 

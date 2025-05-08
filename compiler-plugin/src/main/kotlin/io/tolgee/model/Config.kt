@@ -5,10 +5,12 @@ internal data class Config(
     val compose: Compose
 ) {
     data class Android(
-        val getStringReplacement: Boolean
+        val getStringReplacement: Boolean,
+        val pluralStringReplacement: Boolean
     )
 
     data class Compose(
-        val stringResourceReplacement: Boolean
+        val stringResourceReplacement: Boolean,
+        val pluralStringReplacement: Boolean
     )
 }

@@ -26,10 +26,10 @@ internal class TolgeeResources(
     }
 
     override fun getQuantityString(id: Int, quantity: Int): String {
-        return baseContext.getQuantityStringInstant(tolgee, id, quantity)
+        return baseContext.resources.getQuantityStringInstant(tolgee, id, quantity)
     }
 
     override fun getQuantityString(id: Int, quantity: Int, vararg formatArgs: Any?): String {
-        return baseContext.getQuantityStringInstant(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
+        return baseContext.resources.getQuantityStringInstant(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
     }
 }

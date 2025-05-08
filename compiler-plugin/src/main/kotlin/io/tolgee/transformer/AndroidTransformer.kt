@@ -11,8 +11,8 @@ import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.symbols.UnsafeDuringIrConstructionAPI
 import org.jetbrains.kotlin.ir.types.isInt
-import org.jetbrains.kotlin.ir.types.isSubtypeOfClass
 import org.jetbrains.kotlin.ir.util.callableId
+import org.jetbrains.kotlin.ir.util.isSubtypeOfClass
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
@@ -46,10 +46,17 @@ internal class AndroidTransformer(
         topLevelName = Name.identifier("Context"),
     )
 
+    private val resourcesClassId = ClassId(
+        packageFqName = FqName("android.content.res"),
+        topLevelName = Name.identifier("Resources"),
+    )
+
     /**
      * A reference to the `Context` class in the IR, retrieved using [contextClassId].
      */
     private val contextClass = pluginContext.referenceClass(contextClassId)
+
+    private val resourcesClass = pluginContext.referenceClass(resourcesClassId)
 
     /**
      * Represents the `CallableId` for the `Context.getString` method.
@@ -57,6 +64,11 @@ internal class AndroidTransformer(
     private val contextGetStringCallableId = CallableId(
         classId = contextClassId,
         callableName = Name.identifier("getString"),
+    )
+
+    private val resourcesPluralStringCallableId = CallableId(
+        classId = resourcesClassId,
+        callableName = Name.identifier("getQuantityString"),
     )
 
     /**
@@ -67,6 +79,13 @@ internal class AndroidTransformer(
         CallableId(
             packageName = FqName("io.tolgee.common"),
             callableName = Name.identifier("getStringInstant")
+        )
+    )
+
+    private val tolgeePluralStringFunctions = pluginContext.referenceFunctions(
+        CallableId(
+            packageName = FqName("io.tolgee.common"),
+            callableName = Name.identifier("getQuantityStringInstant")
         )
     )
 
@@ -84,14 +103,27 @@ internal class AndroidTransformer(
      */
     @OptIn(UnsafeDuringIrConstructionAPI::class)
     override fun visitCall(expression: IrCall): IrExpression {
-        if (!config.android.getStringReplacement) {
-            return super.visitCall(expression)
+        if (config.android.getStringReplacement) {
+            visitContext(expression)?.let {
+                return it
+            }
         }
 
-        val function = expression.symbol.owner
-        val context = contextClass ?: return super.visitCall(expression)
+        if (config.android.pluralStringReplacement) {
+            visitResources(expression)?.let {
+                return it
+            }
+        }
 
-        val receiver = if (function.dispatchReceiverParameter?.type?.isSubtypeOfClass(context) == true) {
+        return super.visitCall(expression)
+    }
+
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
+    private fun visitContext(expression: IrCall): IrExpression? {
+        val function = expression.symbol.owner
+        val context = contextClass ?: return null
+
+        val contextReceiver = if (function.dispatchReceiverParameter?.type?.isSubtypeOfClass(context) == true) {
             expression.dispatchReceiver
         } else if (function.extensionReceiverParameter?.type?.isSubtypeOfClass(context) == true) {
             expression.extensionReceiver
@@ -99,15 +131,15 @@ internal class AndroidTransformer(
             null
         }
 
-        if (receiver != null) {
+        if (contextReceiver != null) {
             if (function.isOverrideOf(contextGetStringCallableId)) {
                 val tolgeeMethod = tolgeeGetStringFunctions.firstOrNull {
                     val resIdFirst = it.owner.valueParameters.firstOrNull()?.type?.isInt() == true
                     resIdFirst && it.owner.valueParameters.size == function.valueParameters.size
-                } ?: return super.visitCall(expression)
+                } ?: return null
 
                 return DeclarationIrBuilder(pluginContext, function.symbol).irCall(tolgeeMethod).apply {
-                    extensionReceiver = receiver
+                    extensionReceiver = contextReceiver
 
                     expression.valueArguments.forEachIndexed { index, arg ->
                         putValueArgument(index, arg)
@@ -116,7 +148,40 @@ internal class AndroidTransformer(
             }
         }
 
-        return super.visitCall(expression)
+        return null
+    }
+
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
+    private fun visitResources(expression: IrCall): IrExpression? {
+        val function = expression.symbol.owner
+        val resources = resourcesClass ?: return null
+
+        val resourcesReceiver = if (function.dispatchReceiverParameter?.type?.isSubtypeOfClass(resources) == true) {
+            expression.dispatchReceiver
+        } else if (function.extensionReceiverParameter?.type?.isSubtypeOfClass(resources) == true) {
+            expression.extensionReceiver
+        } else {
+            null
+        }
+
+        if (resourcesReceiver != null) {
+            if (function.isOverrideOf(resourcesPluralStringCallableId)) {
+                val tolgeeMethod = tolgeePluralStringFunctions.firstOrNull {
+                    val resIdFirst = it.owner.valueParameters.firstOrNull()?.type?.isInt() == true
+                    resIdFirst && it.owner.valueParameters.size == function.valueParameters.size
+                } ?: return null
+
+                return DeclarationIrBuilder(pluginContext, function.symbol).irCall(tolgeeMethod).apply {
+                    extensionReceiver = resourcesReceiver
+
+                    expression.valueArguments.forEachIndexed { index, arg ->
+                        putValueArgument(index, arg)
+                    }
+                }
+            }
+        }
+
+        return null
     }
 
     /**

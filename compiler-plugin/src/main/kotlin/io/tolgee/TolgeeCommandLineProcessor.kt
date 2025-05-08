@@ -40,9 +40,21 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
             required = false
         ),
         CliOption(
+            optionName = KEY_ANDROID_PLURAL_STRING_ENABLED.toString(),
+            valueDescription = "<true|false>",
+            description = "Enable or disable pluralString replacements on Android.",
+            required = false
+        ),
+        CliOption(
             optionName = KEY_COMPOSE_STRING_RESOURCE_ENABLED.toString(),
             valueDescription = "<true|false>",
             description = "Enable or disable stringResource replacements for Compose.",
+            required = false
+        ),
+        CliOption(
+            optionName = KEY_COMPOSE_PLURAL_STRING_ENABLED.toString(),
+            valueDescription = "<true|false>",
+            description = "Enable or disable pluralStringResource replacements for Compose.",
             required = false
         )
     )
@@ -61,7 +73,9 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
 
         when (option.optionName) {
             KEY_ANDROID_GET_STRING_ENABLED.toString() -> configuration.put(KEY_ANDROID_GET_STRING_ENABLED, value.toBoolean())
+            KEY_ANDROID_PLURAL_STRING_ENABLED.toString() -> configuration.put(KEY_ANDROID_PLURAL_STRING_ENABLED, value.toBoolean())
             KEY_COMPOSE_STRING_RESOURCE_ENABLED.toString() -> configuration.put(KEY_COMPOSE_STRING_RESOURCE_ENABLED, value.toBoolean())
+            KEY_COMPOSE_PLURAL_STRING_ENABLED.toString() -> configuration.put(KEY_COMPOSE_PLURAL_STRING_ENABLED, value.toBoolean())
         }
     }
 
@@ -71,10 +85,14 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
          */
         val KEY_ANDROID_GET_STRING_ENABLED = CompilerConfigurationKey<Boolean>("tolgee.android.getString")
 
+        val KEY_ANDROID_PLURAL_STRING_ENABLED = CompilerConfigurationKey<Boolean>("tolgee.android.pluralString")
+
         /**
          * A compiler configuration key for enabling or disabling `stringResource` replacements.
          */
         val KEY_COMPOSE_STRING_RESOURCE_ENABLED = CompilerConfigurationKey<Boolean>("tolgee.compose.stringResource")
+
+        val KEY_COMPOSE_PLURAL_STRING_ENABLED = CompilerConfigurationKey<Boolean>("tolgee.compose.pluralStringResource")
 
         /**
          * Retrieves the plugin configuration based on the provided compiler configuration.
@@ -85,10 +103,12 @@ class TolgeeCommandLineProcessor : CommandLineProcessor {
         internal fun getConfig(configuration: CompilerConfiguration): Config {
             return Config(
                 android = Config.Android(
-                    getStringReplacement = configuration[KEY_ANDROID_GET_STRING_ENABLED, true]
+                    getStringReplacement = configuration[KEY_ANDROID_GET_STRING_ENABLED, true],
+                    pluralStringReplacement = configuration[KEY_ANDROID_PLURAL_STRING_ENABLED, true]
                 ),
                 compose = Config.Compose(
-                    stringResourceReplacement = configuration[KEY_COMPOSE_STRING_RESOURCE_ENABLED, true]
+                    stringResourceReplacement = configuration[KEY_COMPOSE_STRING_RESOURCE_ENABLED, true],
+                    pluralStringReplacement = configuration[KEY_COMPOSE_PLURAL_STRING_ENABLED, true]
                 )
             )
         }
