@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>getKeyFromStringResource</title>
+    <title>replacePluralStringResource</title>
 <link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -45,7 +45,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":core/androidMain">android</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gradle-plugin/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -56,9 +56,9 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":core/androidMain" data-filter=":core/androidMain">
+                                <input type="checkbox" class="checkbox--input" id=":gradle-plugin/main" data-filter=":gradle-plugin/main">
                                 <span class="checkbox--icon"></span>
-                                android
+                                jvm
                             </label>
                         </li>
                 </ul>
@@ -90,14 +90,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="Core::io.tolgee/TolgeeAndroid.Companion/getKeyFromStringResource/#android.content.Context#kotlin.Int/PointingToDeclaration//605213360">
-  <div class="breadcrumbs"><a href="../../../index.html">Core</a><span class="delimiter">/</span><a href="../../index.html">io.tolgee</a><span class="delimiter">/</span><a href="../index.html">TolgeeAndroid</a><span class="delimiter">/</span><a href="index.html">Companion</a><span class="delimiter">/</span><span class="current">getKeyFromStringResource</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="Gradle Plugin::io.tolgee.extension/CompilerPluginExtension.ComposeExtension/replacePluralStringResource/#/PointingToDeclaration//-937474457">
+  <div class="breadcrumbs"><a href="../../../index.html">Gradle Plugin</a><span class="delimiter">/</span><a href="../../index.html">io.tolgee.extension</a><span class="delimiter">/</span><a href="../index.html">CompilerPluginExtension</a><span class="delimiter">/</span><a href="index.html">ComposeExtension</a><span class="delimiter">/</span><span class="current">replacePluralStringResource</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>get</span><wbr><span>Key</span><wbr><span>From</span><wbr><span>String</span><wbr><span><span>Resource</span></span></h1>
+    <h1 class="cover"><span>replace</span><wbr><span>Plural</span><wbr><span>String</span><wbr><span><span>Resource</span></span></h1>
   </div>
-  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
-    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
-<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-key-from-string-resource.html"><span class="token function">getKeyFromStringResource</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/AnyRes.html"><span class="token annotation builtin">AnyRes</span></a>&nbsp;</span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tolgee/compose-tolgee/tree/master/core/src/androidMain/kotlin/io/tolgee/TolgeeAndroid.kt#L157">source</a>)</span></span></div><p class="paragraph">Retrieves the resource entry name corresponding to the provided string resource ID. The result is trimmed and null is returned if the resulting string is blank.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">The resource entry name as a string, or null if the result is blank.</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The context from which to retrieve the resources.</p></div></div></div></div><div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>id</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The resource ID of the string resource to retrieve.</p></div></div></div></div></div></div>  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gradle-plugin/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="replace-plural-string-resource.html">replacePluralStringResource</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tolgee/compose-tolgee/tree/master/gradle-plugin/src/main/java/io/tolgee/extension/CompilerPluginExtension.kt#L155">source</a>)</span></span></div></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
