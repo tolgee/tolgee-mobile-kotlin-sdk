@@ -2,6 +2,7 @@ package io.tolgee.model.translation
 
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
+import de.comahe.i18n4k.language
 import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.formatter.MessageParameters
 import de.comahe.i18n4k.messages.providers.MessagesProvider
@@ -139,7 +140,9 @@ internal data class TranslationICU(
      * @return `true` if the locale is present in the supported locales, `false` otherwise.
      */
     override fun hasLocale(locale: Locale): Boolean {
-        return locales.contains(locale)
+        return locales.contains(locale) || locales.any {
+            it.language == locale.language
+        }
     }
 
     /**

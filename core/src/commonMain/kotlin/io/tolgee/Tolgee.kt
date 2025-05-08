@@ -62,17 +62,6 @@ open class Tolgee(
 ) {
 
     /**
-     * A mutex used to ensure thread safety when performing operations related to language management.
-     *
-     * This mutex is particularly utilized in coroutine-safe methods such as loading or accessing
-     * project languages, guarding against concurrent modifications to shared resources like cached data.
-     *
-     * By using this mutex, the system ensures that only one coroutine at a time can access or
-     * modify language-related data, maintaining consistency and preventing race conditions.
-     */
-    private val languagesMutex = Mutex()
-
-    /**
      * A coroutine-safe mutex used to ensure thread safety when accessing
      * or modifying translations-related data.
      *
@@ -241,16 +230,12 @@ open class Tolgee(
     /**
      * Represents the configuration used for API integration and content management.
      *
-     * @property apiUrl The base URL of the API server.
-     * @property projectId The unique identifier for the project within the system.
      * @property locale The target locale used for translations or project-specific setup.
      * @property network The network configuration used for executing HTTP requests and managing concurrency.
      * @property contentDelivery The CDN configuration for accessing and formatting content dynamically.
      */
     @ConsistentCopyVisibility
     data class Config internal constructor(
-        val apiUrl: String,
-        val projectId: String?,
         val locale: Locale?,
         val network: Network,
         val contentDelivery: ContentDelivery,
@@ -262,33 +247,6 @@ open class Tolgee(
          * locale, network configuration, and CDN settings.
          */
         class Builder {
-
-            /**
-             * Represents the base URL of the API that the application will interact with.
-             * This property can be customized to point to different environments or API endpoints.
-             *
-             * - If a blank or null value is set, the default API URL will be applied.
-             * - Leading and trailing whitespaces are trimmed from the value before assignment.
-             *
-             * @property apiUrl The string representing the API base URL.
-             */
-            var apiUrl: String = DEFAULT_API_URL
-                set(value) {
-                    field = value.trim().ifBlank { null } ?: DEFAULT_API_URL
-                }
-
-            /**
-             * Represents the project identifier used to associate the configuration with
-             * a specific project. Typically, this identifier is provided by the user or
-             * the system and is optional.
-             *
-             * The value is automatically trimmed of whitespace, and if it is blank, it
-             * will be set to `null`.
-             */
-            var projectId: String? = null
-                set(value) {
-                    field = value?.trim()?.ifBlank { null }
-                }
 
             /**
              * Represents the locale used for translations or language-specific configurations.
@@ -325,24 +283,6 @@ open class Tolgee(
              * `build()` method is invoked.
              */
             var contentDelivery: ContentDelivery = ContentDelivery()
-
-            /**
-             * Sets the API URL for the builder instance.
-             *
-             * @param url The base URL of the API to be used.
-             */
-            fun apiUrl(url: String) = apply {
-                this.apiUrl = url
-            }
-
-            /**
-             * Sets the project identifier for the configuration.
-             *
-             * @param projectId The unique identifier of the project. It can be null if no project id is specified.
-             */
-            fun projectId(projectId: String?) = apply {
-                this.projectId = projectId
-            }
 
             /**
              * Sets the locale configuration for the builder and returns the instance for further customization.
@@ -439,8 +379,6 @@ open class Tolgee(
              * @return A Config instance populated with the values set in the Builder.
              */
             fun build(): Config = Config(
-                apiUrl = apiUrl,
-                projectId = projectId,
                 locale = locale,
                 network = network,
                 contentDelivery = contentDelivery,
@@ -637,51 +575,15 @@ open class Tolgee(
             }
 
             /**
-             * Companion object for the CDN class providing utility constants and helper functions.
+             * Companion object for the CDN class, keeping for extension functions.
              */
-            companion object {
-                /**
-                 * The default base URL used for constructing CDN resource paths.
-                 *
-                 * This constant serves as the fallback value for the `baseUrl` property in the `Builder` class,
-                 * providing a predefined CDN endpoint to ensure proper URL formation when no custom base URL
-                 * is specified. It is used as part of URL construction logic for assets, localization files,
-                 * or other resources managed via the CDN class.
-                 *
-                 * The value points to a static endpoint (`https://cdn.tolg.ee/`) and can be overridden by the
-                 * consumer through the `Builder` API, allowing for flexibility in customizing the base URL
-                 * for resource retrieval purposes.
-                 */
-                internal const val DEFAULT_BASE_URL = "https://cdn.tolg.ee/"
-
-                /**
-                 * Combines two parts of a URL into a single valid URL string.
-                 *
-                 * @param one The first part of the URL, which may or may not end with a forward slash.
-                 * @param two The second part of the URL, which may or may not start with a forward slash.
-                 * @return A single URL string created by joining the two parts with a single forward slash.
-                 */
-                private fun combineUrlParts(one: String, two: String): String {
-                    val start = if (one.endsWith('/')) one else "$one/"
-                    val end = if (two.startsWith('/')) two.substring(1) else two
-                    return "$start$end"
-                }
-            }
+            companion object
         }
 
         /**
-         * Companion object for the Config class, providing default configuration constants and shared functionality.
+         * Companion object for the Config class, keeping for extension functions.
          */
-        companion object {
-            /**
-             * The default base URL for the Tolgee API version 2.
-             *
-             * This constant is used as the default endpoint for communicating with the Tolgee server
-             * in the absence of a custom API URL provided by the user. It represents the root URL for
-             * accessing all API services provided by Tolgee.
-             */
-            internal const val DEFAULT_API_URL = "https://app.tolgee.io/v2/"
-        }
+        companion object
     }
 
     /**
