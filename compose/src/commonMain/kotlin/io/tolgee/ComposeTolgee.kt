@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.intl.Locale
 import io.tolgee.common.mapNotNull
 import io.tolgee.model.TolgeeMessageParams
+import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
 
 /**
@@ -19,7 +20,7 @@ fun stringResource(tolgee: Tolgee, resource: StringResource): String {
     return tolgee.translation(
         key = resource.key,
         parameters = TolgeeMessageParams.None
-    ).mapNotNull().collectAsState(
+    ).collectAsState(
         initial = org.jetbrains.compose.resources.stringResource(resource)
     ).value
 }
@@ -52,7 +53,7 @@ fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: 
     return tolgee.translation(
         key = resource.key,
         parameters = TolgeeMessageParams.Indexed(*formatArgs)
-    ).mapNotNull().collectAsState(
+    ).collectAsState(
         initial = org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
     ).value
 }
@@ -71,6 +72,38 @@ fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: 
 fun stringResource(resource: StringResource, vararg formatArgs: Any): String {
     val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
     return stringResource(tolgee, resource, *formatArgs)
+}
+
+@Composable
+fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantity: Int): String {
+    return tolgee.translation(
+        key = resource.key,
+        parameters = TolgeeMessageParams.Indexed(quantity)
+    ).collectAsState(
+        initial = org.jetbrains.compose.resources.pluralStringResource(resource, quantity)
+    ).value
+}
+
+@Composable
+fun pluralStringResource(resource: PluralStringResource, quantity: Int): String {
+    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity)
+    return pluralStringResource(tolgee, resource, quantity)
+}
+
+@Composable
+fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String {
+    return tolgee.translation(
+        key = resource.key,
+        parameters = TolgeeMessageParams.Indexed(quantity, *formatArgs)
+    ).collectAsState(
+        initial = org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
+    ).value
+}
+
+@Composable
+fun pluralStringResource(resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String {
+    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
+    return pluralStringResource(tolgee, resource, quantity, *formatArgs)
 }
 
 /**

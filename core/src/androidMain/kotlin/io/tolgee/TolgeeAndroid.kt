@@ -1,6 +1,8 @@
 package io.tolgee
 
 import android.content.Context
+import androidx.annotation.AnyRes
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +39,7 @@ data class TolgeeAndroid internal constructor(
      *         followed by the corresponding Tolgee translations, if available.
      */
     fun translation(context: Context, @StringRes id: Int): Flow<String> = flow {
-        emit(context.getString(id))
+        emit(instant(context, id))
 
         getKeyFromStringResource(context, id)?.let { key ->
             emitAll(translation(key, TolgeeMessageParams.None).mapNotNull())
@@ -55,10 +57,26 @@ data class TolgeeAndroid internal constructor(
      * @return a flow of translated strings
      */
     fun translation(context: Context, @StringRes id: Int, vararg formatArgs: Any): Flow<String> = flow {
-        emit(context.getString(id, *formatArgs))
+        emit(instant(context, id, *formatArgs))
 
         getKeyFromStringResource(context, id)?.let { key ->
             emitAll(translation(key, TolgeeMessageParams.Indexed(*formatArgs)))
+        }
+    }
+
+    fun pluralTranslation(context: Context, @PluralsRes id: Int, quantity: Int): Flow<String> = flow {
+        emit(pluralInstant(context, id, quantity))
+
+        getKeyFromStringResource(context, id)?.let { key ->
+            emitAll(translation(key, TolgeeMessageParams.Indexed(quantity)))
+        }
+    }
+
+    fun pluralTranslation(context: Context, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): Flow<String> = flow {
+        emit(pluralInstant(context, id, quantity, *formatArgs))
+
+        getKeyFromStringResource(context, id)?.let { key ->
+            emitAll(translation(key, TolgeeMessageParams.Indexed(quantity, *formatArgs)))
         }
     }
 
@@ -93,6 +111,18 @@ data class TolgeeAndroid internal constructor(
         } ?: context.getString(id, *formatArgs)
     }
 
+    fun pluralInstant(context: Context, @PluralsRes id: Int, quantity: Int): String {
+        return getKeyFromStringResource(context, id)?.let { key ->
+            instant(key, TolgeeMessageParams.Indexed(quantity))
+        } ?: context.resources.getQuantityString(id, quantity)
+    }
+
+    fun pluralInstant(context: Context, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
+        return getKeyFromStringResource(context, id)?.let { key ->
+            instant(key, TolgeeMessageParams.Indexed(quantity, *formatArgs))
+        } ?: context.resources.getQuantityString(id, quantity, *formatArgs)
+    }
+
     /**
      * Preloads the required languages and their translations for the current Tolgee instance.
      *
@@ -124,7 +154,7 @@ data class TolgeeAndroid internal constructor(
          * @param id The resource ID of the string resource to retrieve.
          * @return The resource entry name as a string, or null if the result is blank.
          */
-        fun getKeyFromStringResource(context: Context, @StringRes id: Int): String? {
+        fun getKeyFromStringResource(context: Context, @AnyRes id: Int): String? {
             return scopeCatching {
                 context.resources.getResourceEntryName(id)
             }.getOrNull()?.trim()?.ifBlank { null }

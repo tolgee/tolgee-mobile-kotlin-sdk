@@ -41,6 +41,7 @@ coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutin
 coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 i18n4k = { group = "de.comahe.i18n4k", name = "i18n4k-core", version.ref = "i18n4k" }
+i18n4k-plural = { group = "de.comahe.i18n4k", name = "i18n4k-cldr-plural-rules", version.ref = "i18n4k" }
 immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutable" }
 kommand = { group = "com.kgit2", name = "kommand", version.ref = "kommand" }
 kotlin-gradle-plugin-api = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin-api", version.ref = "kotlin" }

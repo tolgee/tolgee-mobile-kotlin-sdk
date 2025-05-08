@@ -1,5 +1,6 @@
 package io.tolgee
 
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -89,4 +90,45 @@ fun stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
     val instance = Tolgee.instance ?: return androidx.compose.ui.res.stringResource(id, *formatArgs)
 
     return stringResource(instance, id, *formatArgs)
+}
+
+@Composable
+fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int): String {
+    val context = LocalContext.current
+    val key = remember(id) {
+        TolgeeAndroid.getKeyFromStringResource(context, id)
+    }
+
+    val translationFlow = (tolgee as? TolgeeAndroid)?.pluralTranslation(context, id, quantity)
+        ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
+            tolgee.translation(key = it, parameters = TolgeeMessageParams.Indexed(quantity))
+        } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity))
+
+    return translationFlow.collectAsState(
+        initial = androidx.compose.ui.res.pluralStringResource(id, quantity)
+    ).value
+}
+
+@Composable
+fun pluralStringResource(@PluralsRes id: Int, quantity: Int): String {
+    val instance = Tolgee.instance ?: return androidx.compose.ui.res.pluralStringResource(id, quantity)
+
+    return pluralStringResource(instance, id, quantity)
+}
+
+@Composable
+fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
+    val context = LocalContext.current
+    val key = remember(id) {
+        TolgeeAndroid.getKeyFromStringResource(context, id)
+    }
+
+    val translationFlow = (tolgee as? TolgeeAndroid)?.pluralTranslation(context, id, quantity, *formatArgs)
+        ?: (key ?: TolgeeAndroid.getKeyFromStringResource(context, id))?.let {
+            tolgee.translation(key = it, parameters = TolgeeMessageParams.Indexed(quantity, *formatArgs))
+        } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs))
+
+    return translationFlow.collectAsState(
+        initial = androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs)
+    ).value
 }

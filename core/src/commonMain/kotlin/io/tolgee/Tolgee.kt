@@ -152,9 +152,9 @@ open class Tolgee(
         key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): Flow<String> = localeFlow.mapLatest { locale ->
-        val translation = currentTranslation() ?: suspendCatching {
-            loadTranslations()
-        }.getOrNull() ?: currentTranslation() ?: return@mapLatest null
+        val translation = currentTranslation(locale) ?: suspendCatching {
+            loadTranslations(locale)
+        }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest instant(key, parameters)
 
         return@mapLatest translation.localized(key, parameters, locale)
     }.mapNotNull()

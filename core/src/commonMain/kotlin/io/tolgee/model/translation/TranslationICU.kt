@@ -2,6 +2,7 @@ package io.tolgee.model.translation
 
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
+import de.comahe.i18n4k.i18n4kInitCldrPluralRules
 import de.comahe.i18n4k.language
 import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.formatter.MessageParameters
@@ -101,6 +102,7 @@ internal data class TranslationICU(
         groupedProviders.forEach { provider ->
             registerTranslation(provider)
         }
+        i18n4kInitCldrPluralRules()
     }
 
     /**
