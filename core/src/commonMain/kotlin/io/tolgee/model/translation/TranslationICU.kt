@@ -2,6 +2,7 @@ package io.tolgee.model.translation
 
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
+import de.comahe.i18n4k.language
 import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.formatter.MessageParameters
 import de.comahe.i18n4k.messages.providers.MessagesProvider
@@ -39,8 +40,7 @@ internal data class TranslationICU(
         key.translations.map { (locale, translation) ->
             locale to MappedTranslation(
                 name = key.keyName,
-                description = key.keyDescription,
-                text = translation.text,
+                text = translation,
             )
         }
     }.groupBy({ it.first }, { it.second })
@@ -140,7 +140,9 @@ internal data class TranslationICU(
      * @return `true` if the locale is present in the supported locales, `false` otherwise.
      */
     override fun hasLocale(locale: Locale): Boolean {
-        return locales.contains(locale)
+        return locales.contains(locale) || locales.any {
+            it.language == locale.language
+        }
     }
 
     /**
@@ -151,13 +153,11 @@ internal data class TranslationICU(
      * in processing and organizing translation content.
      *
      * @property name The name or key identifier for the translation.
-     * @property description An optional description providing additional context or details about the translation.
      * @property text The translated content, which may be `null` if no translation is available.
      */
     @Serializable
     internal data class MappedTranslation(
         val name: String,
-        val description: String?,
         val text: String?
     )
 }
