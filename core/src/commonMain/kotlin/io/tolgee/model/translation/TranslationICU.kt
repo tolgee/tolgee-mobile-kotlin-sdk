@@ -37,14 +37,17 @@ internal data class TranslationICU(
      * This property is transient and excluded from serialization.
      */
     @Transient
-    private val groupedKeysByLocale = keys.flatMap { key ->
+    private val groupedKeysByLocale = keys.filter { it.isText }.flatMap { key ->
         key.translations.map { (locale, translation) ->
             locale to MappedTranslation(
                 name = key.keyName,
-                text = translation,
+                text = (translation as? TolgeeKey.Data.Text)?.text,
             )
         }
     }.groupBy({ it.first }, { it.second })
+
+    @Transient
+    private val stringArrayKeys = keys.filter { !it.isText }
 
     /**
      * A collection of message providers grouped by locale. Each provider implements the [MessagesProvider] interface.
@@ -144,6 +147,15 @@ internal data class TranslationICU(
     override fun hasLocale(locale: Locale): Boolean {
         return locales.contains(locale) || locales.any {
             it.language == locale.language
+        }
+    }
+
+    override fun stringArray(key: String, locale: Locale?): List<String> {
+        val foundTolgeeKey = stringArrayKeys.firstOrNull { it.keyName == key } ?: return emptyList()
+        return when (val data = foundTolgeeKey.translationForOrFirst(locale?.language)) {
+            is TolgeeKey.Data.Array -> data.array
+            is TolgeeKey.Data.Text -> listOf(data.text)
+            else -> emptyList()
         }
     }
 

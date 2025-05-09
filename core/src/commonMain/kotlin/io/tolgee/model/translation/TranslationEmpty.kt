@@ -42,4 +42,8 @@ internal object TranslationEmpty : TolgeeTranslation {
     override fun hasLocale(locale: Locale): Boolean {
         return false
     }
+
+    override fun stringArray(key: String, locale: Locale?): List<String> {
+        return emptyList()
+    }
 }

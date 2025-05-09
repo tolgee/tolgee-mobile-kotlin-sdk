@@ -2,6 +2,7 @@ package io.tolgee.common
 
 import android.content.Context
 import android.content.res.Resources
+import androidx.annotation.ArrayRes
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import io.tolgee.Tolgee
@@ -137,6 +138,14 @@ fun Resources.getQuantityStringInstant(@PluralsRes resId: Int, quantity: Int): S
 fun Resources.getQuantityStringInstant(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any): String {
     val instance = Tolgee.instance ?: return this.getQuantityString(resId, quantity, *formatArgs)
     return this.getQuantityStringInstant(instance, resId, quantity, *formatArgs)
+}
+
+fun Resources.getStringArrayInstant(tolgee: Tolgee, @ArrayRes resId: Int): Array<String> {
+    val list = (tolgee as? TolgeeAndroid)?.stringArrayInstant(this, resId)
+        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.stringArrayInstant(key = it)
+        }
+    return list?.ifEmpty { null }?.toTypedArray() ?: this.getStringArray(resId)
 }
 
 /**

@@ -1,5 +1,6 @@
 package io.tolgee.common
 
+import io.tolgee.model.TolgeeKey
 import kotlinx.datetime.Instant
 import kotlinx.serialization.json.*
 
@@ -15,6 +16,11 @@ internal fun JsonElement.stringValue(): String = when (this) {
     is JsonPrimitive -> contentOrNull ?: ""
     is JsonArray -> firstOrNull()?.stringValue() ?: ""
     is JsonObject -> this.values.firstOrNull()?.stringValue() ?: ""
+}
+
+internal fun JsonElement.keyData(): TolgeeKey.Data = when (this) {
+    is JsonArray -> TolgeeKey.Data.Array(map { it.stringValue() })
+    else -> TolgeeKey.Data.Text(stringValue())
 }
 
 /**

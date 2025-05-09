@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
         val parameter = findViewById<TextView>(R.id.parameterized_text)
         val button = findViewById<Button>(R.id.button)
         val plural = findViewById<TextView>(R.id.plural_text)
+        val array = findViewById<TextView>(R.id.array_text)
 
         lifecycleScope.launch {
             tolgee.translation(
@@ -56,12 +57,22 @@ class MainActivity : ComponentActivity() {
         }
         lifecycleScope.launch {
             tolgee.pluralTranslation(
-                context = this@MainActivity,
+                resources = this@MainActivity.resources,
                 id = R.plurals.plr_test_placeholder_2,
                 3, 2, 3, "Plurals"
             ).collect { value ->
                 withContext(Dispatchers.Main) {
                     plural.text = value
+                }
+            }
+        }
+        lifecycleScope.launch {
+            tolgee.stringArrayTranslation(
+                resources = this@MainActivity.resources,
+                id = R.array.array_test
+            ).collect { value ->
+                withContext(Dispatchers.Main) {
+                    array.text = value.joinToString()
                 }
             }
         }

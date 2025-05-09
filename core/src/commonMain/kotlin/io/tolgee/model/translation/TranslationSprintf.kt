@@ -24,6 +24,8 @@ internal data class TranslationSprintf(
     private var usedLocale: Locale?,
 ) : TolgeeTranslation {
 
+    private val stringArrayKeys = keys.filter { !it.isText }
+
     /**
      * Retrieves a localized string for the specified key and formatting parameters, considering a given locale.
      *
@@ -45,10 +47,13 @@ internal data class TranslationSprintf(
             else -> throw IllegalArgumentException("Only indexed or none parameters are supported when using sprintf format.")
         }
 
-        return requestedKey.translationForOrFirst(
-                  locale?.language?.ifBlank { null }
-                      ?: this.usedLocale?.language?.ifBlank { null }
-              )?.sprintf(*args)
+        return when (val data = requestedKey.translationForOrFirst(
+            locale?.language?.ifBlank { null }
+                ?: this.usedLocale?.language?.ifBlank { null }
+        )) {
+            is TolgeeKey.Data.Text -> return data.text.sprintf(*args)
+            else -> null
+        }
     }
 
     /**
@@ -59,5 +64,14 @@ internal data class TranslationSprintf(
      */
     override fun hasLocale(locale: Locale): Boolean {
         return locale == this.usedLocale || locale.language == this.usedLocale?.language
+    }
+
+    override fun stringArray(key: String, locale: Locale?): List<String> {
+        val foundTolgeeKey = stringArrayKeys.firstOrNull { it.keyName == key } ?: return emptyList()
+        return when (val data = foundTolgeeKey.translationForOrFirst(locale?.language)) {
+            is TolgeeKey.Data.Array -> data.array
+            is TolgeeKey.Data.Text -> listOf(data.text)
+            else -> emptyList()
+        }
     }
 }

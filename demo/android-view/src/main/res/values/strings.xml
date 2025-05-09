@@ -15,4 +15,10 @@
         <item quantity="one">%3$s: %1$d test out of %2$d ok</item>
         <item quantity="other">%3$s: %1$d tests out of %2$d ok</item>
     </plurals>
+
+    <string-array name="array_test">
+        <item>First</item>
+        <item>Second</item>
+        <item>Third</item>
+    </string-array>
 </resources>

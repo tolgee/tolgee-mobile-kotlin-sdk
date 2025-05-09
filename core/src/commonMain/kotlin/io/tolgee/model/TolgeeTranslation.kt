@@ -36,6 +36,8 @@ internal interface TolgeeTranslation {
      */
     fun hasLocale(locale: Locale): Boolean
 
+    fun stringArray(key: String, locale: Locale?): List<String>
+
     /**
      * The companion object provides factory functionality for creating instances of `TolgeeTranslation`
      * based on the given formatter. It determines the appropriate implementation to instantiate

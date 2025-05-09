@@ -8,6 +8,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.tolgee.Tolgee
+import io.tolgee.common.keyData
 import io.tolgee.common.stringValue
 import io.tolgee.model.TolgeeKey
 import io.tolgee.model.TolgeeTranslation
@@ -97,7 +98,7 @@ internal data object TolgeeApi {
             keys = decoded.map { (key, value) ->
                 TolgeeKey(
                     keyName = key,
-                    translations = mapOf(language to value.stringValue())
+                    translations = mapOf(language to value.keyData())
                 )
             }.toImmutableList(),
             formatter = config.contentDelivery.formatter,

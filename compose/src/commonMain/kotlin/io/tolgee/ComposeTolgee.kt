@@ -6,6 +6,7 @@ import androidx.compose.ui.text.intl.Locale
 import io.tolgee.common.mapNotNull
 import io.tolgee.model.TolgeeMessageParams
 import org.jetbrains.compose.resources.PluralStringResource
+import org.jetbrains.compose.resources.StringArrayResource
 import org.jetbrains.compose.resources.StringResource
 
 /**
@@ -104,6 +105,21 @@ fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantit
 fun pluralStringResource(resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String {
     val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
     return pluralStringResource(tolgee, resource, quantity, *formatArgs)
+}
+
+@Composable
+fun stringArrayResource(tolgee: Tolgee, resource: StringArrayResource): List<String> {
+    return tolgee.stringArrayTranslation(
+        key = resource.key,
+    ).collectAsState(
+        initial = org.jetbrains.compose.resources.stringArrayResource(resource)
+    ).value
+}
+
+@Composable
+fun stringArrayResource(resource: StringArrayResource): List<String> {
+    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringArrayResource(resource)
+    return stringArrayResource(tolgee, resource)
 }
 
 /**

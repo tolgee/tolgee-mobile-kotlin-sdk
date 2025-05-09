@@ -3,6 +3,7 @@ package io.tolgee
 import android.content.Context
 import android.content.res.Resources
 import androidx.annotation.AnyRes
+import androidx.annotation.ArrayRes
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +14,7 @@ import dev.datlag.tooling.async.scopeCatching
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
 /**
@@ -81,6 +83,14 @@ data class TolgeeAndroid internal constructor(
         }
     }
 
+    fun stringArrayTranslation(resources: Resources, @ArrayRes id: Int): Flow<List<String>> = flow {
+        emit(stringArrayInstant(resources, id))
+
+        getKeyFromResources(resources, id)?.let { key ->
+            emitAll(stringArrayTranslation(key).mapNotNull { it.ifEmpty { null } })
+        }
+    }
+
     /**
      * Provides an immediate translation for the given string resource ID within the given context.
      * If a translation key is derived from the string resource, it retrieves the translation using Tolgee.
@@ -122,6 +132,12 @@ data class TolgeeAndroid internal constructor(
         return getKeyFromResources(resources, id)?.let { key ->
             instant(key, TolgeeMessageParams.Indexed(quantity, *formatArgs))
         } ?: resources.getQuantityString(id, quantity, *formatArgs)
+    }
+
+    fun stringArrayInstant(resources: Resources, @ArrayRes id: Int): List<String> {
+        return getKeyFromResources(resources, id)?.let { key ->
+            stringArrayInstant(key)
+        }?.ifEmpty { null } ?: resources.getStringArray(id).toList()
     }
 
     /**

@@ -159,6 +159,18 @@ open class Tolgee(
         return@mapLatest translation.localized(key, parameters, locale)
     }.mapNotNull()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @NativeCoroutines
+    open fun stringArrayTranslation(
+        key: String
+    ): Flow<List<String>> = localeFlow.mapLatest { locale ->
+        val translation = currentTranslation(locale) ?: suspendCatching {
+            loadTranslations(locale)
+        }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest stringArrayInstant(key)
+
+        return@mapLatest translation.stringArray(key, locale)
+    }.mapNotNull()
+
     /**
      * Immediate Tolgee translation for key with parameters.
      *
@@ -175,6 +187,14 @@ open class Tolgee(
         val translation = currentTranslation() ?: return null
 
         return translation.localized(key, parameters, localeFlow.value)
+    }
+
+    open fun stringArrayInstant(
+        key: String
+    ): List<String> {
+        val translation = currentTranslation() ?: return emptyList()
+
+        return translation.stringArray(key, localeFlow.value)
     }
 
     /**

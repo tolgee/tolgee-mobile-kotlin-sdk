@@ -3,6 +3,7 @@ package io.tolgee
 import android.content.Context
 import android.content.res.Resources
 import io.tolgee.common.getQuantityStringInstant
+import io.tolgee.common.getStringArrayInstant
 import io.tolgee.common.getStringInstant
 
 /**
@@ -31,5 +32,9 @@ internal class TolgeeResources(
 
     override fun getQuantityString(id: Int, quantity: Int, vararg formatArgs: Any?): String {
         return baseContext.resources.getQuantityStringInstant(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
+    }
+
+    override fun getStringArray(id: Int): Array<out String?> {
+        return baseContext.resources.getStringArrayInstant(tolgee, id)
     }
 }

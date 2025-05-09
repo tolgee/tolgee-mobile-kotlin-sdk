@@ -1,5 +1,6 @@
 package io.tolgee
 
+import androidx.annotation.ArrayRes
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -131,4 +132,27 @@ fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int, var
     return translationFlow.collectAsState(
         initial = androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs)
     ).value
+}
+
+@Composable
+fun stringArrayResource(tolgee: Tolgee, @ArrayRes id: Int): Array<String> {
+    val context = LocalContext.current
+    val key = remember(id) {
+        TolgeeAndroid.getKeyFromResources(context, id)
+    }
+
+    val translationFlow = (tolgee as? TolgeeAndroid)?.stringArrayTranslation(context.resources, id)
+        ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
+            tolgee.stringArrayTranslation(key = it)
+        } ?: flowOf(androidx.compose.ui.res.stringArrayResource(id).toList())
+
+    return translationFlow.collectAsState(
+        initial = androidx.compose.ui.res.stringArrayResource(id).toList()
+    ).value.toTypedArray()
+}
+
+@Composable
+fun stringArrayResource(@ArrayRes id: Int): Array<String> {
+    val instance = Tolgee.instance ?: return androidx.compose.ui.res.stringArrayResource(id)
+    return stringArrayResource(instance, id)
 }

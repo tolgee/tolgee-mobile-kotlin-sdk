@@ -17,8 +17,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class TolgeeKey(
     @SerialName("keyName") val keyName: String,
-    @SerialName("translations") val translations: Map<String, String>
+    @SerialName("translations") val translations: Map<String, Data>
 ) {
+
+    val isText = translations.values.all { it is Data.Text }
 
     /**
      * Retrieves a translation for a given language code or the first available non-null translation.
@@ -29,4 +31,14 @@ internal data class TolgeeKey(
      */
     internal fun translationForOrFirst(language: String?) = language?.ifBlank { null }?.let(translations::get)
         ?: translations.firstNotNullOfOrNull { it.value }
+
+    @Serializable
+    sealed interface Data {
+
+        @Serializable
+        data class Text(val text: String) : Data
+
+        @Serializable
+        data class Array(val array: List<String>) : Data
+    }
 }
