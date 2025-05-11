@@ -176,9 +176,7 @@ data class TolgeeAndroid internal constructor(
         }
 
         fun getKeyFromResources(resources: Resources, @AnyRes id: Int): String? {
-            return scopeCatching {
-                resources.getResourceEntryName(id)
-            }.getOrNull()?.trim()?.ifBlank { null }
+            return TolgeeResourceNameCache.getEntryName(resources, id)
         }
     }
 }
