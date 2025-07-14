@@ -3,8 +3,12 @@ package io.tolgee.storage
 import android.content.Context
 import java.io.File
 
-class TolgeeStorageProviderAndroid(val context: Context, val versionCode: Int, val path: String = "tolgee/localization-cache") : TolgeeStorageProvider {
-  val cacheDir get() = context.filesDir / path / versionCode.toString()
+class TolgeeStorageProviderAndroid(
+  private val context: Context,
+  private val versionCode: Int,
+  private val path: String = "tolgee/localization-cache",
+) : TolgeeStorageProvider {
+  private val cacheDir get() = context.filesDir / path / versionCode.toString()
 
   override fun put(name: String, data: ByteArray) {
     val dir = cacheDir
@@ -25,7 +29,7 @@ class TolgeeStorageProviderAndroid(val context: Context, val versionCode: Int, v
     return name.replace("/", "_")
   }
 
-  companion object {
+  internal companion object {
     private infix operator fun File.div(other: String) = File(this, other)
   }
 }
