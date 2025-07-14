@@ -9,11 +9,7 @@ module:Core
 io.tolgee
 io.tolgee.common
 io.tolgee.model
+io.tolgee.storage
 module:Gradle Plugin
 io.tolgee
-io.tolgee.common
 io.tolgee.extension
-io.tolgee.model
-io.tolgee.model.pull
-io.tolgee.model.push
-io.tolgee.tasks
