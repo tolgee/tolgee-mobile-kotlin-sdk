@@ -35,7 +35,7 @@ tolgee {
     // change compile time behavior
     compilerPlugin {
         android {
-            // Replaces Context.getString occurrences with Context.getStringInstant
+            // Replaces Context.getString occurrences with Context.getStringT
             replaceGetString.set(false) // default true
         }
     }

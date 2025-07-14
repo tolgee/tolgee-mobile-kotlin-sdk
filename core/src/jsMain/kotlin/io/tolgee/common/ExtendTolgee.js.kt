@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.js.*
 import io.ktor.client.plugins.cache.*
 import io.tolgee.Tolgee
+import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
@@ -46,6 +47,9 @@ internal actual val platformHttpClient: HttpClient = HttpClient(Js) {
  */
 internal actual val platformNetworkContext: CoroutineContext
     get() = Dispatchers.Default
+
+internal actual val platformStorage: TolgeeStorageProvider?
+    get() = null
 
 /**
  * A platform-specific implementation of the `Tolgee` class.

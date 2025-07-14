@@ -11,6 +11,7 @@ import io.tolgee.model.TolgeeMessageParams
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.cache.*
+import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
@@ -147,6 +148,9 @@ fun Resources.getStringArrayT(tolgee: Tolgee, @ArrayRes resId: Int): Array<Strin
         }
     return list?.ifEmpty { null }?.toTypedArray() ?: this.getStringArray(resId)
 }
+
+internal actual val platformStorage: TolgeeStorageProvider?
+    get() = null
 
 /**
  * Typealias representing a platform-specific implementation of the Tolgee class for Android.

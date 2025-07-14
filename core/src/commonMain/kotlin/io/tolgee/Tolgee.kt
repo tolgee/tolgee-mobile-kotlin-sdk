@@ -13,9 +13,11 @@ import io.tolgee.common.PlatformTolgee
 import io.tolgee.common.createPlatformTolgee
 import io.tolgee.common.platformHttpClient
 import io.tolgee.common.platformNetworkContext
+import io.tolgee.common.platformStorage
 import io.tolgee.model.TolgeeMessageParams
 import io.tolgee.model.TolgeeProjectLanguage
 import io.tolgee.model.TolgeeTranslation
+import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -258,6 +260,7 @@ open class Tolgee(
         val locale: Locale?,
         val network: Network,
         val contentDelivery: ContentDelivery,
+        val storage: TolgeeStorageProvider?,
     ) {
 
         /**
@@ -302,6 +305,20 @@ open class Tolgee(
              * `build()` method is invoked.
              */
             var contentDelivery: ContentDelivery = ContentDelivery()
+
+            /**
+             * Represents the storage configuration for the Builder.
+             *
+             * This property allows the customization of the storage mechanism by providing an implementation of
+             * the `TolgeeStorageProvider` interface. The `TolgeeStorageProvider` interface defines methods for storing and retrieving
+             * data, enabling support for different storage backends.
+             *
+             * By default, it is initialized with `platformStorage`, which can be replaced with a custom implementation
+             * through the `storage(storage: TolgeeStorageProvider)` method in the Builder.
+             *
+             * @property storage The `TolgeeStorageProvider` instance used to handle the storage of data.
+             */
+            var storage: TolgeeStorageProvider? = platformStorage
 
             /**
              * Sets the locale configuration for the builder and returns the instance for further customization.
@@ -393,6 +410,20 @@ open class Tolgee(
             }
 
             /**
+             * Configures the storage settings for the builder.
+             *
+             * This method allows the binding of a specific storage implementation
+             * with the builder configuration to manage data storage operations.
+             *
+             * @param storage The storage implementation of type `TolgeeStorageProvider`.
+             *                This parameter defines how data will be stored and retrieved.
+             * @return The Builder instance with the configured storage, enabling method chaining.
+             */
+            fun storage(storage: TolgeeStorageProvider) = apply {
+                this.storage = storage
+            }
+
+            /**
              * Builds and returns a new instance of the Config class using the provided builder properties.
              *
              * @return A Config instance populated with the values set in the Builder.
@@ -401,6 +432,7 @@ open class Tolgee(
                 locale = locale,
                 network = network,
                 contentDelivery = contentDelivery,
+                storage = storage
             )
         }
 

@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
 /**
- * Transforms IR calls to `Context.getString`, replacing them with `getStringInstant`
+ * Transforms IR calls to `Context.getString`, replacing them with `getStringT`
  * from `io.tolgee.common` where applicable.
  *
  * This transformation ensures that calls to `getString` are intercepted and redirected
@@ -74,7 +74,7 @@ internal class AndroidTransformer(
     )
 
     /**
-     * Retrieves references to the `getStringInstant` functions from the `io.tolgee.common` package.
+     * Retrieves references to the `getStringT` functions from the `io.tolgee.common` package.
      * These functions are intended as replacements for `Context.getString`.
      */
     private val tolgeeGetStringFunctions = pluginContext.referenceFunctions(
@@ -92,16 +92,16 @@ internal class AndroidTransformer(
     )
 
     /**
-     * Visits an `IrCall` expression and replaces calls to `Context.getString` with `getStringInstant`
+     * Visits an `IrCall` expression and replaces calls to `Context.getString` with `getStringT`
      * from `io.tolgee.common`, if the plugin configuration enables this transformation.
      *
      * The method checks whether the function being called belongs to a subclass of `Context`.
      * If so, and if the function overrides `getString`, it attempts to replace it with an appropriate
-     * `getStringInstant` function, ensuring that the first parameter is an integer (`@StringRes resId`)
+     * `getStringT` function, ensuring that the first parameter is an integer (`@StringRes resId`)
      * and that the number of parameters matches.
      *
      * @param expression The `IrCall` expression being visited.
-     * @return The transformed `IrExpression`, replacing `getString` with `getStringInstant` where applicable.
+     * @return The transformed `IrExpression`, replacing `getString` with `getStringT` where applicable.
      */
     @OptIn(UnsafeDuringIrConstructionAPI::class)
     override fun visitCall(expression: IrCall): IrExpression {
