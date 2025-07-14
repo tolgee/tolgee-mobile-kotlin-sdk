@@ -16,7 +16,7 @@ internal open class Node : PathAware() {
     )
 
     /**
-     * Tries to find the executable in package managers on system.
+     * Tries to find the executable in package managers on the system.
      *
      * Prefers executables available in system PATH and falls back to any package manager and finally locally.
      */

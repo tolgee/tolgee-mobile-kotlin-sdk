@@ -20,6 +20,8 @@ public class io/tolgee/Tolgee {
 	public fun setLocale (Lio/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
+	public fun stringArrayInstant (Ljava/lang/String;)Ljava/util/List;
+	public fun stringArrayTranslation (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
 	public final fun translation (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
 	public fun translation (Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
 	public static synthetic fun translation$default (Lio/tolgee/Tolgee;Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
@@ -157,14 +159,21 @@ public final class io/tolgee/TolgeeAndroid : io/tolgee/Tolgee {
 	public fun hashCode ()I
 	public final fun instant (Landroid/content/Context;I)Ljava/lang/String;
 	public final fun instant (Landroid/content/Context;I[Ljava/lang/Object;)Ljava/lang/String;
+	public final fun pluralInstant (Landroid/content/res/Resources;II)Ljava/lang/String;
+	public final fun pluralInstant (Landroid/content/res/Resources;II[Ljava/lang/Object;)Ljava/lang/String;
+	public final fun pluralTranslation (Landroid/content/res/Resources;II)Lkotlinx/coroutines/flow/Flow;
+	public final fun pluralTranslation (Landroid/content/res/Resources;II[Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 	public final fun preload (Landroidx/lifecycle/LifecycleOwner;)Lkotlinx/coroutines/Job;
+	public final fun stringArrayInstant (Landroid/content/res/Resources;I)Ljava/util/List;
+	public final fun stringArrayTranslation (Landroid/content/res/Resources;I)Lkotlinx/coroutines/flow/Flow;
 	public fun toString ()Ljava/lang/String;
 	public final fun translation (Landroid/content/Context;I)Lkotlinx/coroutines/flow/Flow;
 	public final fun translation (Landroid/content/Context;I[Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class io/tolgee/TolgeeAndroid$Companion {
-	public final fun getKeyFromStringResource (Landroid/content/Context;I)Ljava/lang/String;
+	public final fun getKeyFromResources (Landroid/content/Context;I)Ljava/lang/String;
+	public final fun getKeyFromResources (Landroid/content/res/Resources;I)Ljava/lang/String;
 }
 
 public final class io/tolgee/TolgeeContextWrapper : android/content/ContextWrapper {
@@ -187,6 +196,11 @@ public final class io/tolgee/common/ExtendCoroutinesKt {
 }
 
 public final class io/tolgee/common/ExtendTolgee_androidKt {
+	public static final fun getQuantityStringInstant (Landroid/content/res/Resources;II)Ljava/lang/String;
+	public static final fun getQuantityStringInstant (Landroid/content/res/Resources;II[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getQuantityStringInstant (Landroid/content/res/Resources;Lio/tolgee/Tolgee;II)Ljava/lang/String;
+	public static final fun getQuantityStringInstant (Landroid/content/res/Resources;Lio/tolgee/Tolgee;II[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getStringArrayInstant (Landroid/content/res/Resources;Lio/tolgee/Tolgee;I)[Ljava/lang/String;
 	public static final fun getStringInstant (Landroid/content/Context;I)Ljava/lang/String;
 	public static final fun getStringInstant (Landroid/content/Context;I[Ljava/lang/Object;)Ljava/lang/String;
 	public static final fun getStringInstant (Landroid/content/Context;Lio/tolgee/Tolgee;I)Ljava/lang/String;

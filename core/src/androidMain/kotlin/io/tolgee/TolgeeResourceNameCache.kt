@@ -13,11 +13,9 @@ internal object TolgeeResourceNameCache {
 
     fun getEntryName(resources: Resources, @AnyRes resId: Int): String? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            computeEntryName(resources, resId)?.let { return it }
+            return computeEntryName(resources, resId)
         }
-        return accessEntryName(resources, resId) ?: scopeCatching {
-            resources.getResourceEntryName(resId)
-        }.getOrNull()?.ifBlank { null }
+        return computeEntryNameFallback(resources, resId)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -29,13 +27,18 @@ internal object TolgeeResourceNameCache {
         }.getOrNull()?.ifBlank { null }
     }
 
-    private fun accessEntryName(resources: Resources, @AnyRes resId: Int): String? {
-        cache[resId]?.ifBlank { null }?.let { return it }
+    private fun computeEntryNameFallback(resources: Resources, @AnyRes resId: Int): String? {
+        // computeIfAbsent not available for API < N (24)
+        return scopeCatching {
+            cache.computeIfAbsentFallback(resId) {
+                resources.getResourceEntryName(it)
+            }
+        }.getOrNull()?.ifBlank { null }
+    }
 
-        val name = scopeCatching {
-            resources.getResourceEntryName(resId)
-        }.getOrNull()?.ifBlank { null } ?: return null
-
-        return cache.putIfAbsent(resId, name)?.ifBlank { null } ?: name
+    private fun <K, V> ConcurrentHashMap<in K, V>.computeIfAbsentFallback(key: K, mappingFunction: (K) -> V): V {
+        get(key)?.let { return it }
+        val name = mappingFunction(key)
+        return putIfAbsent(key, name) ?: name
     }
 }

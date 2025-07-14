@@ -20,6 +20,8 @@ public class io/tolgee/Tolgee {
 	public fun setLocale (Lio/tolgee/model/TolgeeProjectLanguage;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
+	public fun stringArrayInstant (Ljava/lang/String;)Ljava/util/List;
+	public fun stringArrayTranslation (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
 	public final fun translation (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
 	public fun translation (Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
 	public static synthetic fun translation$default (Lio/tolgee/Tolgee;Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;

@@ -9,6 +9,8 @@ import org.jetbrains.kotlin.ir.builders.irCall
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.expressions.IrCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
+import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.UnsafeDuringIrConstructionAPI
 import org.jetbrains.kotlin.ir.types.isInt
 import org.jetbrains.kotlin.ir.util.callableId
@@ -120,67 +122,65 @@ internal class AndroidTransformer(
 
     @OptIn(UnsafeDuringIrConstructionAPI::class)
     private fun visitContext(expression: IrCall): IrExpression? {
-        val function = expression.symbol.owner
         val context = contextClass ?: return null
+        val contextReceiver = expression.getReceiver(context) ?: return null
 
-        val contextReceiver = if (function.dispatchReceiverParameter?.type?.isSubtypeOfClass(context) == true) {
-            expression.dispatchReceiver
-        } else if (function.extensionReceiverParameter?.type?.isSubtypeOfClass(context) == true) {
-            expression.extensionReceiver
-        } else {
-            null
+        val function = expression.symbol.owner
+        if (!function.isOverrideOf(contextGetStringCallableId)) {
+            return null
         }
 
-        if (contextReceiver != null) {
-            if (function.isOverrideOf(contextGetStringCallableId)) {
-                val tolgeeMethod = tolgeeGetStringFunctions.firstOrNull {
-                    val resIdFirst = it.owner.valueParameters.firstOrNull()?.type?.isInt() == true
-                    resIdFirst && it.owner.valueParameters.size == function.valueParameters.size
-                } ?: return null
+        // FIXME: Shouldn't we fail if we can't replace a call?
+        val tolgeeMethod = tolgeeGetStringFunctions.findReplacementFor(function) ?: return null
 
-                return DeclarationIrBuilder(pluginContext, function.symbol).irCall(tolgeeMethod).apply {
-                    extensionReceiver = contextReceiver
-
-                    expression.valueArguments.forEachIndexed { index, arg ->
-                        putValueArgument(index, arg)
-                    }
-                }
-            }
-        }
-
-        return null
+        return function.symbol.replace(tolgeeMethod, contextReceiver, expression.valueArguments)
     }
 
     @OptIn(UnsafeDuringIrConstructionAPI::class)
     private fun visitResources(expression: IrCall): IrExpression? {
-        val function = expression.symbol.owner
         val resources = resourcesClass ?: return null
+        val resourcesReceiver = expression.getReceiver(resources) ?: return null
 
-        val resourcesReceiver = if (function.dispatchReceiverParameter?.type?.isSubtypeOfClass(resources) == true) {
-            expression.dispatchReceiver
-        } else if (function.extensionReceiverParameter?.type?.isSubtypeOfClass(resources) == true) {
-            expression.extensionReceiver
-        } else {
-            null
+        val function = expression.symbol.owner
+        if (!function.isOverrideOf(resourcesPluralStringCallableId)) {
+            return null
         }
 
-        if (resourcesReceiver != null) {
-            if (function.isOverrideOf(resourcesPluralStringCallableId)) {
-                val tolgeeMethod = tolgeePluralStringFunctions.firstOrNull {
-                    val resIdFirst = it.owner.valueParameters.firstOrNull()?.type?.isInt() == true
-                    resIdFirst && it.owner.valueParameters.size == function.valueParameters.size
-                } ?: return null
+        // FIXME: Shouldn't we fail if we can't replace a call?
+        val tolgeeMethod = tolgeePluralStringFunctions.findReplacementFor(function) ?: return null
 
-                return DeclarationIrBuilder(pluginContext, function.symbol).irCall(tolgeeMethod).apply {
-                    extensionReceiver = resourcesReceiver
+        return function.symbol.replace(tolgeeMethod, resourcesReceiver, expression.valueArguments)
+    }
 
-                    expression.valueArguments.forEachIndexed { index, arg ->
-                        putValueArgument(index, arg)
-                    }
-                }
+
+    private fun IrSimpleFunctionSymbol.replace(replacement: IrSimpleFunctionSymbol, receiver: IrExpression, args: List<IrExpression?>): IrExpression {
+        return DeclarationIrBuilder(pluginContext, this).irCall(replacement).apply {
+            extensionReceiver = receiver
+
+            args.forEachIndexed { index, arg ->
+                arguments[index] = arg
             }
         }
+    }
 
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
+    private fun Collection<IrSimpleFunctionSymbol>.findReplacementFor(function: IrSimpleFunction): IrSimpleFunctionSymbol? {
+        return firstOrNull {
+            val resIdFirst = it.owner.valueParameters.firstOrNull()?.type?.isInt() == true
+            resIdFirst && it.owner.valueParameters.size == function.valueParameters.size
+        }
+    }
+
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
+    private fun IrCall.getReceiver(clazz: IrClassSymbol): IrExpression? {
+        val function = symbol.owner
+
+        if (function.dispatchReceiverParameter?.type?.isSubtypeOfClass(clazz) == true) {
+            return dispatchReceiver
+        }
+        if (function.extensionReceiverParameter?.type?.isSubtypeOfClass(clazz) == true) {
+            return extensionReceiver
+        }
         return null
     }
 

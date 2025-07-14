@@ -75,10 +75,12 @@ public class io/tolgee/extension/CompilerPluginExtension {
 public class io/tolgee/extension/CompilerPluginExtension$AndroidExtension {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public fun getReplaceGetString ()Lorg/gradle/api/provider/Property;
+	public fun getReplacePluralString ()Lorg/gradle/api/provider/Property;
 }
 
 public class io/tolgee/extension/CompilerPluginExtension$ComposeExtension {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public fun getReplacePluralStringResource ()Lorg/gradle/api/provider/Property;
 	public fun getReplaceStringResource ()Lorg/gradle/api/provider/Property;
 }
 
