@@ -15,9 +15,7 @@ import java.util.*
 
 class MainActivity : ComponentActivity() {
 
-    val tolgee = Tolgee.instanceOrInit {
-
-    }
+    val tolgee = Tolgee.instance
 
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(TolgeeContextWrapper.wrap(newBase))
@@ -35,7 +33,7 @@ class MainActivity : ComponentActivity() {
         val array = findViewById<TextView>(R.id.array_text)
 
         lifecycleScope.launch {
-            tolgee.translation(
+            tolgee.tFlow(
                 context = this@MainActivity,
                 id = R.string.description
             ).collect { value ->
@@ -45,7 +43,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         lifecycleScope.launch {
-            tolgee.translation(
+            tolgee.tFlow(
                 context = this@MainActivity,
                 id = R.string.percentage_placeholder,
                 87
@@ -56,7 +54,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         lifecycleScope.launch {
-            tolgee.pluralTranslation(
+            tolgee.tPluralFlow(
                 resources = this@MainActivity.resources,
                 id = R.plurals.plr_test_placeholder_2,
                 3, 2, 3, "Plurals"
@@ -67,7 +65,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         lifecycleScope.launch {
-            tolgee.stringArrayTranslation(
+            tolgee.tArrayFlow(
                 resources = this@MainActivity.resources,
                 id = R.array.array_test
             ).collect { value ->
