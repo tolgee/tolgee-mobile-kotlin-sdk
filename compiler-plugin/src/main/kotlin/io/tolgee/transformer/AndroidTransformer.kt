@@ -122,36 +122,32 @@ internal class AndroidTransformer(
 
     @OptIn(UnsafeDuringIrConstructionAPI::class)
     private fun visitContext(expression: IrCall): IrExpression? {
-        val context = contextClass ?: return null
-        val contextReceiver = expression.getReceiver(context) ?: return null
-
-        val function = expression.symbol.owner
-        if (!function.isOverrideOf(contextGetStringCallableId)) {
-            return null
-        }
-
-        // FIXME: Shouldn't we fail if we can't replace a call?
-        val tolgeeMethod = tolgeeGetStringFunctions.findReplacementFor(function) ?: return null
-
-        return function.symbol.replace(tolgeeMethod, contextReceiver, expression.valueArguments)
+        return expression.visit(contextClass, contextGetStringCallableId, tolgeeGetStringFunctions)
     }
 
     @OptIn(UnsafeDuringIrConstructionAPI::class)
     private fun visitResources(expression: IrCall): IrExpression? {
-        val resources = resourcesClass ?: return null
-        val resourcesReceiver = expression.getReceiver(resources) ?: return null
+        return expression.visit(resourcesClass, resourcesPluralStringCallableId, tolgeePluralStringFunctions)
+    }
 
-        val function = expression.symbol.owner
-        if (!function.isOverrideOf(resourcesPluralStringCallableId)) {
+    @OptIn(UnsafeDuringIrConstructionAPI::class)
+    private fun IrCall.visit(
+        clazz: IrClassSymbol?,
+        replaceFunction: CallableId,
+        replacementFunctions: Collection<IrSimpleFunctionSymbol>
+    ): IrExpression? {
+        val classRef = clazz ?: return null
+        val receiver = getReceiver(classRef) ?: return null
+
+        val function = symbol.owner
+        if (!function.isOverrideOf(replaceFunction)) {
             return null
         }
 
-        // FIXME: Shouldn't we fail if we can't replace a call?
-        val tolgeeMethod = tolgeePluralStringFunctions.findReplacementFor(function) ?: return null
+        val tolgeeMethod = replacementFunctions.findReplacementFor(function) ?: return null
 
-        return function.symbol.replace(tolgeeMethod, resourcesReceiver, expression.valueArguments)
+        return function.symbol.replace(tolgeeMethod, receiver, valueArguments)
     }
-
 
     private fun IrSimpleFunctionSymbol.replace(replacement: IrSimpleFunctionSymbol, receiver: IrExpression, args: List<IrExpression?>): IrExpression {
         return DeclarationIrBuilder(pluginContext, this).irCall(replacement).apply {
