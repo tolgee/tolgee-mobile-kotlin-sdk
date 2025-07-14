@@ -36,7 +36,7 @@ fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String?
  */
 @Composable
 fun stringResource(key: String, default: String?, table: String? = null): String {
-    val instance = Tolgee.instance ?: return run {
+    val instance = Tolgee.instanceOrNull ?: return run {
         val res = Tolgee.systemLocale.getLanguage().ifBlank { null }
 
         TolgeeApple.getLocalizedStringFromBundle(res, key, default, table) ?: default?.ifBlank { null } ?: ""
@@ -80,7 +80,7 @@ fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String?
  */
 @Composable
 fun stringResource(key: String, default: String?, table: String? = null, vararg args: Any): String {
-    val instance = Tolgee.instance ?: return run {
+    val instance = Tolgee.instanceOrNull ?: return run {
         val res = Tolgee.systemLocale.getLanguage().ifBlank { null }
 
         TolgeeApple.getLocalizedStringFromBundleFormatted(res, key, default, table, *args) ?: ""

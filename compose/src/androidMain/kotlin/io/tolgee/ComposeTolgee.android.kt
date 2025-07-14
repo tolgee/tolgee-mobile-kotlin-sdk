@@ -47,7 +47,7 @@ fun stringResource(tolgee: Tolgee, @StringRes id: Int): String {
  */
 @Composable
 fun stringResource(@StringRes id: Int): String {
-    val instance = Tolgee.instance ?: return androidx.compose.ui.res.stringResource(id)
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.stringResource(id)
 
     return stringResource(instance, id)
 }
@@ -88,7 +88,7 @@ fun stringResource(tolgee: Tolgee, @StringRes id: Int, vararg formatArgs: Any): 
  */
 @Composable
 fun stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
-    val instance = Tolgee.instance ?: return androidx.compose.ui.res.stringResource(id, *formatArgs)
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.stringResource(id, *formatArgs)
 
     return stringResource(instance, id, *formatArgs)
 }
@@ -112,7 +112,7 @@ fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int): St
 
 @Composable
 fun pluralStringResource(@PluralsRes id: Int, quantity: Int): String {
-    val instance = Tolgee.instance ?: return androidx.compose.ui.res.pluralStringResource(id, quantity)
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.pluralStringResource(id, quantity)
 
     return pluralStringResource(instance, id, quantity)
 }
@@ -153,6 +153,6 @@ fun stringArrayResource(tolgee: Tolgee, @ArrayRes id: Int): Array<String> {
 
 @Composable
 fun stringArrayResource(@ArrayRes id: Int): Array<String> {
-    val instance = Tolgee.instance ?: return androidx.compose.ui.res.stringArrayResource(id)
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.stringArrayResource(id)
     return stringArrayResource(instance, id)
 }

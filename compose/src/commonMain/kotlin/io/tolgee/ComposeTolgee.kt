@@ -36,7 +36,7 @@ fun stringResource(tolgee: Tolgee, resource: StringResource): String {
  */
 @Composable
 fun stringResource(resource: StringResource): String {
-    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringResource(resource)
+    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.stringResource(resource)
     return stringResource(tolgee, resource)
 }
 
@@ -70,7 +70,7 @@ fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: 
  */
 @Composable
 fun stringResource(resource: StringResource, vararg formatArgs: Any): String {
-    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
+    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.stringResource(resource, *formatArgs)
     return stringResource(tolgee, resource, *formatArgs)
 }
 
@@ -86,7 +86,7 @@ fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantit
 
 @Composable
 fun pluralStringResource(resource: PluralStringResource, quantity: Int): String {
-    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity)
+    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity)
     return pluralStringResource(tolgee, resource, quantity)
 }
 
@@ -102,7 +102,7 @@ fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantit
 
 @Composable
 fun pluralStringResource(resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String {
-    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
+    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
     return pluralStringResource(tolgee, resource, quantity, *formatArgs)
 }
 
@@ -117,7 +117,7 @@ fun stringArrayResource(tolgee: Tolgee, resource: StringArrayResource): List<Str
 
 @Composable
 fun stringArrayResource(resource: StringArrayResource): List<String> {
-    val tolgee = Tolgee.instance ?: return org.jetbrains.compose.resources.stringArrayResource(resource)
+    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.stringArrayResource(resource)
     return stringArrayResource(tolgee, resource)
 }
 

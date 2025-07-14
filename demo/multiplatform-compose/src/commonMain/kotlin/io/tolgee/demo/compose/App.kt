@@ -15,8 +15,9 @@ import io.tolgee.stringResource
 @Composable
 fun App() {
     // no remember required, using a singleton
-    val tolgee = Tolgee.instanceOrInit {
-    }
+    val tolgee = Tolgee.instance
+//    val tolgee = Tolgee.init {
+//    }
 
     MaterialTheme {
         Column {

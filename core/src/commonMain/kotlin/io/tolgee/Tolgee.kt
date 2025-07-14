@@ -689,13 +689,19 @@ open class Tolgee(
          * The instance is accessed lazily and is nullable, meaning it may return `null` if
          * the `Tolgee` instance is not initialized. This is the primary entry point for
          * interacting with the `Tolgee` localization and translation functionalities.
-         *
-         * Use this property to retrieve the currently active `Tolgee` instance, or initialize
-         * a new instance if required via supporting functions.
          */
         @JvmStatic
-        val instance: PlatformTolgee?
+        val instanceOrNull: PlatformTolgee?
             get() = _instance.value
+
+        /**
+         * Provides the singleton instance of the `Tolgee` class.
+         *
+         * Throws an `IllegalStateException` if the instance has not been initialized.
+         */
+        @JvmStatic
+        val instance: PlatformTolgee
+        get() = _instance.value ?: throw IllegalStateException("Tolgee instance not initialized")
 
         /**
          * Initializes the Tolgee framework with the specified configuration and sets it as the global instance.

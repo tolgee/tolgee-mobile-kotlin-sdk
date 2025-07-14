@@ -77,7 +77,7 @@ fun Context.getStringInstant(tolgee: Tolgee, @StringRes resId: Int): String {
  *         stripped of styled text information.
  */
 fun Context.getStringInstant(@StringRes resId: Int): String {
-    val instance = Tolgee.instance ?: return this.getString(resId)
+    val instance = Tolgee.instanceOrNull ?: return this.getString(resId)
     return this.getStringInstant(instance, resId)
 }
 
@@ -112,7 +112,7 @@ fun Context.getStringInstant(tolgee: Tolgee, @StringRes resId: Int, vararg forma
  *         stripped of styled text information.
  */
 fun Context.getStringInstant(@StringRes resId: Int, vararg formatArgs: Any): String {
-    val instance = Tolgee.instance ?: return this.getString(resId, *formatArgs)
+    val instance = Tolgee.instanceOrNull ?: return this.getString(resId, *formatArgs)
     return this.getStringInstant(instance, resId, *formatArgs)
 }
 
@@ -131,12 +131,12 @@ fun Resources.getQuantityStringInstant(tolgee: Tolgee, @PluralsRes resId: Int, q
 }
 
 fun Resources.getQuantityStringInstant(@PluralsRes resId: Int, quantity: Int): String {
-    val instance = Tolgee.instance ?: return this.getQuantityString(resId, quantity)
+    val instance = Tolgee.instanceOrNull ?: return this.getQuantityString(resId, quantity)
     return this.getQuantityStringInstant(instance, resId, quantity)
 }
 
 fun Resources.getQuantityStringInstant(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any): String {
-    val instance = Tolgee.instance ?: return this.getQuantityString(resId, quantity, *formatArgs)
+    val instance = Tolgee.instanceOrNull ?: return this.getQuantityString(resId, quantity, *formatArgs)
     return this.getQuantityStringInstant(instance, resId, quantity, *formatArgs)
 }
 

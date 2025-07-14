@@ -49,7 +49,7 @@ class TolgeeContextWrapper(
          */
         @JvmStatic
         fun wrap(base: Context?): ContextWrapper {
-            val tolgee = Tolgee.instance ?: return ContextWrapper(base)
+            val tolgee = Tolgee.instanceOrNull ?: return ContextWrapper(base)
             return wrap(base, tolgee)
         }
 
