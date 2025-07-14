@@ -7,6 +7,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.utils.io.core.toByteArray
 import io.tolgee.Tolgee
 import io.tolgee.common.keyData
 import io.tolgee.model.TolgeeKey
@@ -38,13 +39,9 @@ internal data object TolgeeApi {
     }
 
     /**
-     * Retrieves translations using the Tolgee API or falls back to a CDN if necessary.
+     * Retrieves translations from the CDN.
      *
-     * This method fetches translations from the Tolgee server with pagination support.
-     * If the API key is not provided or translations are not available, it defaults to
-     * fetching translations from the CDN.
-     *
-     * @param client The HTTP client used to make requests to the Tolgee API.
+     * @param client The HTTP client used to make requests to the CDN.
      * @param config The configuration object containing API URL, project ID, and API key.
      * @param currentLanguage The language to fetch translations for. This is optional.
      * @return A [TolgeeTranslation] object containing the retrieved translations.
@@ -54,44 +51,30 @@ internal data object TolgeeApi {
         config: Tolgee.Config,
         currentLanguage: String?
     ): TolgeeTranslation {
-        return getTranslationFromCDN(client, config, currentLanguage)
-    }
-
-    /**
-     * Retrieves translations from a Content Delivery Network (CDN) based on the specified configuration and language.
-     *
-     * This method fetches the translation file corresponding to a given language from the CDN URL provided in the configuration.
-     * If no valid language or URL is specified, a fallback empty translation object is returned.
-     *
-     * @param client The HTTP client used to perform the network request.
-     * @param config The Tolgee configuration object containing CDN-related settings and fallback locale.
-     * @param currentLanguage The current language code for which translations are being retrieved. If null, fallback mechanisms are applied.
-     * @return A [TolgeeTranslation] object containing the retrieved translations, or a fallback empty translation object if no valid translations are available.
-     */
-    suspend fun getTranslationFromCDN(
-        client: HttpClient,
-        config: Tolgee.Config,
-        currentLanguage: String?
-    ): TolgeeTranslation {
-        val baseUrl = config.contentDelivery.url?.ifBlank { null } ?: return TranslationEmpty
+        val storage = config.contentDelivery.storage
         val language = currentLanguage?.ifBlank { null }
             ?: config.locale?.language?.ifBlank { null }
             ?: Tolgee.systemLocale.language.ifBlank { null }
             ?: return TranslationEmpty
+        val path = config.contentDelivery.path(language)
 
-        val start = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
-        val response = client.get("$start$language.json") {
-            headers {
-                append("sdkType", Tolgee.TYPE_HEADER)
-                append("sdkVersion", Tolgee.VERSION_HEADER)
-            }
-        }.takeIf {
-            it.status.isSuccess()
-        } ?: return TranslationEmpty
+        storage?.get(path)?.decodeToString()?.decodeTranslation(config, language)?.let { return it }
 
+        val fresh = getTranslationFromCDN(client, config, path) ?: return TranslationEmpty
+        val decoded = fresh.decodeTranslation(config, language) ?: return TranslationEmpty
+
+        storage?.put(path, fresh.toByteArray())
+
+        return decoded
+    }
+
+    private suspend fun String.decodeTranslation(
+        config: Tolgee.Config,
+        language: String,
+    ): TolgeeTranslation? {
         val decoded = suspendCatching {
-            json.decodeFromString<Map<String, JsonElement>>(response.readRawBytes().decodeToString())
-        }.getOrNull() ?: return TranslationEmpty
+            json.decodeFromString<Map<String, JsonElement>>(this@decodeTranslation)
+        }.getOrNull() ?: return null
 
         return TolgeeTranslation(
             keys = decoded.map { (key, value) ->
@@ -103,5 +86,36 @@ internal data object TolgeeApi {
             formatter = config.contentDelivery.formatter,
             usedLocale = forLocaleTag(language),
         )
+    }
+
+    /**
+     * Retrieves translations from a Content Delivery Network (CDN) based on the specified configuration and language.
+     *
+     * This method fetches the translation file corresponding to a given language from the CDN URL provided in the configuration.
+     * If no valid language or URL is specified, a fallback empty translation object is returned.
+     *
+     * @param client The HTTP client used to perform the network request.
+     * @param config The Tolgee configuration object containing CDN-related settings and fallback locale.
+     * @param path The path to the translation file within the CDN url.
+     * @return A [TolgeeTranslation] object containing the retrieved translations, or a fallback empty translation object if no valid translations are available.
+     */
+    suspend fun getTranslationFromCDN(
+        client: HttpClient,
+        config: Tolgee.Config,
+        path: String
+    ): String? {
+        val baseUrl = config.contentDelivery.url?.ifBlank { null } ?: return null
+
+        val start = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
+        val response = client.get("$start$path") {
+            headers {
+                append("sdkType", Tolgee.TYPE_HEADER)
+                append("sdkVersion", Tolgee.VERSION_HEADER)
+            }
+        }.takeIf {
+            it.status.isSuccess()
+        } ?: return null
+
+        return response.readRawBytes().decodeToString()
     }
 }
