@@ -80,14 +80,14 @@ internal class AndroidTransformer(
     private val tolgeeGetStringFunctions = pluginContext.referenceFunctions(
         CallableId(
             packageName = FqName("io.tolgee.common"),
-            callableName = Name.identifier("getStringInstant")
+            callableName = Name.identifier("getStringT")
         )
     )
 
     private val tolgeePluralStringFunctions = pluginContext.referenceFunctions(
         CallableId(
             packageName = FqName("io.tolgee.common"),
-            callableName = Name.identifier("getQuantityStringInstant")
+            callableName = Name.identifier("getQuantityStringT")
         )
     )
 
