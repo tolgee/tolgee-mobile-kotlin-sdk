@@ -11,7 +11,6 @@ import io.tolgee.Tolgee.Companion.systemLocale
 import io.tolgee.api.TolgeeApi
 import io.tolgee.common.PlatformTolgee
 import io.tolgee.common.createPlatformTolgee
-import io.tolgee.common.mapNotNull
 import io.tolgee.common.platformHttpClient
 import io.tolgee.common.platformNetworkContext
 import io.tolgee.model.TolgeeMessageParams
@@ -21,6 +20,7 @@ import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
@@ -51,9 +51,8 @@ import kotlin.jvm.JvmStatic
  * - `config`: Configuration settings for the Tolgee instance.
  *
  * Methods:
- * - `languages`: Retrieves a list of available languages, preferring the network source with a fallback to cache.
- * - `translation`: Processes and streams dynamic translations for a given key and parameters.
- * - `instant`: Immediately resolves a translation for a given key and parameters.
+ * - `tFlow`: Processes and streams dynamic translations for a given key and parameters.
+ * - `t`: Immediately resolves a translation for a given key and parameters.
  * - `preload`: Preloads languages and translations into memory for subsequent use.
  * - `setLocale`: Updates the current locale using various parameter types.
  */
@@ -141,46 +140,46 @@ open class Tolgee(
     }
 
     /**
-     * Updating Tolgee translation for key with parameters.
+     * Updating Tolgee translation for a key with parameters.
      *
      * Respects locale changes from [setLocale].
      */
     @JvmOverloads
     @OptIn(ExperimentalCoroutinesApi::class)
     @NativeCoroutines
-    open fun translation(
+    open fun tFlow(
         key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): Flow<String> = localeFlow.mapLatest { locale ->
         val translation = currentTranslation(locale) ?: suspendCatching {
             loadTranslations(locale)
-        }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest instant(key, parameters)
+        }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest t(key, parameters)
 
         return@mapLatest translation.localized(key, parameters, locale)
-    }.mapNotNull()
+    }.filterNotNull()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @NativeCoroutines
-    open fun stringArrayTranslation(
+    open fun tArrayFlow(
         key: String
     ): Flow<List<String>> = localeFlow.mapLatest { locale ->
         val translation = currentTranslation(locale) ?: suspendCatching {
             loadTranslations(locale)
-        }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest stringArrayInstant(key)
+        }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest tArray(key)
 
         return@mapLatest translation.stringArray(key, locale)
-    }.mapNotNull()
+    }.filterNotNull()
 
     /**
-     * Immediate Tolgee translation for key with parameters.
+     * Immediate Tolgee translation for a key with parameters.
      *
-     * **Requires** calling [preload] or [translation] before.
+     * **Requires** calling [preload] or [tFlow] before.
      * (Otherwise) May return null if no translations are loaded at time calling.
      *
      * Respects only the locale at time calling.
      */
     @JvmOverloads
-    open fun instant(
+    open fun t(
         key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): String? {
@@ -189,7 +188,7 @@ open class Tolgee(
         return translation.localized(key, parameters, localeFlow.value)
     }
 
-    open fun stringArrayInstant(
+    open fun tArray(
         key: String
     ): List<String> {
         val translation = currentTranslation() ?: return emptyList()
@@ -204,7 +203,7 @@ open class Tolgee(
      * corresponding translations are loaded into memory. It performs these operations atomically
      * by utilizing mutex locks to prevent concurrent modifications.
      *
-     * Must be called before accessing translation functionalities such as [instant] to ensure
+     * Must be called before accessing translation functionalities such as [t] to ensure
      * that translations are available and up-to-date.
      *
      * This method is coroutine-safe and utilizes structured concurrency to manage asynchronous
@@ -699,77 +698,57 @@ open class Tolgee(
             get() = _instance.value
 
         /**
-         * Initializes the Tolgee framework with the specified configuration and optionally sets it as the global instance.
+         * Initializes the Tolgee framework with the specified configuration and sets it as the global instance.
          *
-         * @param global A boolean flag indicating whether the initialized instance should be set as the global instance.
-         *               Defaults to true if the current global instance is null.
          * @param config The configuration object used to initialize the Tolgee instance.
          */
         @JvmStatic
         @JvmOverloads
         fun init(
-            global: Boolean = _instance.value == null,
             config: Config
-        ) = createPlatformTolgee(config).also {
-            if (global) {
-                _instance.value = it
+        ) {
+            if (_instance.value != null) {
+                throw IllegalStateException("Tolgee is already initialized!")
+            }
+            val tolgee = createPlatformTolgee(config)
+            if (!_instance.compareAndSet(null, tolgee)) {
+                throw IllegalStateException("Tolgee is already initialized!")
             }
         }
 
         /**
-         * Initializes the Tolgee instance with the provided configuration options.
+         * Initializes the Tolgee instance with the provided configuration options and sets it as the global instance.
          *
-         * This method sets up the configuration for the Tolgee library and prepares it for use.
-         * Configuration options are specified via a [Config.Builder] block, allowing
-         * customization of different settings such as API URL, authentication, and other
-         * Tolgee features.
-         *
-         * @param global A flag indicating whether to initialize this instance globally. Defaults
-         *        to true if no instance has been initialized yet; otherwise, false.
          * @param builder A lambda function used to configure the builder for creating the Tolgee configuration.
          */
         @JvmStatic
         @JvmOverloads
         fun init(
-            global: Boolean = _instance.value == null,
             builder: Config.Builder.() -> Unit
-        ) = init(global, Config.Builder().apply(builder).build())
+        ) {
+            init(Config.Builder().apply(builder).build())
+        }
 
         /**
-         * Returns the existing instance of Tolgee if it has been initialized; otherwise, initializes
-         * a new instance using the provided configuration and optional global context.
+         * Initializes the Tolgee framework with the specified configuration and returns it.
          *
-         * This method ensures that the Tolgee instance is either reused if it already exists,
-         * or created and configured if it does not. It relies on a lazy initialization strategy.
-         *
-         * @param global Specifies whether the instance should be initialized in a global context.
-         *               Defaults to `true` if no instance currently exists; otherwise, `false`.
-         * @param config The configuration object that provides the necessary setup details for
-         *               initializing the Tolgee instance.
+         * @param config The configuration object used to initialize the Tolgee instance.
          */
         @JvmStatic
         @JvmOverloads
-        fun instanceOrInit(
-            global: Boolean = _instance.value == null,
+        fun new(
             config: Config
-        ) = instance ?: init(global, config)
+        ) = createPlatformTolgee(config)
 
         /**
-         * Retrieves the current instance of the `Tolgee` class if it exists; otherwise, initializes a new instance.
+         * Initializes the Tolgee instance with the provided configuration options and returns it.
          *
-         * This method checks if the global instance of the `Tolgee` class is already initialized. If not,
-         * it initializes a new instance using the provided configuration builder.
-         * The method ensures thread-safe initialization and allows customization of the `Tolgee`
-         * configuration through the builder parameter.
-         *
-         * @param global A Boolean flag determining whether the instance should be initialized globally. Defaults to true if no instance exists.
-         * @param builder A lambda function for building the `Config` used during initialization.
+         * @param builder A lambda function used to configure the builder for creating the Tolgee configuration.
          */
         @JvmStatic
         @JvmOverloads
-        fun instanceOrInit(
-            global: Boolean = _instance.value == null,
+        fun new(
             builder: Config.Builder.() -> Unit
-        ) = instance ?: init(global, builder)
+        ) = new(Config.Builder().apply(builder).build())
     }
 }

@@ -3,7 +3,6 @@ package io.tolgee
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.intl.Locale
-import io.tolgee.common.mapNotNull
 import io.tolgee.model.TolgeeMessageParams
 import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringArrayResource
@@ -18,7 +17,7 @@ import org.jetbrains.compose.resources.StringResource
  */
 @Composable
 fun stringResource(tolgee: Tolgee, resource: StringResource): String {
-    return tolgee.translation(
+    return tolgee.tFlow(
         key = resource.key,
         parameters = TolgeeMessageParams.None
     ).collectAsState(
@@ -51,7 +50,7 @@ fun stringResource(resource: StringResource): String {
  */
 @Composable
 fun stringResource(tolgee: Tolgee, resource: StringResource, vararg formatArgs: Any): String {
-    return tolgee.translation(
+    return tolgee.tFlow(
         key = resource.key,
         parameters = TolgeeMessageParams.Indexed(*formatArgs)
     ).collectAsState(
@@ -77,7 +76,7 @@ fun stringResource(resource: StringResource, vararg formatArgs: Any): String {
 
 @Composable
 fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantity: Int): String {
-    return tolgee.translation(
+    return tolgee.tFlow(
         key = resource.key,
         parameters = TolgeeMessageParams.Indexed(quantity)
     ).collectAsState(
@@ -93,7 +92,7 @@ fun pluralStringResource(resource: PluralStringResource, quantity: Int): String 
 
 @Composable
 fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String {
-    return tolgee.translation(
+    return tolgee.tFlow(
         key = resource.key,
         parameters = TolgeeMessageParams.Indexed(quantity, *formatArgs)
     ).collectAsState(
@@ -109,7 +108,7 @@ fun pluralStringResource(resource: PluralStringResource, quantity: Int, vararg f
 
 @Composable
 fun stringArrayResource(tolgee: Tolgee, resource: StringArrayResource): List<String> {
-    return tolgee.stringArrayTranslation(
+    return tolgee.tArrayFlow(
         key = resource.key,
     ).collectAsState(
         initial = org.jetbrains.compose.resources.stringArrayResource(resource)

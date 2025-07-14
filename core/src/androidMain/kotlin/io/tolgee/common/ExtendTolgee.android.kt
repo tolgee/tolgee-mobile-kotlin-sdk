@@ -61,9 +61,9 @@ internal actual val platformNetworkContext: CoroutineContext
  *         stripped of styled text information.
  */
 fun Context.getStringInstant(tolgee: Tolgee, @StringRes resId: Int): String {
-    return (tolgee as? TolgeeAndroid)?.instant(this, resId)
+    return (tolgee as? TolgeeAndroid)?.t(this, resId)
         ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
-            tolgee.instant(key = it, parameters = TolgeeMessageParams.None)
+            tolgee.t(key = it, parameters = TolgeeMessageParams.None)
         } ?: this.getString(resId)
 }
 
@@ -94,9 +94,9 @@ fun Context.getStringInstant(@StringRes resId: Int): String {
  *         stripped of styled text information.
  */
 fun Context.getStringInstant(tolgee: Tolgee, @StringRes resId: Int, vararg formatArgs: Any): String {
-    return (tolgee as? TolgeeAndroid)?.instant(this, resId, *formatArgs)
+    return (tolgee as? TolgeeAndroid)?.t(this, resId, *formatArgs)
         ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
-            tolgee.instant(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
+            tolgee.t(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
         } ?: this.getString(resId, *formatArgs)
 }
 
@@ -117,16 +117,16 @@ fun Context.getStringInstant(@StringRes resId: Int, vararg formatArgs: Any): Str
 }
 
 fun Resources.getQuantityStringInstant(tolgee: Tolgee, @PluralsRes resId: Int, quantity: Int): String {
-    return (tolgee as? TolgeeAndroid)?.pluralInstant(this, resId, quantity)
+    return (tolgee as? TolgeeAndroid)?.tPlural(this, resId, quantity)
         ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
-            tolgee.instant(key = it, TolgeeMessageParams.Indexed(quantity))
+            tolgee.t(key = it, TolgeeMessageParams.Indexed(quantity))
         } ?: this.getQuantityString(resId, quantity)
 }
 
 fun Resources.getQuantityStringInstant(tolgee: Tolgee, @PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any): String {
-    return (tolgee as? TolgeeAndroid)?.pluralInstant(this, resId, quantity, *formatArgs)
+    return (tolgee as? TolgeeAndroid)?.tPlural(this, resId, quantity, *formatArgs)
         ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
-            tolgee.instant(key = it, TolgeeMessageParams.Indexed(quantity, *formatArgs))
+            tolgee.t(key = it, TolgeeMessageParams.Indexed(quantity, *formatArgs))
         } ?: this.getQuantityString(resId, quantity, *formatArgs)
 }
 
@@ -141,9 +141,9 @@ fun Resources.getQuantityStringInstant(@PluralsRes resId: Int, quantity: Int, va
 }
 
 fun Resources.getStringArrayInstant(tolgee: Tolgee, @ArrayRes resId: Int): Array<String> {
-    val list = (tolgee as? TolgeeAndroid)?.stringArrayInstant(this, resId)
+    val list = (tolgee as? TolgeeAndroid)?.tArray(this, resId)
         ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
-            tolgee.stringArrayInstant(key = it)
+            tolgee.tArray(key = it)
         }
     return list?.ifEmpty { null }?.toTypedArray() ?: this.getStringArray(resId)
 }

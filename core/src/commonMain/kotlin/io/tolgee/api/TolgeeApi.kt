@@ -9,7 +9,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.tolgee.Tolgee
 import io.tolgee.common.keyData
-import io.tolgee.common.stringValue
 import io.tolgee.model.TolgeeKey
 import io.tolgee.model.TolgeeTranslation
 import io.tolgee.model.translation.TranslationEmpty

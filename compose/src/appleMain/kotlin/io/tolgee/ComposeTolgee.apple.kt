@@ -15,7 +15,7 @@ import io.tolgee.model.TolgeeMessageParams
  */
 @Composable
 fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String? = null): String {
-    val translationFlow = (tolgee as? TolgeeApple)?.translation(key, default, table) ?: tolgee.translation(key)
+    val translationFlow = (tolgee as? TolgeeApple)?.tFlow(key, default, table) ?: tolgee.tFlow(key)
     val res = tolgee.getLocale().getLanguage().ifBlank { null }
 
     return translationFlow.collectAsState(
@@ -59,8 +59,8 @@ fun stringResource(key: String, default: String?, table: String? = null): String
  */
 @Composable
 fun stringResource(tolgee: Tolgee, key: String, default: String?, table: String? = null, vararg args: Any): String {
-    val translationFlow = (tolgee as? TolgeeApple)?.translation(key, default, table, *args)
-        ?: tolgee.translation(key, TolgeeMessageParams.Indexed(*args))
+    val translationFlow = (tolgee as? TolgeeApple)?.tFlow(key, default, table, *args)
+        ?: tolgee.tFlow(key, TolgeeMessageParams.Indexed(*args))
     val res = tolgee.getLocale().getLanguage().ifBlank { null }
 
     return translationFlow.collectAsState(

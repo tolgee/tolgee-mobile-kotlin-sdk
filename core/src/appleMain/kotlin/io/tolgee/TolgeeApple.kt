@@ -3,11 +3,11 @@ package io.tolgee
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import de.comahe.i18n4k.createLocale
 import io.tolgee.common.fromRes
-import io.tolgee.common.mapNotNull
 import io.tolgee.model.TolgeeMessageParams
 import io.tolgee.common.localizedString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import platform.Foundation.NSBundle
 import platform.Foundation.NSLocale
@@ -45,7 +45,7 @@ data class TolgeeApple internal constructor(
      * @return A flow that emits localized strings corresponding to the given key.
      */
     @NativeCoroutines
-    fun translation(key: String, default: String?, table: String? = null): Flow<String> = flow {
+    fun tFlow(key: String, default: String?, table: String? = null): Flow<String> = flow {
         emit(
             getLocalizedStringFromBundle(
                 bundleRes,
@@ -55,8 +55,8 @@ data class TolgeeApple internal constructor(
             ) ?: default?.ifBlank { null }
         )
 
-        emitAll(translation(key, TolgeeMessageParams.None))
-    }.mapNotNull()
+        emitAll(tFlow(key, TolgeeMessageParams.None))
+    }.filterNotNull()
 
     /**
      * Provides a flow of localized string representations for a given key, allowing localization updates
@@ -72,11 +72,11 @@ data class TolgeeApple internal constructor(
      * @return A flow that emits localized and formatted string values corresponding to the given key and arguments.
      */
     @NativeCoroutines
-    fun translation(key: String, default: String?, table: String? = null, vararg args: Any): Flow<String> = flow {
+    fun tFlow(key: String, default: String?, table: String? = null, vararg args: Any): Flow<String> = flow {
         emit(getLocalizedStringFromBundleFormatted(bundleRes, key, default, table, *args))
 
-        emitAll(translation(key, TolgeeMessageParams.Indexed(*args)))
-    }.mapNotNull()
+        emitAll(tFlow(key, TolgeeMessageParams.Indexed(*args)))
+    }.filterNotNull()
 
     /**
      * Retrieves the translation for a given key immediately.
@@ -87,8 +87,8 @@ data class TolgeeApple internal constructor(
      * @param table The optional localization table where the key is searched. Can be null.
      * @return The localized string if found, or the default value if provided. Returns null if none is available.
      */
-    fun instant(key: String, default: String?, table: String? = null): String? {
-        return instant(key) ?: getLocalizedStringFromBundle(
+    fun t(key: String, default: String?, table: String? = null): String? {
+        return t(key) ?: getLocalizedStringFromBundle(
             bundleRes,
             key,
             default,
@@ -108,8 +108,8 @@ data class TolgeeApple internal constructor(
      * @param args Optional arguments to be used for formatting the translation string.
      * @return The translated and optionally formatted string, or null if no translation is found and no default is provided.
      */
-    fun instant(key: String, default: String?, table: String? = null, vararg args: Any): String? {
-        return instant(key, TolgeeMessageParams.Indexed(*args))
+    fun t(key: String, default: String?, table: String? = null, vararg args: Any): String? {
+        return t(key, TolgeeMessageParams.Indexed(*args))
             ?: getLocalizedStringFromBundleFormatted(bundleRes, key, default, table, *args)
     }
 
@@ -171,6 +171,7 @@ data class TolgeeApple internal constructor(
             table: String?,
             vararg args: Any
         ): String? {
+            // FIXME: why not just expand the args?? is there some weird limitation with calling the c functions?
             return (getLocalizedStringFromBundle(res, key, default, table) ?: default?.ifBlank { null })?.let { format ->
                 when (args.size) {
                     0 -> NSString.localizedStringWithFormat(format)
