@@ -68,6 +68,14 @@ internal data object TolgeeApi {
         return decoded
     }
 
+    /**
+     * Decodes a localization file's content in JSON format into a `TolgeeTranslation` object.
+     *
+     * @param config The configuration object used for content delivery and formatting.
+     * @param language The language code for the language being processed.
+     * @return A `TolgeeTranslation` object containing parsed keys and translations, or `null`
+     *         if the decoding process fails or the input is invalid.
+     */
     private suspend fun String.decodeTranslation(
         config: Tolgee.Config,
         language: String,
