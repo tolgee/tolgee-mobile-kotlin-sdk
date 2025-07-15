@@ -58,14 +58,16 @@ internal data object TolgeeApi {
             ?: return TranslationEmpty
         val path = config.contentDelivery.path(language)
 
-        storage?.get(path)?.decodeToString()?.decodeTranslation(config, language)?.let { return it }
+        val fresh = getTranslationFromCDN(client, config, path)
+        val decoded = fresh?.decodeTranslation(config, language)
 
-        val fresh = getTranslationFromCDN(client, config, path) ?: return TranslationEmpty
-        val decoded = fresh.decodeTranslation(config, language) ?: return TranslationEmpty
+        if (decoded != null) {
+            storage?.put(path, fresh.toByteArray())
+            return decoded
+        }
 
-        storage?.put(path, fresh.toByteArray())
-
-        return decoded
+        val cached = storage?.get(path)?.decodeToString()?.decodeTranslation(config, language)
+        return cached ?: TranslationEmpty
     }
 
     /**
