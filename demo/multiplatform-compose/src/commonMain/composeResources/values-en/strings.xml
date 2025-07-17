@@ -7,7 +7,7 @@
     <item>Third</item>
   </string-array>
   <string name="description">Basic Text</string>
-  <string name="percentage_placeholder">Parameterized Text</string>
+  <string name="percentage_placeholder">Parameterized Text %1$s</string>
   <plurals name="plr_test">
     <item quantity="one">Plural 1</item>
     <item quantity="other">Plural Other</item>

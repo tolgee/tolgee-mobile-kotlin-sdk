@@ -20,6 +20,7 @@ import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapLatest
@@ -97,6 +98,10 @@ open class Tolgee(
         MutableStateFlow(config.locale)
     }
 
+    val changeFlow by lazy {
+        MutableSharedFlow<Unit>()
+    }
+
 
     /**
      * Loads translations for a given locale or the default locale if none is specified.
@@ -117,6 +122,7 @@ open class Tolgee(
                 currentLanguage = locale?.language?.ifBlank { null },
             ).also {
                 cachedTranslation.value = it
+                changeFlow.emit(Unit)
             }
         }
     }

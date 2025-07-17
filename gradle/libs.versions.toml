@@ -29,6 +29,7 @@ semver = "3.0.0"
 serialization = "1.8.1"
 tooling = "1.7.0"
 versions = "0.52.0"
+android-appcompat = "1.7.1"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
@@ -62,6 +63,7 @@ serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 serialization-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
+android-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "android-appcompat" }
 
 [plugins]
 android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -80,3 +82,4 @@ native-coroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref =
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
+tolgee = { id = "io.tolgee", version.ref = "library" }

@@ -153,8 +153,9 @@ internal class AndroidTransformer(
         return DeclarationIrBuilder(pluginContext, this).irCall(replacement).apply {
             extensionReceiver = receiver
 
+            arguments[0] = receiver
             args.forEachIndexed { index, arg ->
-                arguments[index] = arg
+                arguments[index+1] = arg
             }
         }
     }

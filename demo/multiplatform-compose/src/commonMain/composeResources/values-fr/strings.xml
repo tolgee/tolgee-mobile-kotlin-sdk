@@ -7,7 +7,7 @@
     <item>Troisième</item>
   </string-array>
   <string name="description">Texte Fondamental</string>
-  <string name="percentage_placeholder">Texte paramétré</string>
+  <string name="percentage_placeholder">Texte paramétré %1$s</string>
   <plurals name="plr_test">
     <item quantity="one">%d seul</item>
     <item quantity="many">%d plusieurs</item>

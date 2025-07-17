@@ -1,11 +1,13 @@
 package io.tolgee
 
+import io.tolgee.common.tolgeeExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 open class TolgeePlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
+        target.tolgeeExtension
         target.pluginManager.apply(TolgeeCompilerSubPlugin::class.java)
     }
 

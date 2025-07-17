@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
-  <string name="app_name">TolgeeView</string>
+  <string name="app_name">TolgeeZobrazení</string>
   <string-array name="array_test">
     <item>První</item>
     <item>Druhý</item>
     <item>Třetí</item>
   </string-array>
   <string name="description">Základní text</string>
-  <string name="percentage_placeholder">Parametrizovaný text</string>
+  <string name="percentage_placeholder">Parametrizovaný text %1$s</string>
   <plurals name="plr_test">
     <item quantity="one">Množné 1</item>
     <item quantity="few">Množné Ostatní</item>

@@ -7,6 +7,7 @@ dependencyResolutionManagement {
     // Use Maven Central as the default repository (where Gradle will download dependencies) in all subprojects.
     @Suppress("UnstableApiUsage")
     repositories {
+        mavenLocal()
         mavenCentral()
         google()
     }
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
 
 pluginManagement {
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -28,6 +30,6 @@ include(":compose")
 include(":gradle-plugin")
 include(":compiler-plugin")
 
-include(":demo:android-view", ":demo:multiplatform-compose")
+include(":demo:android-view", ":demo:multiplatform-compose", ":demo:exampletolgeecompilerforandroid")
 
 rootProject.name = "compose-tolgee"

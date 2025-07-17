@@ -26,8 +26,8 @@ class MainActivity : ComponentActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val basic = findViewById<TextView>(R.id.basic_text)
         val name = findViewById<TextView>(R.id.app_name_text)
+        val basic = findViewById<TextView>(R.id.basic_text)
         val parameter = findViewById<TextView>(R.id.parameterized_text)
         val plural = findViewById<TextView>(R.id.plural_text)
         val array = findViewById<TextView>(R.id.array_text)
