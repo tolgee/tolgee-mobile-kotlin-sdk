@@ -10,7 +10,8 @@ class MyApplication : Application() {
 
     Tolgee.init {
       contentDelivery {
-//        url =
+        url = "https://cdn.tolg.ee/96eacb8b07382b60c3f94b30405cc49b"
+        formatter = Tolgee.Formatter.Sprintf
       }
     }
   }
