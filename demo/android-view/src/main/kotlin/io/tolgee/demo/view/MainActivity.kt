@@ -27,11 +27,24 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
 
         val basic = findViewById<TextView>(R.id.basic_text)
+        val name = findViewById<TextView>(R.id.app_name_text)
         val parameter = findViewById<TextView>(R.id.parameterized_text)
-        val button = findViewById<Button>(R.id.button)
         val plural = findViewById<TextView>(R.id.plural_text)
         val array = findViewById<TextView>(R.id.array_text)
+        val buttonEn = findViewById<Button>(R.id.button_en)
+        val buttonFr = findViewById<Button>(R.id.button_fr)
+        val buttonCs = findViewById<Button>(R.id.button_cs)
 
+        lifecycleScope.launch {
+            tolgee.tFlow(
+                context = this@MainActivity,
+                id = R.string.app_name,
+            ).collect { value ->
+                withContext(Dispatchers.Main) {
+                    name.text = value
+                }
+            }
+        }
         lifecycleScope.launch {
             tolgee.tFlow(
                 context = this@MainActivity,
@@ -74,8 +87,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        button.setOnClickListener {
+
+        buttonEn.setOnClickListener {
             tolgee.setLocale(Locale.ENGLISH)
+        }
+        buttonFr.setOnClickListener {
+            tolgee.setLocale(Locale.FRENCH)
+        }
+        buttonCs.setOnClickListener {
+            tolgee.setLocale(Locale("cs"))
         }
     }
 }
