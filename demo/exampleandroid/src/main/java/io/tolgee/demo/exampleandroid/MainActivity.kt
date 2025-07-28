@@ -16,6 +16,8 @@ class MainActivity : ComponentActivity() {
   val tolgee = Tolgee.instance
 
   override fun attachBaseContext(newBase: Context?) {
+    // Wrapping base context will make sure getString calls will use tolgee
+    // even for instances which cannot be replaced automatically by the compiler
     super.attachBaseContext(TolgeeContextWrapper.wrap(newBase))
   }
 
@@ -24,12 +26,14 @@ class MainActivity : ComponentActivity() {
 
     lifecycleScope.launch {
       tolgee.changeFlow.collect {
+        // we want to reload activity after a language change
         recreate()
       }
     }
 
     setContentView(R.layout.activity_main)
 
+    // Make sure the app title stays updated
     setTitle(R.string.app_name)
 
     val name = findViewById<TextView>(R.id.app_name_text)
@@ -41,6 +45,7 @@ class MainActivity : ComponentActivity() {
     val buttonFr = findViewById<Button>(R.id.button_fr)
     val buttonCs = findViewById<Button>(R.id.button_cs)
 
+    // Update texts within the app with translated ones
     name.text = getString(R.string.app_name)
     basic.text = getString(R.string.description)
     parameter.text = getString(R.string.percentage_placeholder, "87")
@@ -63,6 +68,10 @@ class MainActivity : ComponentActivity() {
 
   override fun onStart() {
     super.onStart()
+
+    // Make sure the translations are loaded
+    // This function will initiate translations fetching in the background and
+    // will trigger changeFlow whenever updated translations are available
     Tolgee.instance.preload(this)
   }
 }

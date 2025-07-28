@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BasicText(modifier: Modifier = Modifier) {
+  // Use tolgee version of stringResource composable
   Text(
     text = stringResource(R.string.description),
     modifier = modifier
@@ -64,6 +65,7 @@ fun BasicText(modifier: Modifier = Modifier) {
 
 @Composable
 fun ParametrizedText(name: String, modifier: Modifier = Modifier) {
+  // Passing parameters for the stringResource is supported
   Text(
     text = stringResource(R.string.percentage_placeholder, name),
     modifier = modifier
@@ -72,6 +74,7 @@ fun ParametrizedText(name: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun PluralText(count: Int, param: Int, modifier: Modifier = Modifier) {
+  // Plurals are also supported
   Text(
     text = pluralStringResource(R.plurals.plr_test_placeholder_2, count, param, count, "Plurals"),
     modifier = modifier

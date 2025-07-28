@@ -19,14 +19,30 @@ fun App() {
 
     MaterialTheme {
         Column {
+            // Use tolgee version of stringResource composable
+            // (or alternatively enable tolgee compiler plugin which will convert the calls automatically)
             Text(text = stringResource(Res.string.description))
-            Text(text = stringResource(Res.string.percentage_placeholder))
+            Text(text = stringResource(Res.string.percentage_placeholder, "87"))
             Button(
                 onClick = {
-                    tolgee.setLocale("en-US")
+                    tolgee.setLocale("en")
                 }
             ) {
                 Text(text = "English")
+            }
+            Button(
+                onClick = {
+                    tolgee.setLocale("fr")
+                }
+            ) {
+                Text(text = "Français")
+            }
+            Button(
+                onClick = {
+                    tolgee.setLocale("cs")
+                }
+            ) {
+                Text(text = "Čeština")
             }
         }
     }
