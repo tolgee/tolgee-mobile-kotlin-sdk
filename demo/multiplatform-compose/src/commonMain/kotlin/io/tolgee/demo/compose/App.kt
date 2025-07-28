@@ -16,13 +16,11 @@ import io.tolgee.stringResource
 fun App() {
     // no remember required, using a singleton
     val tolgee = Tolgee.instance
-//    val tolgee = Tolgee.init {
-//    }
 
     MaterialTheme {
         Column {
-            Text(text = stringResource(tolgee, Res.string.description))
-            Text(text = stringResource(tolgee, Res.string.percentage_placeholder))
+            Text(text = stringResource(Res.string.description))
+            Text(text = stringResource(Res.string.percentage_placeholder))
             Button(
                 onClick = {
                     tolgee.setLocale("en-US")

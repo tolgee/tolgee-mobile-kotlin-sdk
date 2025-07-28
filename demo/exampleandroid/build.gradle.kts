@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-  namespace = "io.tolgee.demo.exampletolgeecompilerforandroid"
+  namespace = "io.tolgee.demo.exampleandroid"
   compileSdk = 35
 
   defaultConfig {
-    applicationId = "io.tolgee.demo.exampletolgeecompilerforandroid"
+    applicationId = "io.tolgee.demo.exampleandroid"
     minSdk = 21
     targetSdk = 35
     versionCode = 1
@@ -46,6 +46,5 @@ dependencies {
   implementation(libs.activity)
 
   implementation(libs.coroutines.android)
-  implementation(libs.android.appcompat)
   implementation(project(":core"))
 }

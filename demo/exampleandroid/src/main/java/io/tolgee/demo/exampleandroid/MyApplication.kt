@@ -1,9 +1,7 @@
-package io.tolgee.demo.exampletolgeecompilerforandroid
+package io.tolgee.demo.exampleandroid
 
 import android.app.Application
 import io.tolgee.Tolgee
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MyApplication : Application() {
 

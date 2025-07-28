@@ -2,6 +2,7 @@ package io.tolgee
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import io.tolgee.common.getQuantityStringT
 import io.tolgee.common.getStringArrayT
 import io.tolgee.common.getStringT
@@ -36,5 +37,9 @@ internal class TolgeeResources(
 
     override fun getStringArray(id: Int): Array<out String?> {
         return baseContext.resources.getStringArrayT(tolgee, id)
+    }
+
+    override fun getText(id: Int): CharSequence {
+        return baseContext.getStringT(tolgee, id)
     }
 }
