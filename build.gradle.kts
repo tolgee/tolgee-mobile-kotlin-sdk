@@ -22,8 +22,9 @@ plugins {
 // Ignore API on demo projects
 apiValidation {
     ignoredProjects.add("demo")
-    ignoredProjects.add("exampleandroid")
     ignoredProjects.add("multiplatform-compose")
+    ignoredProjects.add("exampleandroid")
+    ignoredProjects.add("examplejetpack")
 }
 
 dependencies {

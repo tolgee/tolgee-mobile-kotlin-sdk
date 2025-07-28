@@ -135,6 +135,13 @@ fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int, var
 }
 
 @Composable
+fun pluralStringResource(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs)
+
+    return pluralStringResource(instance, id, quantity, *formatArgs)
+}
+
+@Composable
 fun stringArrayResource(tolgee: Tolgee, @ArrayRes id: Int): Array<String> {
     val context = LocalContext.current
     val key = remember(id) {

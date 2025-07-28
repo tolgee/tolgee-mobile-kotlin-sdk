@@ -29,7 +29,8 @@ semver = "3.0.0"
 serialization = "1.8.1"
 tooling = "1.7.0"
 versions = "0.52.0"
-android-appcompat = "1.7.1"
+lifecycle-runtime-ktx = "2.6.1"
+compose-bom = "2024.09.00"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
@@ -63,7 +64,14 @@ serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 serialization-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
-android-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "android-appcompat" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+ui = { group = "androidx.compose.ui", name = "ui" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+material3 = { group = "androidx.compose.material3", name = "material3" }
 
 [plugins]
 android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

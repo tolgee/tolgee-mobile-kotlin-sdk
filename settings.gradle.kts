@@ -30,6 +30,6 @@ include(":compose")
 include(":gradle-plugin")
 include(":compiler-plugin")
 
-include(":demo:multiplatform-compose", ":demo:exampleandroid")
+include(":demo:multiplatform-compose", ":demo:exampleandroid", ":demo:examplejetpack")
 
 rootProject.name = "compose-tolgee"
