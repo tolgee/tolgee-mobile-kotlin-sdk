@@ -124,13 +124,13 @@ data class TolgeeAndroid internal constructor(
     fun tPlural(resources: Resources, @PluralsRes id: Int, quantity: Int): String {
         return getKeyFromResources(resources, id)?.let { key ->
             t(key, TolgeeMessageParams.Indexed(quantity))
-        } ?: resources.getQuantityString(id, quantity)
+        } ?: resources.getQuantityString(id, quantity, quantity)
     }
 
     fun tPlural(resources: Resources, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
         return getKeyFromResources(resources, id)?.let { key ->
             t(key, TolgeeMessageParams.Indexed(quantity, *formatArgs))
-        } ?: resources.getQuantityString(id, quantity, *formatArgs)
+        } ?: resources.getQuantityString(id, quantity, quantity, *formatArgs)
     }
 
     fun tArray(resources: Resources, @ArrayRes id: Int): List<String> {

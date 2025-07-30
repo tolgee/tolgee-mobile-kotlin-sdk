@@ -9,18 +9,18 @@
   <string name="description">Texte Fondamental</string>
   <string name="percentage_placeholder">Texte paramétré %1$s</string>
   <plurals name="plr_test">
-    <item quantity="one">%d seul</item>
-    <item quantity="many">%d plusieurs</item>
-    <item quantity="other">%d autres</item>
+    <item quantity="one">%1$d seul</item>
+    <item quantity="many">%1$d plusieurs</item>
+    <item quantity="other">%1$d autres</item>
   </plurals>
   <plurals name="plr_test_placeholder">
-    <item quantity="one">%2$s: %d test ok</item>
-    <item quantity="many">%2$s: %d tests ok</item>
-    <item quantity="other">%2$s: %d tests ok</item>
+    <item quantity="one">%2$s: %1$d test ok</item>
+    <item quantity="many">%2$s: %1$d tests ok</item>
+    <item quantity="other">%2$s: %1$d tests ok</item>
   </plurals>
   <plurals name="plr_test_placeholder_2">
-    <item quantity="one">%3$s : %d test sur %2$d validé</item>
-    <item quantity="many">%3$s : %d tests sur %2$d validés</item>
-    <item quantity="other">%3$s : %d tests sur %2$d validés</item>
+    <item quantity="one">%3$s : %1$d test sur %2$d validé</item>
+    <item quantity="many">%3$s : %1$d tests sur %2$d validés</item>
+    <item quantity="other">%3$s : %1$d tests sur %2$d validés</item>
   </plurals>
 </resources>

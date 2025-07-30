@@ -7,18 +7,18 @@ dependencyResolutionManagement {
     // Use Maven Central as the default repository (where Gradle will download dependencies) in all subprojects.
     @Suppress("UnstableApiUsage")
     repositories {
-        mavenLocal()
         mavenCentral()
         google()
+        mavenLocal()
     }
 }
 
 pluginManagement {
     repositories {
-        mavenLocal()
         google()
         mavenCentral()
         gradlePluginPortal()
+        mavenLocal()
     }
 }
 

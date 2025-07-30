@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import compose_tolgee.demo.multiplatform_compose.generated.resources.Res
 import compose_tolgee.demo.multiplatform_compose.generated.resources.description
 import compose_tolgee.demo.multiplatform_compose.generated.resources.percentage_placeholder
+import compose_tolgee.demo.multiplatform_compose.generated.resources.plr_test_placeholder_2
 import io.tolgee.Tolgee
+import io.tolgee.pluralStringResource
 import io.tolgee.stringResource
 // import org.jetbrains.compose.resources.stringResource
 
@@ -23,6 +25,7 @@ fun App() {
             // (or alternatively enable tolgee compiler plugin which will convert the calls automatically)
             Text(text = stringResource(Res.string.description))
             Text(text = stringResource(Res.string.percentage_placeholder, "87"))
+            Text(text = pluralStringResource(Res.plurals.plr_test_placeholder_2, 2, 10, "Plurals"))
             Button(
                 onClick = {
                     tolgee.setLocale("en")

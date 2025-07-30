@@ -21,6 +21,7 @@ internal fun JsonElement.stringValue(): String = when (this) {
 
 internal fun JsonElement.keyData(): TolgeeKey.Data = when (this) {
     is JsonArray -> TolgeeKey.Data.Array(map { it.stringValue() })
+    is JsonObject -> TolgeeKey.Data.Plural(mapValues { it.value.stringValue() })
     else -> TolgeeKey.Data.Text(stringValue())
 }
 

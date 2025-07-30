@@ -21,6 +21,8 @@ internal data class TolgeeKey(
 ) {
 
     val isText = translations.values.all { it is Data.Text }
+    val isPlural = translations.values.any { it is Data.Plural }
+    val isArray = translations.values.any { it is Data.Array }
 
     /**
      * Retrieves a translation for a given language code or the first available non-null translation.
@@ -37,6 +39,9 @@ internal data class TolgeeKey(
 
         @Serializable
         data class Text(val text: String) : Data
+
+        @Serializable
+        data class Plural(val plurals: Map<String, String>) : Data
 
         @Serializable
         data class Array(val array: List<String>) : Data

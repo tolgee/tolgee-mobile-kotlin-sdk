@@ -512,7 +512,7 @@ open class Tolgee(
             val url: String? = null,
             val path: (language: String) -> String = { "$it.json" },
             val storage: TolgeeStorageProvider? = platformStorage,
-            val formatter: Formatter = Formatter.ICU,
+            val formatter: Formatter = Formatter.Sprintf,
         ) {
             /**
              * A builder class for constructing instances of `CDN` with configurable properties.
@@ -566,7 +566,7 @@ open class Tolgee(
                  * Typically used within the `CDN.Builder` class to configure translation formatting behavior
                  * for the resulting `CDN` instance.
                  */
-                var formatter: Formatter = Formatter.ICU
+                var formatter: Formatter = Formatter.Sprintf
 
                 /**
                  * Sets the URL for the CDN configuration.

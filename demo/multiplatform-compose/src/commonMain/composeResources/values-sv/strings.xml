@@ -13,11 +13,11 @@
     <item quantity="other">Plural Other</item>
   </plurals>
   <plurals name="plr_test_placeholder">
-    <item quantity="one">%2$s: %d test okej</item>
-    <item quantity="other">%2$s: %d tester okej</item>
+    <item quantity="one">%2$s: %1$d test okej</item>
+    <item quantity="other">%2$s: %1$d tester okej</item>
   </plurals>
   <plurals name="plr_test_placeholder_2">
-    <item quantity="one">%3$s: %d test av %2$d ok</item>
-    <item quantity="other">%3$s: %d tester av %2$d ok</item>
+    <item quantity="one">%3$s: %1$d test av %2$d ok</item>
+    <item quantity="other">%3$s: %1$d tester av %2$d ok</item>
   </plurals>
 </resources>

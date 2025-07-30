@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
     name.text = getString(R.string.app_name)
     basic.text = getString(R.string.description)
     parameter.text = getString(R.string.percentage_placeholder, "87")
-    plural.text = resources.getQuantityString(R.plurals.plr_test_placeholder_2,3, 2, 3, "Plurals")
+    plural.text = resources.getQuantityString(R.plurals.plr_test_placeholder_2,2, 3, "Plurals")
     array.text = resources.getStringArray(R.array.array_test).joinToString()
 
     buttonEn.setOnClickListener {

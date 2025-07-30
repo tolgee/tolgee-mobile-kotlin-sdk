@@ -96,13 +96,13 @@ fun pluralStringResource(tolgee: Tolgee, resource: PluralStringResource, quantit
         key = resource.key,
         parameters = TolgeeMessageParams.Indexed(quantity, *formatArgs)
     ).collectAsState(
-        initial = org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
+        initial = org.jetbrains.compose.resources.pluralStringResource(resource, quantity, quantity, *formatArgs)
     ).value
 }
 
 @Composable
 fun pluralStringResource(resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String {
-    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity, *formatArgs)
+    val tolgee = Tolgee.instanceOrNull ?: return org.jetbrains.compose.resources.pluralStringResource(resource, quantity, quantity, *formatArgs)
     return pluralStringResource(tolgee, resource, quantity, *formatArgs)
 }
 

@@ -103,16 +103,16 @@ fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int): St
     val translationFlow = (tolgee as? TolgeeAndroid)?.tPluralFlow(context.resources, id, quantity)
         ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
             tolgee.tFlow(key = it, parameters = TolgeeMessageParams.Indexed(quantity))
-        } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity))
+        } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity, quantity))
 
     return translationFlow.collectAsState(
-        initial = androidx.compose.ui.res.pluralStringResource(id, quantity)
+        initial = androidx.compose.ui.res.pluralStringResource(id, quantity, quantity)
     ).value
 }
 
 @Composable
 fun pluralStringResource(@PluralsRes id: Int, quantity: Int): String {
-    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.pluralStringResource(id, quantity)
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.pluralStringResource(id, quantity, quantity)
 
     return pluralStringResource(instance, id, quantity)
 }
@@ -127,16 +127,16 @@ fun pluralStringResource(tolgee: Tolgee, @PluralsRes id: Int, quantity: Int, var
     val translationFlow = (tolgee as? TolgeeAndroid)?.tPluralFlow(context.resources, id, quantity, *formatArgs)
         ?: (key ?: TolgeeAndroid.getKeyFromResources(context, id))?.let {
             tolgee.tFlow(key = it, parameters = TolgeeMessageParams.Indexed(quantity, *formatArgs))
-        } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs))
+        } ?: flowOf(androidx.compose.ui.res.pluralStringResource(id, quantity, quantity, *formatArgs))
 
     return translationFlow.collectAsState(
-        initial = androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs)
+        initial = androidx.compose.ui.res.pluralStringResource(id, quantity, quantity, *formatArgs)
     ).value
 }
 
 @Composable
 fun pluralStringResource(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
-    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.pluralStringResource(id, quantity, *formatArgs)
+    val instance = Tolgee.instanceOrNull ?: return androidx.compose.ui.res.pluralStringResource(id, quantity, quantity, *formatArgs)
 
     return pluralStringResource(instance, id, quantity, *formatArgs)
 }
