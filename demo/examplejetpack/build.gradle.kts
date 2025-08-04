@@ -18,6 +18,7 @@ android {
 
   buildFeatures {
     buildConfig = true
+    compose = true
   }
 
   buildTypes {
@@ -32,9 +33,6 @@ android {
   }
   kotlinOptions {
     jvmTarget = "11"
-  }
-  buildFeatures {
-    compose = true
   }
 }
 
