@@ -39,8 +39,11 @@ The project consists of several modules:
    ```bash
    ./gradlew publishToMavenLocal
    ```
+   You may need to disable signing temporarily as it is enforced by default.
 
 ## Testing Information
+
+Testing infrastructure is in a relatively ok state, but there are no tests at the moment.
 
 ### Running Tests
 
@@ -109,7 +112,7 @@ class SimpleTest {
 
 - The project follows Kotlin coding conventions
 - Use 4 spaces for indentation
-- Maximum line length is 120 characters
+- The maximum line length is 120 characters (not fully enforced at the moment)
 - Use trailing commas in parameter lists and collection literals that span multiple lines
 
 ### Multiplatform Considerations

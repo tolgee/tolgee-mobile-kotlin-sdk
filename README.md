@@ -138,10 +138,19 @@ For complete examples of how to use the Tolgee SDK, check out the demo projects:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+Check out [HACKING.md](.junie/guidelines.md) for some information about the project internals and information about the workflow.
 
 ## License
 
 This project is licensed under the Apache License 2.0—see the [LICENSE](LICENSE) file for details.
+
+## Contributors
+
+<a href="https://github.com/tolgee/tolgee-mobile-kotlin-sdk/graphs/contributors">
+  <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-mobile-kotlin-sdk"/>
+</a>
+
+Let us know what you think! #FeedbackWanted ❤️
 
 ----
 🧀
