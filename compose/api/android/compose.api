@@ -15,6 +15,7 @@ public final class io/tolgee/ComposeTolgeeKt {
 
 public final class io/tolgee/ComposeTolgee_androidKt {
 	public static final fun pluralStringResource (IILandroidx/compose/runtime/Composer;I)Ljava/lang/String;
+	public static final fun pluralStringResource (II[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
 	public static final fun pluralStringResource (Lio/tolgee/Tolgee;IILandroidx/compose/runtime/Composer;I)Ljava/lang/String;
 	public static final fun pluralStringResource (Lio/tolgee/Tolgee;II[Ljava/lang/Object;Landroidx/compose/runtime/Composer;I)Ljava/lang/String;
 	public static final fun stringArrayResource (ILandroidx/compose/runtime/Composer;I)[Ljava/lang/String;

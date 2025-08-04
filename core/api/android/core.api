@@ -1,6 +1,7 @@
 public class io/tolgee/Tolgee {
 	public static final field Companion Lio/tolgee/Tolgee$Companion;
 	public fun <init> (Lio/tolgee/Tolgee$Config;)V
+	public final fun getChangeFlow ()Lkotlinx/coroutines/flow/MutableSharedFlow;
 	public fun getConfig ()Lio/tolgee/Tolgee$Config;
 	public static final fun getInstance ()Lio/tolgee/TolgeeAndroid;
 	public static final fun getInstanceOrNull ()Lio/tolgee/TolgeeAndroid;

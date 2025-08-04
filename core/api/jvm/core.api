@@ -1,6 +1,7 @@
 public class io/tolgee/Tolgee {
 	public static final field Companion Lio/tolgee/Tolgee$Companion;
 	public fun <init> (Lio/tolgee/Tolgee$Config;)V
+	public final fun getChangeFlow ()Lkotlinx/coroutines/flow/MutableSharedFlow;
 	public fun getConfig ()Lio/tolgee/Tolgee$Config;
 	public static final fun getInstance ()Lio/tolgee/common/PlatformTolgee;
 	public static final fun getInstanceOrNull ()Lio/tolgee/common/PlatformTolgee;
@@ -149,10 +150,6 @@ public final class io/tolgee/Tolgee$Formatter$Sprintf : io/tolgee/Tolgee$Formatt
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/tolgee/common/ExtendCoroutinesKt {
-	public static final fun mapNotNull (Lkotlinx/coroutines/flow/Flow;)Lkotlinx/coroutines/flow/Flow;
-}
-
 public final class io/tolgee/common/PlatformTolgee : io/tolgee/Tolgee {
 	public final fun component1 ()Lio/tolgee/Tolgee$Config;
 	public fun equals (Ljava/lang/Object;)Z
@@ -196,38 +193,6 @@ public final class io/tolgee/model/TolgeeMessageParams$None : io/tolgee/model/To
 	public fun get (Ljava/lang/CharSequence;)Ljava/lang/Object;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/tolgee/model/TolgeeProjectLanguage {
-	public static final field Companion Lio/tolgee/model/TolgeeProjectLanguage$Companion;
-	public final fun asLocale ()Ljava/util/Locale;
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Z
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getBase ()Z
-	public final fun getFlagEmoji ()Ljava/lang/String;
-	public final fun getName ()Ljava/lang/String;
-	public final fun getOriginalName ()Ljava/lang/String;
-	public final fun getTag ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public synthetic class io/tolgee/model/TolgeeProjectLanguage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lio/tolgee/model/TolgeeProjectLanguage$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/tolgee/model/TolgeeProjectLanguage;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/tolgee/model/TolgeeProjectLanguage;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-}
-
-public final class io/tolgee/model/TolgeeProjectLanguage$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public abstract interface class io/tolgee/storage/TolgeeStorageProvider {
