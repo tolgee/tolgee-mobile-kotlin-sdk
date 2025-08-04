@@ -5,13 +5,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import compose_tolgee.demo.multiplatform_compose.generated.resources.Res
-import compose_tolgee.demo.multiplatform_compose.generated.resources.description
-import compose_tolgee.demo.multiplatform_compose.generated.resources.percentage_placeholder
-import compose_tolgee.demo.multiplatform_compose.generated.resources.plr_test_placeholder_2
+import tolgee_mobile_kotlin_sdk.demo.multiplatform_compose.generated.resources.Res
+import tolgee_mobile_kotlin_sdk.demo.multiplatform_compose.generated.resources.description
+import tolgee_mobile_kotlin_sdk.demo.multiplatform_compose.generated.resources.percentage_placeholder
+import tolgee_mobile_kotlin_sdk.demo.multiplatform_compose.generated.resources.plr_test_placeholder_2
 import io.tolgee.Tolgee
 import io.tolgee.pluralStringResource
 import io.tolgee.stringResource
+
 // import org.jetbrains.compose.resources.stringResource
 
 @Composable
