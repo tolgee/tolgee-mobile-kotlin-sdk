@@ -138,7 +138,7 @@ For complete examples of how to use the Tolgee SDK, check out the demo projects:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-Check out [HACKING.md](.junie/guidelines.md) for some information about the project internals and information about the workflow.
+Check out [guidelines.md](.junie/guidelines.md) for some information about the project internals and information about the workflow.
 
 ## License
 
