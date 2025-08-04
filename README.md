@@ -1,4 +1,4 @@
-# Tolgee Mobile Kotlin SDK (Alpha)
+# Tolgee Mobile Kotlin SDK (Alpha) 🐁
 
 🚨🚨🚨This package is still under development and the API is not yet stable.
 Feel free to use it, but there might be API breakage between releases.🚨🚨🚨
@@ -142,3 +142,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the Apache License 2.0—see the [LICENSE](LICENSE) file for details.
+
+----
+🧀
