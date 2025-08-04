@@ -32,4 +32,4 @@ include(":compiler-plugin")
 
 include(":demo:multiplatform-compose", ":demo:exampleandroid", ":demo:examplejetpack")
 
-rootProject.name = "compose-tolgee"
+rootProject.name = "tolgee-mobile-kotlin-sdk"

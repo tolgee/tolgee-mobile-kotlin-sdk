@@ -27,7 +27,7 @@ dokka {
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/tolgee/compose-tolgee/tree/master/core/src")
+            remoteUrl("https://github.com/tolgee/tolgee-mobile-kotlin-sdk/tree/master/core/src")
         }
     }
 }
@@ -54,7 +54,7 @@ kotlin {
         name = appleFramework
         version = libVersion
         license = "Apache License 2.0"
-        homepage = "https://github.com/tolgee/compose-tolgee"
+        homepage = "https://github.com/tolgee/tolgee-mobile-kotlin-sdk"
         summary = "Kotlin Multiplatform localization wrapper for Tolgee"
 
         framework {
@@ -259,7 +259,7 @@ mavenPublishing {
         name.set(libName)
 
         description.set("Kotlin Multiplatform localization wrapper for Tolgee")
-        url.set("https://github.com/tolgee/compose-tolgee")
+        url.set("https://github.com/tolgee/tolgee-mobile-kotlin-sdk")
 
         licenses {
             license {
@@ -269,8 +269,8 @@ mavenPublishing {
         }
 
         scm {
-            url.set("https://github.com/tolgee/compose-tolgee")
-            connection.set("scm:git:git://github.com/tolgee/compose-tolgee.git")
+            url.set("https://github.com/tolgee/tolgee-mobile-kotlin-sdk")
+            connection.set("scm:git:git://github.com/tolgee/tolgee-mobile-kotlin-sdk.git")
         }
 
         developers {

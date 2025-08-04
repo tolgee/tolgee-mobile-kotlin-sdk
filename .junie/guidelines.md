@@ -1,6 +1,6 @@
-# Development Guidelines for Compose-Tolgee
+# Development Guidelines for Tolgee Mobile Kotlin SDK
 
-This document provides essential information for developers working on the Compose-Tolgee project.
+This document provides essential information for developers working on the Tolgee Mobile Kotlin SDK project.
 
 ## Build/Configuration Instructions
 

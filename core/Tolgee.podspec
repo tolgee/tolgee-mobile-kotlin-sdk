@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'Tolgee'
     spec.version                  = '1.0.0-alpha01'
-    spec.homepage                 = 'https://github.com/tolgee/compose-tolgee'
+    spec.homepage                 = 'https://github.com/tolgee/tolgee-mobile-kotlin-sdk'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = 'Apache License 2.0'
