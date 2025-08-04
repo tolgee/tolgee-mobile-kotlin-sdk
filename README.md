@@ -1,8 +1,5 @@
 # Tolgee Mobile Kotlin SDK (Alpha) 🐁
 
-🚨🚨🚨This package is still under development and the API is not yet stable.
-Feel free to use it, but there might be API breakage between releases.🚨🚨🚨
-
 [![Tolgee](https://img.shields.io/badge/Tolgee-f06695)](https://tolgee.io/)
 ![Android](https://img.shields.io/badge/Android-Supported-green?logo=android)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Supported-green?logo=jetpackcompose)
