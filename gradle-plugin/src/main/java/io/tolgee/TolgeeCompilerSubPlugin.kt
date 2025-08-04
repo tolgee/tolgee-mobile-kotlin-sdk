@@ -36,7 +36,7 @@ class TolgeeCompilerSubPlugin : KotlinCompilerPluginSupportPlugin {
     }
 
     companion object {
-        private const val GROUP_NAME = "io.tolgee.mobile-koltin-sdk"
+        private const val GROUP_NAME = "io.tolgee.mobile-kotlin-sdk"
         private const val ARTIFACT = "compiler-plugin"
         private const val PLUGIN_ID = "tolgee"
     }

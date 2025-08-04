@@ -14,7 +14,7 @@ plugins {
     signing
 }
 
-val libGroup = "io.tolgee.mobile-koltin-sdk"
+val libGroup = "io.tolgee.mobile-kotlin-sdk"
 val libName = "compose"
 
 group = libGroup
@@ -75,7 +75,7 @@ kotlin {
 
 android {
     compileSdk = 35
-    namespace = "io.tolgee.mobilekoltinsdk.compose"
+    namespace = "io.tolgee.mobilekotlinsdk.compose"
 
     defaultConfig {
         minSdk = 21

@@ -13,7 +13,7 @@ plugins {
     signing
 }
 
-val libGroup = "io.tolgee.mobile-koltin-sdk"
+val libGroup = "io.tolgee.mobile-kotlin-sdk"
 val libName = "gradle-plugin"
 
 group = libGroup

@@ -90,4 +90,4 @@ native-coroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref =
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
-tolgee = { id = "io.tolgee.mobile-koltin-sdk", version.ref = "library" }
+tolgee = { id = "io.tolgee.mobile-kotlin-sdk", version.ref = "library" }

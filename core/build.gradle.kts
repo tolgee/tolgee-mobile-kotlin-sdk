@@ -15,7 +15,7 @@ plugins {
     signing
 }
 
-val libGroup = "io.tolgee.mobile-koltin-sdk"
+val libGroup = "io.tolgee.mobile-kotlin-sdk"
 val libName = "core"
 val appleFramework = "Tolgee"
 
@@ -233,7 +233,7 @@ kotlin {
 
 android {
     compileSdk = 35
-    namespace = "io.tolgee.mobilekoltinsdk.core"
+    namespace = "io.tolgee.mobilekotlinsdk.core"
 
     defaultConfig {
         minSdk = 21
