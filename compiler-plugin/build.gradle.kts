@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.vanniktech.publish)
 }
 
-val libGroup = "io.tolgee"
+val libGroup = "io.tolgee.mobile-koltin-sdk"
 val libName = "compiler-plugin"
 
 group = libGroup

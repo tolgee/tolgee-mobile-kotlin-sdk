@@ -3,7 +3,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-library = "1.0.0-alpha01"
+library = "1.0.0-beta01"
 activity = "1.10.1"
 android-core = "1.16.0"
 android-tools = "8.10.1"
@@ -90,4 +90,4 @@ native-coroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref =
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
-tolgee = { id = "io.tolgee", version.ref = "library" }
+tolgee = { id = "io.tolgee.mobile-koltin-sdk", version.ref = "library" }

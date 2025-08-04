@@ -1,7 +1,7 @@
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.android)
-  alias(libs.plugins.tolgee)
+//  alias(libs.plugins.tolgee) // uncomment to enable compiler plugin
 }
 
 android {
@@ -30,16 +30,17 @@ android {
   }
 }
 
-tolgee {
-  // change compile time behavior
-  compilerPlugin {
-    android {
-      // Replaces Context.getString occurrences with Context.getStringT (tolgee extension)
-      replaceGetString.set(true) // default true
-      replacePluralString.set(true) // default true
-    }
-  }
-}
+// Uncomment to change configuration of compiler plugin
+//tolgee {
+//  // change compile time behavior
+//  compilerPlugin {
+//    android {
+//      // Replaces Context.getString occurrences with Context.getStringT (tolgee extension)
+//      replaceGetString.set(true) // default true
+//      replacePluralString.set(true) // default true
+//    }
+//  }
+//}
 
 dependencies {
   implementation(libs.android)
