@@ -16,6 +16,10 @@ android {
     versionName = "1.0"
   }
 
+  buildFeatures {
+    buildConfig = true
+  }
+
   buildTypes {
     release {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

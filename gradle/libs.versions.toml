@@ -3,7 +3,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-library = "1.0.0-beta01"
+library = "1.0.0-alpha01"
 activity = "1.10.1"
 android-core = "1.16.0"
 android-tools = "8.10.1"

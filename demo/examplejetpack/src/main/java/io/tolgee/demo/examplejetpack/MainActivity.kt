@@ -25,6 +25,7 @@ import de.comahe.i18n4k.forLocaleTag
 import kotlinx.coroutines.flow.mapLatest
 import io.tolgee.stringResource
 import io.tolgee.pluralStringResource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +109,7 @@ fun Tolgee.isLocaleSelected(locale: String, fallback: Boolean): Boolean {
 }
 
 @Composable
+@OptIn(ExperimentalCoroutinesApi::class)
 fun isLocaleSelected(locale: String, fallback: Boolean): Boolean {
   val tolgee = Tolgee.instance
   return tolgee.changeFlow.mapLatest {
