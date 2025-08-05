@@ -53,6 +53,12 @@ class MyApplication : Application() {
 }
 ```
 
+Add the following permissions to your `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
 #### Other Platforms
 
 For non-Android platforms, initialization is similar but without the Android-specific storage provider:
