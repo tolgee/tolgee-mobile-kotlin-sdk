@@ -53,6 +53,8 @@ The SDK is split into multiple modules, each serving a specific purpose:
 > [!NOTE]
 > For managing static translations (used as fallback), check out [tolgee-cli](https://github.com/tolgee/tolgee-cli).
 > It provides tools for updating and syncing your static translation files.
+>
+> In each demo project you can find an example of `.tolgeerc` configuration file.
 
 Using Version Catalog is highly recommended to keep your versions aligned.
 
