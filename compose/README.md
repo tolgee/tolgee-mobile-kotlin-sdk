@@ -52,12 +52,6 @@ class MyApplication : Application() {
 }
 ```
 
-Add the following permissions to your `AndroidManifest.xml`:
-
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-```
-
 #### Multiplatform
 
 ```kotlin
