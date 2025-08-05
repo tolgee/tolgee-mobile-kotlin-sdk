@@ -50,9 +50,9 @@ The SDK is split into multiple modules, each serving a specific purpose:
 
 ## Installation
 
-> **Note**
-> For managing static translations (used as fallback), check out [tolgee-cli](https://github.com/tolgee/cli). It
-> provides tools for updating and syncing your static translation files.
+> [!NOTE]
+> For managing static translations (used as fallback), check out [tolgee-cli](https://github.com/tolgee/tolgee-cli).
+> It provides tools for updating and syncing your static translation files.
 
 Using Version Catalog is highly recommended to keep your versions aligned.
 
