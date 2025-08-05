@@ -171,7 +171,6 @@ data class TolgeeApple internal constructor(
             table: String?,
             vararg args: Any
         ): String? {
-            // FIXME: why not just expand the args?? is there some weird limitation with calling the c functions?
             return (getLocalizedStringFromBundle(res, key, default, table) ?: default?.ifBlank { null })?.let { format ->
                 when (args.size) {
                     0 -> NSString.localizedStringWithFormat(format)

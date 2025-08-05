@@ -149,6 +149,26 @@ fun Resources.getStringArrayT(tolgee: Tolgee, @ArrayRes resId: Int): Array<Strin
     return list?.ifEmpty { null }?.toTypedArray() ?: this.getStringArray(resId)
 }
 
+/**
+ * Returns a localized formatted string from [Tolgee] cache or the application's package's
+ * default string table, substituting the format arguments as defined in
+ * [java.util.Formatter] and [java.lang.String.format].
+ *
+ * This function will fall back to the Android `getText` method if no translation is found - preserving formatting.
+ * If translation is found, no style information is preserved and the method acts the same as [getStringT].
+ *
+ * @param tolgee The [Tolgee] instance to get the cached string from.
+ * @param resId Resource id for the format string
+ * @return The string data associated with the resource, formatted and
+ *         stripped of styled text information.
+ */
+fun Context.getTextT(tolgee: Tolgee, @StringRes resId: Int): CharSequence {
+    return (tolgee as? TolgeeAndroid)?.tStyled(this, resId)
+        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.t(key = it, parameters = TolgeeMessageParams.None)
+        } ?: this.getText(resId)
+}
+
 internal actual val platformStorage: TolgeeStorageProvider?
     get() = null
 

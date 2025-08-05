@@ -2,10 +2,10 @@ package io.tolgee
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import io.tolgee.common.getQuantityStringT
 import io.tolgee.common.getStringArrayT
 import io.tolgee.common.getStringT
+import io.tolgee.common.getTextT
 
 /**
  * Ignore Deprecation: Resources constructor is not really deprecated, apps should just not create
@@ -40,6 +40,6 @@ internal class TolgeeResources(
     }
 
     override fun getText(id: Int): CharSequence {
-        return baseContext.getStringT(tolgee, id)
+        return baseContext.getTextT(tolgee, id)
     }
 }

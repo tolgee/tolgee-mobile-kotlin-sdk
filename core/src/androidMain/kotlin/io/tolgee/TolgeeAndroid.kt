@@ -140,6 +140,26 @@ data class TolgeeAndroid internal constructor(
     }
 
     /**
+     * Provides an immediate translation for the given string resource ID within the given context.
+     * If a translation key is derived from the string resource, it retrieves the translation using Tolgee.
+     * Otherwise, it falls back to returning the default string resource value.
+     *
+     * This is a special version that allows returning a [CharSequence] instead of a [String] and
+     * will fall back to the Android `getText` method if no translation is found - preserving formatting.
+     *
+     * If translation is found, no style information is preserved and the method acts the same as [t].
+     *
+     * @param context The context used to access resources and provide localization settings.
+     * @param id The resource ID of the string to be translated.
+     * @return The translated string if a key-based translation is found; otherwise, the default string resource value.
+     */
+    fun tStyled(context: Context, @StringRes id: Int): CharSequence {
+        return getKeyFromResources(context, id)?.let { key ->
+            t(key)
+        } ?: context.getText(id)
+    }
+
+    /**
      * Preloads the required languages and their translations for the current Tolgee instance.
      *
      * This method ensures that both the list of available project languages and their

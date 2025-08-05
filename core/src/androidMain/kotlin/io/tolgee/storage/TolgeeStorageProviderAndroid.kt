@@ -1,35 +1,48 @@
 package io.tolgee.storage
 
 import android.content.Context
+import dev.datlag.tooling.canReadSafely
+import dev.datlag.tooling.canWriteSafely
+import dev.datlag.tooling.existsSafely
+import dev.datlag.tooling.mkdirsSafely
+import dev.datlag.tooling.scopeCatching
 import java.io.File
 
 class TolgeeStorageProviderAndroid(
-  private val context: Context,
-  private val versionCode: Int,
-  private val path: String = "tolgee/localization-cache",
+    private val context: Context,
+    private val versionCode: Int,
+    private val path: String = "tolgee/localization-cache",
 ) : TolgeeStorageProvider {
-  private val cacheDir get() = context.filesDir / path / versionCode.toString()
+    private val cacheDir get() = context.filesDir / path / versionCode.toString()
 
-  override fun put(name: String, data: ByteArray) {
-    val dir = cacheDir
-    dir.mkdirs()
-    val file = dir / escape(name)
-    file.writeBytes(data)
-  }
-
-  override fun get(name: String): ByteArray? {
-    val file = cacheDir / escape(name)
-    if (!file.exists()) {
-      return null
+    override fun put(name: String, data: ByteArray) {
+        val dir = cacheDir
+        dir.mkdirsSafely()
+        val file = dir / escape(name)
+        if (!file.canWriteSafely()) {
+            return
+        }
+        scopeCatching {
+            file.writeBytes(data)
+        }
     }
-    return file.readBytes()
-  }
 
-  private fun escape(name: String): String {
-    return name.replace("/", "_")
-  }
+    override fun get(name: String): ByteArray? {
+        val file = cacheDir / escape(name)
+        if (!file.existsSafely() || !file.canReadSafely()) {
+            return null
+        }
 
-  internal companion object {
-    private infix operator fun File.div(other: String) = File(this, other)
-  }
+        return scopeCatching {
+            file.readBytes()
+        }.getOrNull()
+    }
+
+    private fun escape(name: String): String {
+        return name.replace("/", "_")
+    }
+
+    internal companion object {
+        private infix operator fun File.div(other: String) = File(this, other)
+    }
 }

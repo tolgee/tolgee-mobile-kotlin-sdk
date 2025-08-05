@@ -13,7 +13,6 @@ import kotlinx.serialization.json.*
  * @return The string representation of the [JsonElement], or an empty string if it cannot be resolved.
  */
 internal fun JsonElement.stringValue(): String = when (this) {
-    // FIXME: Whyyy; either its primitive or its an error/non-existent key
     is JsonPrimitive -> contentOrNull ?: ""
     is JsonArray -> firstOrNull()?.stringValue() ?: ""
     is JsonObject -> this.values.firstOrNull()?.stringValue() ?: ""

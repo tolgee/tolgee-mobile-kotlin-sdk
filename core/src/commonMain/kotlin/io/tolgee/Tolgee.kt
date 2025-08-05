@@ -744,7 +744,7 @@ open class Tolgee(
          */
         @JvmStatic
         val instance: PlatformTolgee
-        get() = _instance.value ?: throw IllegalStateException("Tolgee instance not initialized")
+            get() = _instance.value ?: throw IllegalStateException("Tolgee instance not initialized")
 
         /**
          * Initializes the Tolgee framework with the specified configuration and sets it as the global instance.
