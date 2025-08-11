@@ -98,8 +98,50 @@ open class Tolgee(
         MutableStateFlow(config.locale)
     }
 
+    /**
+     * A flow that emits whenever translations change.
+     *
+     * This can be used in to reactively respond to translation changes.
+     */
     val changeFlow by lazy {
         MutableSharedFlow<Unit>()
+    }
+
+    /**
+     * Interface for listening to changes in Tolgee translations.
+     *
+     * This interface provides a callback mechanism for Java code and other environments
+     * where Kotlin Flows might not be the preferred approach for handling asynchronous events.
+     */
+    interface ChangeListener {
+        /**
+         * Called when translations in Tolgee have changed.
+         */
+        fun onTranslationsChanged()
+    }
+
+    /**
+     * Collection of registered change listeners.
+     */
+    private val changeListeners = mutableSetOf<ChangeListener>()
+
+    /**
+     * Registers a listener to be notified when translations change.
+     *
+     * @param listener The listener to register
+     */
+    fun addChangeListener(listener: ChangeListener) {
+        changeListeners.add(listener)
+    }
+
+    /**
+     * Unregisters a previously registered change listener.
+     *
+     * @param listener The listener to unregister
+     * @return true if the listener was found and removed, false otherwise
+     */
+    fun removeChangeListener(listener: ChangeListener): Boolean {
+        return changeListeners.remove(listener)
     }
 
 
@@ -123,6 +165,9 @@ open class Tolgee(
             ).also {
                 cachedTranslation.value = it
                 changeFlow.emit(Unit)
+                changeListeners.forEach { listener ->
+                    listener.onTranslationsChanged()
+                }
             }
         }
     }
@@ -226,6 +271,7 @@ open class Tolgee(
      *
      * @param locale The locale to be set for translations and related operations.
      */
+    @JvmOverloads
     open fun setLocale(locale: Locale) = localeFlow.updateAndGet { locale } ?: locale
 
     /**
@@ -233,6 +279,7 @@ open class Tolgee(
      *
      * @param localeTag A string representation of the desired locale.
      */
+    @JvmOverloads
     open fun setLocale(localeTag: String) = setLocale(forLocaleTag(localeTag))
 
     /**

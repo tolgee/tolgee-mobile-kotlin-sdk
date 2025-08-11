@@ -1,6 +1,7 @@
 public class io/tolgee/Tolgee {
 	public static final field Companion Lio/tolgee/Tolgee$Companion;
 	public fun <init> (Lio/tolgee/Tolgee$Config;)V
+	public final fun addChangeListener (Lio/tolgee/Tolgee$ChangeListener;)V
 	public final fun getChangeFlow ()Lkotlinx/coroutines/flow/MutableSharedFlow;
 	public fun getConfig ()Lio/tolgee/Tolgee$Config;
 	public static final fun getInstance ()Lio/tolgee/common/PlatformTolgee;
@@ -12,6 +13,7 @@ public class io/tolgee/Tolgee {
 	public static final fun new (Lio/tolgee/Tolgee$Config;)Lio/tolgee/common/PlatformTolgee;
 	public static final fun new (Lkotlin/jvm/functions/Function1;)Lio/tolgee/common/PlatformTolgee;
 	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun removeChangeListener (Lio/tolgee/Tolgee$ChangeListener;)Z
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public final fun t (Ljava/lang/String;)Ljava/lang/String;
@@ -22,6 +24,10 @@ public class io/tolgee/Tolgee {
 	public final fun tFlow (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
 	public fun tFlow (Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;)Lkotlinx/coroutines/flow/Flow;
 	public static synthetic fun tFlow$default (Lio/tolgee/Tolgee;Ljava/lang/String;Lio/tolgee/model/TolgeeMessageParams;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public abstract interface class io/tolgee/Tolgee$ChangeListener {
+	public abstract fun onTranslationsChanged ()V
 }
 
 public final class io/tolgee/Tolgee$Companion {

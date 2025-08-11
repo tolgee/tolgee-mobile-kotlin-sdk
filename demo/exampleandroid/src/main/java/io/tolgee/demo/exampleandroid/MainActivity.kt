@@ -54,15 +54,15 @@ class MainActivity : ComponentActivity() {
 
     buttonEn.setOnClickListener {
       tolgee.setLocale(Locale.ENGLISH)
-      Tolgee.instance.preload(this)
+      tolgee.preload(this)
     }
     buttonFr.setOnClickListener {
       tolgee.setLocale(Locale.FRENCH)
-      Tolgee.instance.preload(this)
+      tolgee.preload(this)
     }
     buttonCs.setOnClickListener {
-      tolgee.setLocale(Locale("cs"))
-      Tolgee.instance.preload(this)
+      tolgee.setLocale("cs")
+      tolgee.preload(this)
     }
   }
 
@@ -72,6 +72,6 @@ class MainActivity : ComponentActivity() {
     // Make sure the translations are loaded
     // This function will initiate translations fetching in the background and
     // will trigger changeFlow whenever updated translations are available
-    Tolgee.instance.preload(this)
+    tolgee.preload(this)
   }
 }
