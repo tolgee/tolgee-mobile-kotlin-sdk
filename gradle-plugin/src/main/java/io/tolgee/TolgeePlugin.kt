@@ -13,7 +13,7 @@ open class TolgeePlugin : Plugin<Project> {
 
     companion object {
         // Separate variable so it can easily be replaced by sed in CI/CD
-        private const val PACKAGE_VERSION = "1.0.0-alpha01"
+        private const val PACKAGE_VERSION = "1.0.0-SNAPSHOT"
 
         val version: String
             get() = this::class.java.`package`?.implementationVersion?.ifBlank { null }

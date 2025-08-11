@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
@@ -6,7 +5,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.atomicfu)
     alias(libs.plugins.multiplatform)
-    alias(libs.plugins.native.coroutines)
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.dokka)
     alias(libs.plugins.serialization)
@@ -30,10 +28,6 @@ dokka {
             remoteUrl("https://github.com/tolgee/tolgee-mobile-kotlin-sdk/tree/master/core/src")
         }
     }
-}
-
-nativeCoroutines {
-    k2Mode = true
 }
 
 kotlin {
@@ -197,12 +191,14 @@ kotlin {
             api(libs.i18n4k)
             implementation(libs.i18n4k.plural)
             implementation(libs.datetime)
+            implementation(libs.coroutines)
         }
 
         androidMain.dependencies {
             implementation(libs.android)
 
             implementation(libs.ktor.android)
+            implementation(libs.coroutines.android)
         }
 
         jvmMain.dependencies {
@@ -246,7 +242,7 @@ android {
 }
 
 mavenPublishing {
-    publishToMavenCentral(host = SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+    publishToMavenCentral(automaticRelease = true)
     signAllPublications()
 
     coordinates(

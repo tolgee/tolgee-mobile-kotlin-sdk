@@ -1,6 +1,5 @@
 package io.tolgee
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
@@ -18,6 +17,7 @@ import io.tolgee.model.TolgeeMessageParams
 import io.tolgee.model.TolgeeTranslation
 import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.atomicfu.atomic
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -165,8 +165,10 @@ open class Tolgee(
             ).also {
                 cachedTranslation.value = it
                 changeFlow.emit(Unit)
-                changeListeners.forEach { listener ->
-                    listener.onTranslationsChanged()
+                withContext(Dispatchers.Main) {
+                    changeListeners.forEach { listener ->
+                        listener.onTranslationsChanged()
+                    }
                 }
             }
         }
@@ -198,7 +200,6 @@ open class Tolgee(
      */
     @JvmOverloads
     @OptIn(ExperimentalCoroutinesApi::class)
-    @NativeCoroutines
     open fun tFlow(
         key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
@@ -211,7 +212,6 @@ open class Tolgee(
     }.filterNotNull()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    @NativeCoroutines
     open fun tArrayFlow(
         key: String
     ): Flow<List<String>> = localeFlow.mapLatest { locale ->
@@ -261,7 +261,6 @@ open class Tolgee(
      * This method is coroutine-safe and utilizes structured concurrency to manage asynchronous
      * operations.
      */
-    @NativeCoroutines
     open suspend fun preload() {
         suspendCatching { loadTranslations() }
     }
@@ -745,7 +744,7 @@ open class Tolgee(
          * Used for tracking plugin/integration usage.
          */
         internal const val TYPE_HEADER = "Compose Multiplatform"
-        internal const val VERSION_HEADER = "1.0.0-alpha01"
+        internal const val VERSION_HEADER = "1.0.0-SNAPSHOT"
 
         /**
          * Provides the locale of the system where the application is running.
