@@ -1,6 +1,10 @@
 package io.tolgee.model.translation
 
 import de.comahe.i18n4k.Locale
+import de.comahe.i18n4k.cldr.plurals.PluralCategory
+import de.comahe.i18n4k.cldr.plurals.PluralRule
+import de.comahe.i18n4k.cldr.plurals.PluralRuleType
+import de.comahe.i18n4k.createLocale
 import de.comahe.i18n4k.language
 import io.tolgee.common.sprintf
 import io.tolgee.model.TolgeeKey
@@ -24,7 +28,7 @@ internal data class TranslationSprintf(
     private var usedLocale: Locale?,
 ) : TolgeeTranslation {
 
-    private val stringArrayKeys = keys.filter { !it.isText }
+    private val stringArrayKeys = keys.filter { it.isArray }
 
     /**
      * Retrieves a localized string for the specified key and formatting parameters, considering a given locale.
@@ -52,8 +56,27 @@ internal data class TranslationSprintf(
                 ?: this.usedLocale?.language?.ifBlank { null }
         )) {
             is TolgeeKey.Data.Text -> return data.text.sprintf(*args)
+            is TolgeeKey.Data.Plural -> {
+                val selected = data.plurals[getPluralName(args.getOrNull(0))]
+                return selected?.sprintf(*args)
+            }
             else -> null
         }
+    }
+
+    fun getPluralName(number: Any?): String {
+        if (number == null) return PluralCategory.OTHER.id
+        val locale = usedLocale ?: return PluralCategory.OTHER.id
+
+        val pluralRule = PluralRule.create(createLocale(locale.language), PluralRuleType.CARDINAL)
+
+        val pluralCategory = when (number) {
+            is Number -> pluralRule?.select(number)
+            is String -> pluralRule?.select(number)
+            else -> PluralCategory.OTHER
+        } ?: PluralCategory.OTHER
+
+        return pluralCategory.id
     }
 
     /**
@@ -70,6 +93,7 @@ internal data class TranslationSprintf(
         val foundTolgeeKey = stringArrayKeys.firstOrNull { it.keyName == key } ?: return emptyList()
         return when (val data = foundTolgeeKey.translationForOrFirst(locale?.language)) {
             is TolgeeKey.Data.Array -> data.array
+            is TolgeeKey.Data.Plural -> data.plurals.map { it.value }
             is TolgeeKey.Data.Text -> listOf(data.text)
             else -> emptyList()
         }

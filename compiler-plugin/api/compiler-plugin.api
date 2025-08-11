@@ -8,6 +8,8 @@ public final class io/tolgee/TolgeeCommandLineProcessor : org/jetbrains/kotlin/c
 
 public final class io/tolgee/TolgeeCommandLineProcessor$Companion {
 	public final fun getKEY_ANDROID_GET_STRING_ENABLED ()Lorg/jetbrains/kotlin/config/CompilerConfigurationKey;
+	public final fun getKEY_ANDROID_PLURAL_STRING_ENABLED ()Lorg/jetbrains/kotlin/config/CompilerConfigurationKey;
+	public final fun getKEY_COMPOSE_PLURAL_STRING_ENABLED ()Lorg/jetbrains/kotlin/config/CompilerConfigurationKey;
 	public final fun getKEY_COMPOSE_STRING_RESOURCE_ENABLED ()Lorg/jetbrains/kotlin/config/CompilerConfigurationKey;
 }
 

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.tolgee.io/cli-schema.json",
+  "projectId": 20161,
+  "format": "COMPOSE_XML",
+  "push": {
+    "filesTemplate": "./src/commonMain/composeResources/values-{languageTag}/strings.xml",
+    "language": ["en", "cs", "fr", "sv"]
+  },
+  "pull": {
+    "path": ".",
+    "fileStructureTemplate": "./src/commonMain/composeResources/values-{languageTag}/strings.{extension}"
+  }
+}

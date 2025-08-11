@@ -9,6 +9,7 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        mavenLocal()
     }
 }
 
@@ -17,6 +18,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        mavenLocal()
     }
 }
 
@@ -28,6 +30,6 @@ include(":compose")
 include(":gradle-plugin")
 include(":compiler-plugin")
 
-include(":demo:android-view", ":demo:multiplatform-compose")
+include(":demo:multiplatform-compose", ":demo:exampleandroid", ":demo:examplejetpack")
 
-rootProject.name = "compose-tolgee"
+rootProject.name = "tolgee-mobile-kotlin-sdk"

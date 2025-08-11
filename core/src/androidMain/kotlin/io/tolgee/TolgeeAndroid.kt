@@ -8,11 +8,10 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import io.tolgee.common.mapNotNull
 import io.tolgee.model.TolgeeMessageParams
-import dev.datlag.tooling.async.scopeCatching
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
@@ -41,11 +40,11 @@ data class TolgeeAndroid internal constructor(
      * @return A [Flow] emitting localized text, starting with the Android string resource and
      *         followed by the corresponding Tolgee translations, if available.
      */
-    fun translation(context: Context, @StringRes id: Int): Flow<String> = flow {
-        emit(instant(context, id))
+    fun tFlow(context: Context, @StringRes id: Int): Flow<String> = flow {
+        emit(t(context, id))
 
         getKeyFromResources(context, id)?.let { key ->
-            emitAll(translation(key, TolgeeMessageParams.None).mapNotNull())
+            emitAll(tFlow(key, TolgeeMessageParams.None).filterNotNull())
         }
     }
 
@@ -59,35 +58,35 @@ data class TolgeeAndroid internal constructor(
      * @param formatArgs optional arguments to format the string resource
      * @return a flow of translated strings
      */
-    fun translation(context: Context, @StringRes id: Int, vararg formatArgs: Any): Flow<String> = flow {
-        emit(instant(context, id, *formatArgs))
+    fun tFlow(context: Context, @StringRes id: Int, vararg formatArgs: Any): Flow<String> = flow {
+        emit(t(context, id, *formatArgs))
 
         getKeyFromResources(context, id)?.let { key ->
-            emitAll(translation(key, TolgeeMessageParams.Indexed(*formatArgs)))
+            emitAll(tFlow(key, TolgeeMessageParams.Indexed(*formatArgs)))
         }
     }
 
-    fun pluralTranslation(resources: Resources, @PluralsRes id: Int, quantity: Int): Flow<String> = flow {
-        emit(pluralInstant(resources, id, quantity))
+    fun tPluralFlow(resources: Resources, @PluralsRes id: Int, quantity: Int): Flow<String> = flow {
+        emit(tPlural(resources, id, quantity))
 
         getKeyFromResources(resources, id)?.let { key ->
-            emitAll(translation(key, TolgeeMessageParams.Indexed(quantity)))
+            emitAll(tFlow(key, TolgeeMessageParams.Indexed(quantity)))
         }
     }
 
-    fun pluralTranslation(resources: Resources, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): Flow<String> = flow {
-        emit(pluralInstant(resources, id, quantity, *formatArgs))
+    fun tPluralFlow(resources: Resources, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): Flow<String> = flow {
+        emit(tPlural(resources, id, quantity, *formatArgs))
 
         getKeyFromResources(resources, id)?.let { key ->
-            emitAll(translation(key, TolgeeMessageParams.Indexed(quantity, *formatArgs)))
+            emitAll(tFlow(key, TolgeeMessageParams.Indexed(quantity, *formatArgs)))
         }
     }
 
-    fun stringArrayTranslation(resources: Resources, @ArrayRes id: Int): Flow<List<String>> = flow {
-        emit(stringArrayInstant(resources, id))
+    fun tArrayFlow(resources: Resources, @ArrayRes id: Int): Flow<List<String>> = flow {
+        emit(tArray(resources, id))
 
         getKeyFromResources(resources, id)?.let { key ->
-            emitAll(stringArrayTranslation(key).mapNotNull { it.ifEmpty { null } })
+            emitAll(tArrayFlow(key).mapNotNull { it.ifEmpty { null } })
         }
     }
 
@@ -100,9 +99,9 @@ data class TolgeeAndroid internal constructor(
      * @param id The resource ID of the string to be translated.
      * @return The translated string if a key-based translation is found; otherwise, the default string resource value.
      */
-    fun instant(context: Context, @StringRes id: Int): String {
+    fun t(context: Context, @StringRes id: Int): String {
         return getKeyFromResources(context, id)?.let { key ->
-            instant(key)
+            t(key)
         } ?: context.getString(id)
     }
 
@@ -116,28 +115,48 @@ data class TolgeeAndroid internal constructor(
      * @param formatArgs Optional arguments for formatting the string.
      * @return The translated string if a translation key is found, or the default string resource value.
      */
-    fun instant(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
+    fun t(context: Context, @StringRes id: Int, vararg formatArgs: Any): String {
         return getKeyFromResources(context, id)?.let { key ->
-            instant(key, TolgeeMessageParams.Indexed(*formatArgs))
+            t(key, TolgeeMessageParams.Indexed(*formatArgs))
         } ?: context.getString(id, *formatArgs)
     }
 
-    fun pluralInstant(resources: Resources, @PluralsRes id: Int, quantity: Int): String {
+    fun tPlural(resources: Resources, @PluralsRes id: Int, quantity: Int): String {
         return getKeyFromResources(resources, id)?.let { key ->
-            instant(key, TolgeeMessageParams.Indexed(quantity))
-        } ?: resources.getQuantityString(id, quantity)
+            t(key, TolgeeMessageParams.Indexed(quantity))
+        } ?: resources.getQuantityString(id, quantity, quantity)
     }
 
-    fun pluralInstant(resources: Resources, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
+    fun tPlural(resources: Resources, @PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
         return getKeyFromResources(resources, id)?.let { key ->
-            instant(key, TolgeeMessageParams.Indexed(quantity, *formatArgs))
-        } ?: resources.getQuantityString(id, quantity, *formatArgs)
+            t(key, TolgeeMessageParams.Indexed(quantity, *formatArgs))
+        } ?: resources.getQuantityString(id, quantity, quantity, *formatArgs)
     }
 
-    fun stringArrayInstant(resources: Resources, @ArrayRes id: Int): List<String> {
+    fun tArray(resources: Resources, @ArrayRes id: Int): List<String> {
         return getKeyFromResources(resources, id)?.let { key ->
-            stringArrayInstant(key)
+            tArray(key)
         }?.ifEmpty { null } ?: resources.getStringArray(id).toList()
+    }
+
+    /**
+     * Provides an immediate translation for the given string resource ID within the given context.
+     * If a translation key is derived from the string resource, it retrieves the translation using Tolgee.
+     * Otherwise, it falls back to returning the default string resource value.
+     *
+     * This is a special version that allows returning a [CharSequence] instead of a [String] and
+     * will fall back to the Android `getText` method if no translation is found - preserving formatting.
+     *
+     * If translation is found, no style information is preserved and the method acts the same as [t].
+     *
+     * @param context The context used to access resources and provide localization settings.
+     * @param id The resource ID of the string to be translated.
+     * @return The translated string if a key-based translation is found; otherwise, the default string resource value.
+     */
+    fun tStyled(context: Context, @StringRes id: Int): CharSequence {
+        return getKeyFromResources(context, id)?.let { key ->
+            t(key)
+        } ?: context.getText(id)
     }
 
     /**
@@ -147,7 +166,7 @@ data class TolgeeAndroid internal constructor(
      * corresponding translations are loaded into memory. It performs these operations atomically
      * by utilizing mutex locks to prevent concurrent modifications.
      *
-     * Must be called before accessing translation functionalities such as [instant] to ensure
+     * Must be called before accessing translation functionalities such as [t] to ensure
      * that translations are available and up-to-date.
      *
      * This method is coroutine-safe and utilizes structured concurrency to manage asynchronous

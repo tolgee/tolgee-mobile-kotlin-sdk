@@ -47,7 +47,7 @@ internal data class TranslationICU(
     }.groupBy({ it.first }, { it.second })
 
     @Transient
-    private val stringArrayKeys = keys.filter { !it.isText }
+    private val stringArrayKeys = keys.filter { it.isArray }
 
     /**
      * A collection of message providers grouped by locale. Each provider implements the [MessagesProvider] interface.

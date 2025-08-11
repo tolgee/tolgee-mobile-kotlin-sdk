@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+  <string name="app_name">TolgeeVisa</string>
+  <string-array name="array_test">
+    <item>Första</item>
+    <item>Andra</item>
+    <item>Tredje</item>
+  </string-array>
+  <string name="description">Grundläggande text</string>
+  <string name="percentage_placeholder">Parameteriserad text %1$s</string>
+  <plurals name="plr_test">
+    <item quantity="one">Plural 1</item>
+    <item quantity="other">Plural Other</item>
+  </plurals>
+  <plurals name="plr_test_placeholder">
+    <item quantity="one">%2$s: %1$d test okej</item>
+    <item quantity="other">%2$s: %1$d tester okej</item>
+  </plurals>
+  <plurals name="plr_test_placeholder_2">
+    <item quantity="one">%3$s: %1$d test av %2$d ok</item>
+    <item quantity="other">%3$s: %1$d tester av %2$d ok</item>
+  </plurals>
+</resources>

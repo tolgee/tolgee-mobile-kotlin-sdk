@@ -2,6 +2,7 @@ package io.tolgee.common
 
 import io.tolgee.Tolgee
 import io.ktor.client.*
+import io.tolgee.storage.TolgeeStorageProvider
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -30,6 +31,14 @@ internal expect val platformHttpClient: HttpClient
  * It is typically used as the default context for executing coroutines in networking scenarios.
  */
 internal expect val platformNetworkContext: CoroutineContext
+
+/**
+ * Expected declaration for the platform-specific storage implementation.
+ *
+ * This property is expected to be provided by each platform's implementation
+ * to enable storage-related functionalities.
+ */
+internal expect val platformStorage: TolgeeStorageProvider?
 
 /**
  * Platform-specific implementation of the Tolgee interface.

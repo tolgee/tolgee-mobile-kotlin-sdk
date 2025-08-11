@@ -4,6 +4,7 @@ import io.tolgee.Tolgee
 import io.ktor.client.*
 import io.ktor.client.engine.winhttp.*
 import io.ktor.client.plugins.cache.*
+import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlin.coroutines.CoroutineContext
@@ -41,6 +42,9 @@ internal actual val platformHttpClient: HttpClient = HttpClient(WinHttp) {
  */
 internal actual val platformNetworkContext: CoroutineContext
     get() = Dispatchers.IO
+
+internal actual val platformStorage: TolgeeStorageProvider?
+    get() = null
 
 /**
  * Actual implementation of the `PlatformTolgee` class for a specific platform.

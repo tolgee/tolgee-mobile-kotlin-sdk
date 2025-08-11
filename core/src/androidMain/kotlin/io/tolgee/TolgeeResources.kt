@@ -2,9 +2,10 @@ package io.tolgee
 
 import android.content.Context
 import android.content.res.Resources
-import io.tolgee.common.getQuantityStringInstant
-import io.tolgee.common.getStringArrayInstant
-import io.tolgee.common.getStringInstant
+import io.tolgee.common.getQuantityStringT
+import io.tolgee.common.getStringArrayT
+import io.tolgee.common.getStringT
+import io.tolgee.common.getTextT
 
 /**
  * Ignore Deprecation: Resources constructor is not really deprecated, apps should just not create
@@ -19,22 +20,26 @@ internal class TolgeeResources(
 ) : Resources(base.assets, base.displayMetrics, base.configuration) {
 
     override fun getString(id: Int): String {
-        return baseContext.getStringInstant(tolgee, id)
+        return baseContext.getStringT(tolgee, id)
     }
 
     override fun getString(id: Int, vararg formatArgs: Any?): String {
-        return baseContext.getStringInstant(tolgee, id, *formatArgs.filterNotNull().toTypedArray())
+        return baseContext.getStringT(tolgee, id, *formatArgs.filterNotNull().toTypedArray())
     }
 
     override fun getQuantityString(id: Int, quantity: Int): String {
-        return baseContext.resources.getQuantityStringInstant(tolgee, id, quantity)
+        return baseContext.resources.getQuantityStringT(tolgee, id, quantity)
     }
 
     override fun getQuantityString(id: Int, quantity: Int, vararg formatArgs: Any?): String {
-        return baseContext.resources.getQuantityStringInstant(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
+        return baseContext.resources.getQuantityStringT(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
     }
 
     override fun getStringArray(id: Int): Array<out String?> {
-        return baseContext.resources.getStringArrayInstant(tolgee, id)
+        return baseContext.resources.getStringArrayT(tolgee, id)
+    }
+
+    override fun getText(id: Int): CharSequence {
+        return baseContext.getTextT(tolgee, id)
     }
 }

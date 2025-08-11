@@ -13,7 +13,7 @@ plugins {
     signing
 }
 
-val libGroup = "io.tolgee"
+val libGroup = "io.tolgee.mobile-kotlin-sdk"
 val libName = "gradle-plugin"
 
 group = libGroup
@@ -30,7 +30,7 @@ dokka {
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(file("src"))
-            remoteUrl("https://github.com/tolgee/compose-tolgee/tree/master/gradle-plugin/src")
+            remoteUrl("https://github.com/tolgee/tolgee-mobile-kotlin-sdk/tree/master/gradle-plugin/src")
         }
     }
 }
@@ -57,8 +57,8 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        website.set("https://github.com/tolgee/compose-tolgee")
-        vcsUrl.set("https://github.com/tolgee/compose-tolgee")
+        website.set("https://github.com/tolgee/tolgee-mobile-kotlin-sdk")
+        vcsUrl.set("https://github.com/tolgee/tolgee-mobile-kotlin-sdk")
 
         create("tolgeePlugin") {
             id = libGroup
@@ -83,7 +83,7 @@ mavenPublishing {
         name.set(libName)
 
         description.set("Compose Multiplatform localization wrapper for Tolgee")
-        url.set("https://github.com/tolgee/compose-tolgee")
+        url.set("https://github.com/tolgee/tolgee-mobile-kotlin-sdk")
 
         licenses {
             license {
@@ -93,8 +93,8 @@ mavenPublishing {
         }
 
         scm {
-            url.set("https://github.com/tolgee/compose-tolgee")
-            connection.set("scm:git:git://github.com/tolgee/compose-tolgee.git")
+            url.set("https://github.com/tolgee/tolgee-mobile-kotlin-sdk")
+            connection.set("scm:git:git://github.com/tolgee/tolgee-mobile-kotlin-sdk.git")
         }
 
         developers {
