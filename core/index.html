@@ -46,11 +46,12 @@
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
                 <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":core/androidMain">android</button>
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":core/androidNativeMain">androidNative</button>
                 <button class="platform-tag platform-selector common-like" data-active="" data-filter=":core/appleMain">apple</button>
                 <button class="platform-tag platform-selector common-like" data-active="" data-filter=":core/commonMain">common</button>
                 <button class="platform-tag platform-selector js-like" data-active="" data-filter=":core/jsMain">js</button>
                 <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":core/jvmMain">jvm</button>
-                <button class="platform-tag platform-selector native-like" data-active="" data-filter=":core/linuxMain">linux</button>
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":core/linuxMain">linux</button>
                 <button class="platform-tag platform-selector native-like" data-active="" data-filter=":core/mingwMain">mingw</button>
                 <button class="platform-tag platform-selector wasm-like" data-active="" data-filter=":core/wasmJsMain">wasmJs</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
@@ -66,6 +67,13 @@
                                 <input type="checkbox" class="checkbox--input" id=":core/androidMain" data-filter=":core/androidMain">
                                 <span class="checkbox--icon"></span>
                                 android
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":core/androidNativeMain" data-filter=":core/androidNativeMain">
+                                <span class="checkbox--icon"></span>
+                                androidNative
                             </label>
                         </li>
                         <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
@@ -96,7 +104,7 @@
                                 jvm
                             </label>
                         </li>
-                        <li role="option" class="dropdown--option platform-selector-option native-like" tabindex="0">
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
                             <label class="checkbox">
                                 <input type="checkbox" class="checkbox--input" id=":core/linuxMain" data-filter=":core/linuxMain">
                                 <span class="checkbox--icon"></span>
@@ -146,7 +154,7 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" id="content" pageids="Core::////PointingToDeclaration//1372475355">
+<div class="main-content" id="content" pageids="Core::////PointingToDeclaration//404389583">
   <div class="breadcrumbs"></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Core</span></span></h1>
@@ -172,23 +180,24 @@
         <div></div>
       </div>
     </div>
-<a data-name="2131641565%2FPackages%2F1372475355" anchor-label="io.tolgee.common" id="2131641565%2FPackages%2F1372475355" data-filterable-set=":core/androidMain,:core/appleMain,:core/commonMain,:core/jsMain,:core/jvmMain,:core/linuxMain,:core/mingwMain,:core/wasmJsMain"></a>
-    <div class="table-row" data-filterable-current=":core/androidMain,:core/appleMain,:core/commonMain,:core/jsMain,:core/jvmMain,:core/linuxMain,:core/mingwMain,:core/wasmJsMain" data-filterable-set=":core/androidMain,:core/appleMain,:core/commonMain,:core/jsMain,:core/jvmMain,:core/linuxMain,:core/mingwMain,:core/wasmJsMain">
+<a data-name="2131641565%2FPackages%2F404389583" anchor-label="io.tolgee.common" id="2131641565%2FPackages%2F404389583" data-filterable-set=":core/androidMain,:core/androidNativeMain,:core/appleMain,:core/commonMain,:core/jsMain,:core/jvmMain,:core/linuxMain,:core/mingwMain,:core/wasmJsMain"></a>
+    <div class="table-row" data-filterable-current=":core/androidMain,:core/androidNativeMain,:core/appleMain,:core/commonMain,:core/jsMain,:core/jvmMain,:core/linuxMain,:core/mingwMain,:core/wasmJsMain" data-filterable-set=":core/androidMain,:core/androidNativeMain,:core/appleMain,:core/commonMain,:core/jsMain,:core/jvmMain,:core/linuxMain,:core/mingwMain,:core/wasmJsMain">
       <div>
         <div class="main-subrow ">
           <div class=""><span class="inline-flex">
               <div><a href="io.tolgee.common/index.html">io.tolgee.common</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2131641565%2FPackages%2F1372475355"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2131641565%2FPackages%2F404389583"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
           <div class="pull-right">
             <div class="platform-tags no-gutters">
               <div class="platform-tag jvm-like">android</div>
+              <div class="platform-tag common-like">androidNative</div>
               <div class="platform-tag common-like">apple</div>
               <div class="platform-tag common-like">common</div>
               <div class="platform-tag js-like">js</div>
               <div class="platform-tag jvm-like">jvm</div>
-              <div class="platform-tag native-like">linux</div>
+              <div class="platform-tag common-like">linux</div>
               <div class="platform-tag native-like">mingw</div>
               <div class="platform-tag wasm-like">wasmJs</div>
             </div>
