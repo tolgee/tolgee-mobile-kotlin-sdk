@@ -744,7 +744,7 @@ open class Tolgee(
          * Used for tracking plugin/integration usage.
          */
         internal const val TYPE_HEADER = "Compose Multiplatform"
-        internal const val VERSION_HEADER = "1.0.0-SNAPSHOT"
+        internal const val VERSION_HEADER = "1.0.0-alpha01"
 
         /**
          * Provides the locale of the system where the application is running.
