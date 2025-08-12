@@ -1,6 +1,5 @@
 package io.tolgee
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import de.comahe.i18n4k.createLocale
 import io.tolgee.common.fromRes
 import io.tolgee.model.TolgeeMessageParams
@@ -44,7 +43,6 @@ data class TolgeeApple internal constructor(
      * @param table The name of the table where the key is searched for, or null to use the default table.
      * @return A flow that emits localized strings corresponding to the given key.
      */
-    @NativeCoroutines
     fun tFlow(key: String, default: String?, table: String? = null): Flow<String> = flow {
         emit(
             getLocalizedStringFromBundle(
@@ -71,7 +69,6 @@ data class TolgeeApple internal constructor(
      * @param args A variable number of arguments for formatting the localized string.
      * @return A flow that emits localized and formatted string values corresponding to the given key and arguments.
      */
-    @NativeCoroutines
     fun tFlow(key: String, default: String?, table: String? = null, vararg args: Any): Flow<String> = flow {
         emit(getLocalizedStringFromBundleFormatted(bundleRes, key, default, table, *args))
 
