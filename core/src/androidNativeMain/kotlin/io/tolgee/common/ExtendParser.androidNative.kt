@@ -9,20 +9,20 @@ import kotlin.time.Instant
  * Converts the given object to an instance of Instant.
  *
  * @return The converted Instant value from the given object.
- * @throws IllegalArgumentException if the conversion cannot be performed.
+ * @throws IllegalArgumentException if the object cannot be converted to an Instant.
  */
-@OptIn(ExperimentalTime::class)
+@OptIn(markerClass = [ExperimentalTime::class])
 internal actual fun Any.convertToInstant(): Instant {
     throw IllegalArgumentException("Can not convert to LocalDateTime: $this")
 }
 
 /**
- * Formats the string using the specified arguments and returns the formatted result.
+ * Formats the string using the specified arguments, similar to the C `sprintf` function.
  *
- * This function works similarly to the C `sprintf` function by replacing format specifiers
- * within the string with corresponding values from the provided arguments.
+ * This function replaces placeholders in the string with the provided arguments, applying formatting rules
+ * defined within the string.
  *
- * @param args The values to substitute into the format specifiers within the string.
- * @return A new string where the format specifiers are replaced with corresponding argument values.
+ * @param args The arguments to be substituted into the format string.
+ * @return The formatted string with placeholders replaced by the provided arguments.
  */
 internal actual fun String.sprintf(vararg args: Any): String = Sprintf(this, args.toImmutableList()).process().toString()

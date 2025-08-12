@@ -1,8 +1,9 @@
 package io.tolgee.common
 
 import io.tolgee.model.TolgeeKey
-import kotlinx.datetime.Instant
 import kotlinx.serialization.json.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Converts a [JsonElement] to its string representation.
@@ -29,6 +30,7 @@ internal fun JsonElement.keyData(): TolgeeKey.Data = when (this) {
  *
  * @return The converted Instant value from the given object.
  */
+@OptIn(ExperimentalTime::class)
 internal expect fun Any.convertToInstant(): Instant
 
 /**

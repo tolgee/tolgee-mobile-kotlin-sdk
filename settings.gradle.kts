@@ -28,7 +28,7 @@ pluginManagement {
 include(":core")
 include(":compose")
 include(":gradle-plugin")
-include(":compiler-plugin")
+// include(":compiler-plugin")
 
 include(":demo:multiplatform-compose", ":demo:exampleandroid", ":demo:examplejetpack")
 

@@ -2,7 +2,8 @@ package io.tolgee.common
 
 import io.tolgee.format.Sprintf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Converts the invoking object to an instance of Instant.
@@ -10,6 +11,7 @@ import kotlinx.datetime.Instant
  * @return The corresponding Instant value derived from the invoking object.
  * @throws IllegalArgumentException if the conversion to Instant is not possible.
  */
+@OptIn(ExperimentalTime::class)
 internal actual fun Any.convertToInstant(): Instant {
     throw IllegalArgumentException("Can not convert to LocalDateTime: $this")
 }

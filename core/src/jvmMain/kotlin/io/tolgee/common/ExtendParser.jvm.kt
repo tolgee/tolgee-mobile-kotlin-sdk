@@ -3,10 +3,11 @@ package io.tolgee.common
 import io.tolgee.format.Sprintf
 import dev.datlag.tooling.async.scopeCatching
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.datetime.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Converts the given object to an instance of Instant.
@@ -14,6 +15,7 @@ import java.util.*
  * @return The converted Instant value from the given object.
  * @throws IllegalArgumentException if the object cannot be converted to an Instant.
  */
+@OptIn(ExperimentalTime::class)
 internal actual fun Any.convertToInstant(): Instant = when (this) {
     is java.time.LocalDateTime -> Instant.fromEpochSeconds(
         this.atZone(ZoneId.systemDefault()).toEpochSecond()

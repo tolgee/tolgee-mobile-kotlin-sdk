@@ -2,12 +2,13 @@ package io.tolgee.format
 
 import io.tolgee.common.convertToInstant
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Mostly copied from https://github.com/sergeych/mp_stools
@@ -76,6 +77,7 @@ internal data class Sprintf(
         return notNullArg(index)
     }
 
+    @OptIn(ExperimentalTime::class)
     internal fun getLocalDateTime(index: Int): LocalDateTime {
         return when (val t = notNullArg<Any>(index)) {
             is Instant -> t.toLocalDateTime(TimeZone.currentSystemDefault())

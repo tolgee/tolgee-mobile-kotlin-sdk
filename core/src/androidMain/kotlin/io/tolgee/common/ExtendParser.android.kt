@@ -4,10 +4,11 @@ import android.os.Build
 import io.tolgee.format.Sprintf
 import dev.datlag.tooling.async.scopeCatching
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.datetime.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Converts the current object to an instance of [Instant]. This function handles various
@@ -17,6 +18,7 @@ import java.util.*
  * @return The corresponding [Instant] for the current object.
  * @throws IllegalArgumentException If the object type is not supported or cannot be converted.
  */
+@OptIn(ExperimentalTime::class)
 internal actual fun Any.convertToInstant(): Instant = when (this) {
     is Date -> Instant.fromEpochMilliseconds(this.time)
     else -> {

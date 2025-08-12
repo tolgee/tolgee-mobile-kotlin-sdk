@@ -35,10 +35,10 @@ kotlin {
         publishAllLibraryVariants()
     }
 
-    /*androidNativeX64()
+    androidNativeX64()
     androidNativeX86()
     androidNativeArm64()
-    androidNativeArm32()*/
+    androidNativeArm32()
 
     jvm()
     jvmToolchain(21)
@@ -157,7 +157,7 @@ kotlin {
     }
 
     linuxX64()
-    // linuxArm64()
+    linuxArm64()
 
     mingwX64()
 
@@ -199,6 +199,10 @@ kotlin {
 
             implementation(libs.ktor.android)
             implementation(libs.coroutines.android)
+        }
+
+        androidNativeMain.dependencies {
+            implementation(libs.ktor.cio)
         }
 
         jvmMain.dependencies {

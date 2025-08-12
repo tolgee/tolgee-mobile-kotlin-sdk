@@ -7,6 +7,7 @@ import kotlinx.datetime.number
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.Serializable
+import kotlin.time.ExperimentalTime
 
 /**
  * Mostly copied from https://github.com/sergeych/mp_stools
@@ -231,6 +232,7 @@ internal data class Specification(
         insertField(parent.getCharacter(index).toString())
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun createTimeField(upperCase: Boolean) {
         val ch = parent.nextChar()
         endStage()

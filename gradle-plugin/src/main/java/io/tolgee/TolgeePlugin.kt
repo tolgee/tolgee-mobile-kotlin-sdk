@@ -8,7 +8,9 @@ open class TolgeePlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         target.tolgeeExtension
-        target.pluginManager.apply(TolgeeCompilerSubPlugin::class.java)
+
+        // Unavailable right now, as it's broken after Kotlin 2.2.0 (and even on 2.1.20)
+        // target.pluginManager.apply(TolgeeCompilerSubPlugin::class.java)
     }
 
     companion object {

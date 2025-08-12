@@ -30,7 +30,7 @@ dependencies {
     dokka(project(":core"))
     dokka(project(":compose"))
     dokka(project(":gradle-plugin"))
-    dokka(project(":compiler-plugin"))
+//    dokka(project(":compiler-plugin"))
 }
 
 // Force new atomicfu version, compose uses 0.23.2

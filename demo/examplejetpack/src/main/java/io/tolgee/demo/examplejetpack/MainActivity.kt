@@ -15,6 +15,7 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRowScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
@@ -112,8 +113,10 @@ fun Tolgee.isLocaleSelected(locale: String, fallback: Boolean): Boolean {
 @OptIn(ExperimentalCoroutinesApi::class)
 fun isLocaleSelected(locale: String, fallback: Boolean): Boolean {
   val tolgee = Tolgee.instance
-  return tolgee.changeFlow.mapLatest {
-    tolgee.isLocaleSelected(locale, fallback)
+  return remember(tolgee) {
+    tolgee.changeFlow.mapLatest {
+      tolgee.isLocaleSelected(locale, fallback)
+    }
   }.collectAsState(initial = tolgee.isLocaleSelected(locale, fallback)).value
 }
 

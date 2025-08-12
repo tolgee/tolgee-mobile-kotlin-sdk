@@ -50,6 +50,7 @@ kotlin-compiler-embeddable = { group = "org.jetbrains.kotlin", name = "kotlin-co
 kotlin-compiler-testing = { group = "dev.zacsweers.kctfork", name = "core", version.ref = "kctfork" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-curl = { group = "io.ktor", name = "ktor-client-curl", version.ref = "ktor" }
 ktor-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-java = { group = "io.ktor", name = "ktor-client-java", version.ref = "ktor" }
