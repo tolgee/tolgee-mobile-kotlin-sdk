@@ -31,7 +31,6 @@ Currently, Android is fully supported, but any Kotlin-based codebase can in theo
   - Sprintf (Android SDK) formatting
   - ICU (Tolgee Native Flat JSON) formatting
 - **Compose integration**: Full integration with Jetpack Compose and Compose Multiplatform
-- **Compiler plugin**: Automatically transform existing code to use Tolgee without manual changes
 - **Kotlin Multiplatform**: Designed with multiplatform support in mind
 
 ## Modules
@@ -40,13 +39,11 @@ The SDK is split into multiple modules, each serving a specific purpose:
 
 - **[Core](./core/README.md)**: Base library for fetching translations from CDN and querying them
 - **[Compose](./compose/README.md)**: Extension for using the library with Jetpack Compose or Compose Multiplatform
-- **[Gradle Plugin](./gradle-plugin/README.md)**: Gradle plugin for integrating and configuring the compiler plugin
 
 ## Which Module Should I Use?
 
 - If you are using **traditional Android Views**, use the [Core](./core/README.md) module
 - If you are using **Jetpack Compose** or **Compose Multiplatform**, use the [Compose](./compose/README.md) module
-- If you want to **automatically transform existing code** to use Tolgee, add the [Gradle Plugin](./gradle-plugin/README.md)
 
 ## Installation
 
@@ -88,28 +85,12 @@ dependencies {
 }
 ```
 
-### Gradle Plugin (Compiler Plugin)
-
-```toml
-# gradle/libs.versions.toml
-[plugins]
-tolgee = { id = "io.tolgee.mobile-kotlin-sdk", version.ref = "tolgee" }
-```
-
-```kotlin
-// build.gradle.kts
-plugins {
-    alias(libs.plugins.tolgee)
-}
-```
-
 ## Basic Usage
 
 For detailed usage instructions, please refer to the module-specific documentation:
 
 - [Core Module Documentation](./core/README.md)—For traditional Android and base functionality
 - [Compose Module Documentation](./compose/README.md)—For Jetpack Compose and Compose Multiplatform
-- [Gradle Plugin Documentation](./gradle-plugin/README.md)—For compiler plugin configuration
 
 ### Quick Start
 
