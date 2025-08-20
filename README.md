@@ -1,4 +1,4 @@
-# Tolgee Mobile Kotlin SDK (Alpha) 🐁
+# Tolgee Mobile SDK for Android and Compose Multiplatform 🐁
 
 [![Tolgee](https://img.shields.io/badge/Tolgee-f06695)](https://tolgee.io/)
 ![Android](https://img.shields.io/badge/Android-Supported-green?logo=android)
