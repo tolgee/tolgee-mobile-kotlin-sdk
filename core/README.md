@@ -122,6 +122,13 @@ val textWithParams = tolgee.t(context, R.string.string_with_params, "param1", "p
 
 // Get a translation with fallback to Android resources as a Flow
 val textFlow = tolgee.tFlow(context, R.string.string_key)
+
+// Wrap the context of your Activity to override what is returned by getString-like methods
+class MyActivity : Activity() {
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(TolgeeContextWrapper.wrap(newBase))
+    }
+}
 ```
 
 ### Locale Management
