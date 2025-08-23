@@ -35,38 +35,38 @@ jobs:
 
       - name: Framework Tolgee
         continue-on-error: true
-        run: ./gradlew core:assembleTolgeeXCFramework || ./gradlew core:assembleXCFramework
+        run: ./gradlew core:assembleKMPTolgeeXCFramework
 
       - name: Framework Tolgee Release
         continue-on-error: true
-        run: ./gradlew core:assembleTolgeeReleaseXCFramework || ./gradlew core:assembleReleaseXCFramework
+        run: ./gradlew core:assembleKMPTolgeeReleaseXCFramework
 
       - name: Framework Tolgee Debug
         continue-on-error: true
-        run: ./gradlew core:assembleTolgeeDebugXCFramework || ./gradlew core:assembleDebugXCFramework
+        run: ./gradlew core:assembleKMPTolgeeDebugXCFramework
 
       - name: Create XCFramework Archive
         run: |
           cd core/build/XCFrameworks/release
-          tar -czf Tolgee-release.xcframework.tar.gz Tolgee.xcframework
+          tar -czf KMPTolgee-release.xcframework.tar.gz KMPTolgee.xcframework
           cd ../debug
-          tar -czf Tolgee-debug.xcframework.tar.gz Tolgee.xcframework
+          tar -czf KMPTolgee-debug.xcframework.tar.gz KMPTolgee.xcframework
           cd ../../../../
-          mv core/build/XCFrameworks/release/Tolgee-release.xcframework.tar.gz .
-          mv core/build/XCFrameworks/debug/Tolgee-debug.xcframework.tar.gz .
+          mv core/build/XCFrameworks/release/KMPTolgee-release.xcframework.tar.gz .
+          mv core/build/XCFrameworks/debug/KMPTolgee-debug.xcframework.tar.gz .
 
       - name: Upload XCFramework to Release
         if: ${{ github.event_name == 'release' }}
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            Tolgee-release.xcframework.tar.gz
-            Tolgee-debug.xcframework.tar.gz
+            KMPTolgee-release.xcframework.tar.gz
+            KMPTolgee-debug.xcframework.tar.gz
 
       - name: Upload XCFramework to action packages
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@v4
         with:
           path: |
-            Tolgee-release.xcframework.tar.gz
-            Tolgee-debug.xcframework.tar.gz
+            KMPTolgee-release.xcframework.tar.gz
+            KMPTolgee-debug.xcframework.tar.gz

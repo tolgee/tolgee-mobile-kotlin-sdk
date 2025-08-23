@@ -1,3 +1,4 @@
+import co.touchlab.skie.configuration.DefaultArgumentInterop
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
@@ -8,6 +9,7 @@ plugins {
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.dokka)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.skie)
     alias(libs.plugins.vanniktech.publish)
     `maven-publish`
     signing
@@ -15,7 +17,7 @@ plugins {
 
 val libGroup = "io.tolgee.mobile-kotlin-sdk"
 val libName = "core"
-val appleFramework = "Tolgee"
+val appleFramework = "KMPTolgee"
 
 group = libGroup
 version = libVersion
@@ -27,6 +29,26 @@ dokka {
             localDirectory.set(file("src"))
             remoteUrl("https://github.com/tolgee/tolgee-mobile-kotlin-sdk/tree/master/core/src")
         }
+    }
+}
+
+skie {
+    build {
+        produceDistributableFramework()
+        enableSwiftLibraryEvolution.set(true)
+        noClangModuleBreadcrumbsInStaticFrameworks.set(true)
+    }
+    features {
+        enableSwiftUIObservingPreview.set(true)
+        enableFutureCombineExtensionPreview.set(true)
+        enableFlowCombineConvertorPreview.set(true)
+
+        group {
+            DefaultArgumentInterop.Enabled(true)
+        }
+    }
+    analytics {
+        disableUpload.set(true)
     }
 }
 
