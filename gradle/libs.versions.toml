@@ -2,34 +2,38 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
+# Keep each section in alphabetic order!
+# Only exceptions are entries produced by this SDK, commented by "Keep at top".
+
 [versions]
-library = "1.0.0-alpha01"
+library = "1.0.0-alpha01" # Keep at top
 activity = "1.10.1"
-android-core = "1.16.0"
-android-tools = "8.12.0"
+android-core = "1.17.0"
+android-tools = "8.12.1"
 atomicfu = "0.29.0"
 auto-service = "1.1.1"
 binary-compatibility = "0.18.1"
 compose = "1.8.2"
+compose-bom = "2025.08.00"
 coroutines = "1.10.2"
 datetime = "0.7.1"
 dokka = "2.0.0"
 i18n4k = "0.11.0"
 immutable = "0.4.0"
-kaml = "0.85.0"
+kaml = "0.92.0"
 kctfork = "0.8.0"
 kommand = "2.3.0"
-kotlin = "2.2.0"
-ksp = "2.2.0-2.0.2"
+kotlin = "2.2.10"
+ksp = "2.2.10-2.0.2"
 ktor = "3.2.3"
 ktorfit = "2.6.4"
+lifecycle-runtime-ktx = "2.9.2"
 publish = "0.34.0"
 semver = "3.0.0"
 serialization = "1.9.0"
-tooling = "1.7.0"
+skie = "0.10.6"
+tooling = "1.8.0"
 versions = "0.52.0"
-lifecycle-runtime-ktx = "2.9.2"
-compose-bom = "2025.07.00"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
@@ -37,6 +41,7 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 android = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
 android-tools = { group = "com.android.tools.build", name = "gradle", version.ref = "android-tools" }
 auto-service = { group = "com.google.auto.service", name = "auto-service", version.ref = "auto-service" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
@@ -59,21 +64,21 @@ ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "k
 ktor-winhttp = { group = "io.ktor", name = "ktor-client-winhttp", version.ref = "ktor" }
 ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfit" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+material3 = { group = "androidx.compose.material3", name = "material3" }
 semver = { group = "io.github.z4kn4fein", name = "semver", version.ref = "semver" }
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
 serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 serialization-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
 tooling = { group = "dev.datlag.tooling", name = "tooling-async", version.ref = "tooling" }
-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 [plugins]
+tolgee = { id = "io.tolgee.mobile-kotlin-sdk", version.ref = "library" } # Keep at top
 android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "android-tools" }
 android-library = { id = "com.android.library", version.ref = "android-tools" }
@@ -87,6 +92,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+skie = { id = "co.touchlab.skie", version.ref = "skie" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
-tolgee = { id = "io.tolgee.mobile-kotlin-sdk", version.ref = "library" }
