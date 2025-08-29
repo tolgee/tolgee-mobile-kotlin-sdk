@@ -169,6 +169,20 @@ fun Context.getTextT(tolgee: Tolgee, @StringRes resId: Int): CharSequence {
         } ?: this.getText(resId)
 }
 
+fun Resources.getQuantityTextT(tolgee: Tolgee, @PluralsRes resId: Int, quantity: Int): CharSequence {
+    return (tolgee as? TolgeeAndroid)?.tPluralStyled(this, resId, quantity)
+        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.t(key = it, parameters = TolgeeMessageParams.Indexed(quantity))
+        } ?: this.getQuantityText(resId, quantity)
+}
+
+fun Resources.getTextArrayT(tolgee: Tolgee, @ArrayRes resId: Int): Array<out CharSequence> {
+    return (tolgee as? TolgeeAndroid)?.tArrayStyled(this, resId)
+        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.tArray(key = it).toTypedArray()
+        } ?: this.getTextArray(resId)
+}
+
 internal actual val platformStorage: TolgeeStorageProvider?
     get() = null
 

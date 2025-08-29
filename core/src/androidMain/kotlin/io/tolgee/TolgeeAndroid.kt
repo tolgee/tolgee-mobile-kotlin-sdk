@@ -159,6 +159,18 @@ data class TolgeeAndroid internal constructor(
         } ?: context.getText(id)
     }
 
+    fun tPluralStyled(resources: Resources, @PluralsRes id: Int, quantity: Int): CharSequence {
+        return getKeyFromResources(resources, id)?.let { key ->
+            t(key, TolgeeMessageParams.Indexed(quantity))
+        } ?: resources.getQuantityText(id, quantity)
+    }
+
+    fun tArrayStyled(resources: Resources, @ArrayRes id: Int): Array<out CharSequence> {
+        return getKeyFromResources(resources, id)?.let { key ->
+            tArray(key).toTypedArray()
+        } ?: resources.getTextArray(id)
+    }
+
     /**
      * Preloads the required languages and their translations for the current Tolgee instance.
      *
