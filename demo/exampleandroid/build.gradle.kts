@@ -6,12 +6,12 @@ plugins {
 
 android {
   namespace = "io.tolgee.demo.exampleandroid"
-  compileSdk = 35
+  compileSdk = 36
 
   defaultConfig {
     applicationId = "io.tolgee.demo.exampleandroid"
     minSdk = 21
-    targetSdk = 35
+    targetSdk = 36
     versionCode = 1
     versionName = "1.0"
   }

@@ -254,7 +254,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     namespace = "io.tolgee.mobilekotlinsdk.core"
 
     defaultConfig {
