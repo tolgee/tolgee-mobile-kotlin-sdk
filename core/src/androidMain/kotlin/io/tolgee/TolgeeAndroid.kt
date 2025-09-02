@@ -105,6 +105,12 @@ data class TolgeeAndroid internal constructor(
         } ?: context.getString(id)
     }
 
+    fun t(resources: Resources, @StringRes id: Int): String {
+        return getKeyFromResources(resources, id)?.let { key ->
+            t(key)
+        } ?: resources.getString(id)
+    }
+
     /**
      * Provides an immediate translation for a given string resource ID with optional format arguments.
      * If the translation key is found in the string resource, it retrieves the translation; otherwise,
@@ -119,6 +125,12 @@ data class TolgeeAndroid internal constructor(
         return getKeyFromResources(context, id)?.let { key ->
             t(key, TolgeeMessageParams.Indexed(*formatArgs))
         } ?: context.getString(id, *formatArgs)
+    }
+
+    fun t(resources: Resources, @StringRes id: Int, vararg formatArgs: Any): String {
+        return getKeyFromResources(resources, id)?.let { key ->
+            t(key, TolgeeMessageParams.Indexed(*formatArgs))
+        } ?: resources.getString(id, *formatArgs)
     }
 
     fun tPlural(resources: Resources, @PluralsRes id: Int, quantity: Int): String {
@@ -157,6 +169,20 @@ data class TolgeeAndroid internal constructor(
         return getKeyFromResources(context, id)?.let { key ->
             t(key)
         } ?: context.getText(id)
+    }
+
+    fun tStyled(resources: Resources, @StringRes id: Int): CharSequence {
+        return getKeyFromResources(resources, id)?.let { key ->
+            t(key)
+        } ?: resources.getText(id)
+    }
+
+    fun tStyled(resources: Resources, @StringRes id: Int, def: CharSequence?): CharSequence? {
+        return id.takeUnless { it == 0 }?.let {
+            getKeyFromResources(resources, it)?.let { key ->
+                t(key)
+            }
+        } ?: resources.getText(id, def)
     }
 
     fun tPluralStyled(resources: Resources, @PluralsRes id: Int, quantity: Int): CharSequence {

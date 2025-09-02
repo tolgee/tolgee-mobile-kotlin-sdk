@@ -62,10 +62,21 @@ internal actual val platformNetworkContext: CoroutineContext
  *         stripped of styled text information.
  */
 fun Context.getStringT(tolgee: Tolgee, @StringRes resId: Int): String {
-    return (tolgee as? TolgeeAndroid)?.t(this, resId)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.t(this, resId)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.t(key = it, parameters = TolgeeMessageParams.None)
-        } ?: this.getString(resId)
+        }
+    } ?: this.getString(resId)
+}
+
+fun Resources.getStringT(tolgee: Tolgee, @StringRes resId: Int): String {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.t(this, resId)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.t(key = it, parameters = TolgeeMessageParams.None)
+        }
+    } ?: this.getString(resId)
 }
 
 /**
@@ -78,6 +89,11 @@ fun Context.getStringT(tolgee: Tolgee, @StringRes resId: Int): String {
  *         stripped of styled text information.
  */
 fun Context.getStringT(@StringRes resId: Int): String {
+    val instance = Tolgee.instanceOrNull ?: return this.getString(resId)
+    return this.getStringT(instance, resId)
+}
+
+fun Resources.getStringT(@StringRes resId: Int): String {
     val instance = Tolgee.instanceOrNull ?: return this.getString(resId)
     return this.getStringT(instance, resId)
 }
@@ -95,10 +111,21 @@ fun Context.getStringT(@StringRes resId: Int): String {
  *         stripped of styled text information.
  */
 fun Context.getStringT(tolgee: Tolgee, @StringRes resId: Int, vararg formatArgs: Any): String {
-    return (tolgee as? TolgeeAndroid)?.t(this, resId, *formatArgs)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.t(this, resId, *formatArgs)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.t(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
-        } ?: this.getString(resId, *formatArgs)
+        }
+    } ?: this.getString(resId, *formatArgs)
+}
+
+fun Resources.getStringT(tolgee: Tolgee, @StringRes resId: Int, vararg formatArgs: Any): String {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.t(this, resId, *formatArgs)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.t(key = it, parameters = TolgeeMessageParams.Indexed(*formatArgs))
+        }
+    } ?: this.getString(resId, *formatArgs)
 }
 
 /**
@@ -117,18 +144,27 @@ fun Context.getStringT(@StringRes resId: Int, vararg formatArgs: Any): String {
     return this.getStringT(instance, resId, *formatArgs)
 }
 
+fun Resources.getStringT(@StringRes resId: Int, vararg formatArgs: Any): String {
+    val instance = Tolgee.instanceOrNull ?: return this.getString(resId, *formatArgs)
+    return this.getStringT(instance, resId, *formatArgs)
+}
+
 fun Resources.getQuantityStringT(tolgee: Tolgee, @PluralsRes resId: Int, quantity: Int): String {
-    return (tolgee as? TolgeeAndroid)?.tPlural(this, resId, quantity)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tPlural(this, resId, quantity)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.t(key = it, TolgeeMessageParams.Indexed(quantity))
-        } ?: this.getQuantityString(resId, quantity)
+        }
+    }?: this.getQuantityString(resId, quantity)
 }
 
 fun Resources.getQuantityStringT(tolgee: Tolgee, @PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any): String {
-    return (tolgee as? TolgeeAndroid)?.tPlural(this, resId, quantity, *formatArgs)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tPlural(this, resId, quantity, *formatArgs)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.t(key = it, TolgeeMessageParams.Indexed(quantity, *formatArgs))
-        } ?: this.getQuantityString(resId, quantity, *formatArgs)
+        }
+    } ?: this.getQuantityString(resId, quantity, *formatArgs)
 }
 
 fun Resources.getQuantityStringT(@PluralsRes resId: Int, quantity: Int): String {
@@ -142,10 +178,12 @@ fun Resources.getQuantityStringT(@PluralsRes resId: Int, quantity: Int, vararg f
 }
 
 fun Resources.getStringArrayT(tolgee: Tolgee, @ArrayRes resId: Int): Array<String> {
-    val list = (tolgee as? TolgeeAndroid)?.tArray(this, resId)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    val list = when (tolgee) {
+        is TolgeeAndroid -> tolgee.tArray(this, resId)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.tArray(key = it)
         }
+    }
     return list?.ifEmpty { null }?.toTypedArray() ?: this.getStringArray(resId)
 }
 
@@ -163,24 +201,50 @@ fun Resources.getStringArrayT(tolgee: Tolgee, @ArrayRes resId: Int): Array<Strin
  *         stripped of styled text information.
  */
 fun Context.getTextT(tolgee: Tolgee, @StringRes resId: Int): CharSequence {
-    return (tolgee as? TolgeeAndroid)?.tStyled(this, resId)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tStyled(this, resId)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.t(key = it, parameters = TolgeeMessageParams.None)
-        } ?: this.getText(resId)
+        }
+    } ?: this.getText(resId)
+}
+
+fun Resources.getTextT(tolgee: Tolgee, @StringRes resId: Int): CharSequence {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tStyled(this, resId)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+            tolgee.t(key = it, parameters = TolgeeMessageParams.None)
+        }
+    } ?: this.getText(resId)
+}
+
+fun Resources.getTextT(tolgee: Tolgee, @StringRes resId: Int, def: CharSequence?): CharSequence? {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tStyled(this, resId, def)
+        else -> resId.takeUnless { it == 0 }?.let {
+            TolgeeAndroid.getKeyFromResources(this, it)?.let { key ->
+                tolgee.t(key = key, parameters = TolgeeMessageParams.None)
+            }
+        }
+    } ?: this.getText(resId, def)
 }
 
 fun Resources.getQuantityTextT(tolgee: Tolgee, @PluralsRes resId: Int, quantity: Int): CharSequence {
-    return (tolgee as? TolgeeAndroid)?.tPluralStyled(this, resId, quantity)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tPluralStyled(this, resId, quantity)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.t(key = it, parameters = TolgeeMessageParams.Indexed(quantity))
-        } ?: this.getQuantityText(resId, quantity)
+        }
+    } ?: this.getQuantityText(resId, quantity)
 }
 
 fun Resources.getTextArrayT(tolgee: Tolgee, @ArrayRes resId: Int): Array<out CharSequence> {
-    return (tolgee as? TolgeeAndroid)?.tArrayStyled(this, resId)
-        ?: TolgeeAndroid.getKeyFromResources(this, resId)?.let {
+    return when (tolgee) {
+        is TolgeeAndroid -> tolgee.tArrayStyled(this, resId)
+        else -> TolgeeAndroid.getKeyFromResources(this, resId)?.let {
             tolgee.tArray(key = it).toTypedArray()
-        } ?: this.getTextArray(resId)
+        }
+    } ?: this.getTextArray(resId)
 }
 
 internal actual val platformStorage: TolgeeStorageProvider?

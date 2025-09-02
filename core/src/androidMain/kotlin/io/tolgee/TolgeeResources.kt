@@ -1,7 +1,6 @@
 package io.tolgee
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -52,9 +51,9 @@ import java.io.InputStream
  */
 @Suppress("DEPRECATION")
 internal class TolgeeResources(
-    val base: Context,
+    val base: Resources,
     val tolgee: Tolgee
-) : Resources(base.resources.assets, base.resources.displayMetrics, base.resources.configuration) {
+) : Resources(base.assets, base.displayMetrics, base.configuration) {
 
     /**
      * Following methods are intercepted by Tolgee.
@@ -69,15 +68,15 @@ internal class TolgeeResources(
     }
 
     override fun getQuantityString(@PluralsRes id: Int, quantity: Int): String {
-        return base.resources.getQuantityStringT(tolgee, id, quantity)
+        return base.getQuantityStringT(tolgee, id, quantity)
     }
 
     override fun getQuantityString(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any?): String {
-        return base.resources.getQuantityStringT(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
+        return base.getQuantityStringT(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
     }
 
     override fun getStringArray(@ArrayRes id: Int): Array<out String?> {
-        return base.resources.getStringArrayT(tolgee, id)
+        return base.getStringArrayT(tolgee, id)
     }
 
     override fun getText(@StringRes id: Int): CharSequence {
@@ -85,11 +84,15 @@ internal class TolgeeResources(
     }
 
     override fun getQuantityText(@PluralsRes id: Int, quantity: Int): CharSequence {
-        return base.resources.getQuantityTextT(tolgee, id, quantity)
+        return base.getQuantityTextT(tolgee, id, quantity)
     }
 
     override fun getTextArray(id: Int): Array<out CharSequence?> {
-        return base.resources.getTextArrayT(tolgee, id)
+        return base.getTextArrayT(tolgee, id)
+    }
+
+    override fun getText(@StringRes id: Int, def: CharSequence?): CharSequence? {
+        return base.getTextT(tolgee, id, def)
     }
 
     /**
@@ -98,117 +101,117 @@ internal class TolgeeResources(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getFont(@FontRes id: Int): Typeface {
-        return base.resources.getFont(id)
+        return base.getFont(id)
     }
 
     override fun getIntArray(@ArrayRes id: Int): IntArray {
-        return base.resources.getIntArray(id)
+        return base.getIntArray(id)
     }
 
     override fun obtainTypedArray(@ArrayRes id: Int): TypedArray {
-        return base.resources.obtainTypedArray(id)
+        return base.obtainTypedArray(id)
     }
 
     override fun getDimension(@DimenRes id: Int): Float {
-        return base.resources.getDimension(id)
+        return base.getDimension(id)
     }
 
     override fun getDimensionPixelOffset(@DimenRes id: Int): Int {
-        return base.resources.getDimensionPixelOffset(id)
+        return base.getDimensionPixelOffset(id)
     }
 
     override fun getDimensionPixelSize(@DimenRes id: Int): Int {
-        return base.resources.getDimensionPixelSize(id)
+        return base.getDimensionPixelSize(id)
     }
 
     override fun getFraction(@FractionRes id: Int, base: Int, pbase: Int): Float {
-        return this.base.resources.getFraction(id, base, pbase)
+        return this.base.getFraction(id, base, pbase)
     }
 
     @Deprecated("Proxied Deprecation")
     override fun getDrawable(@DrawableRes id: Int): Drawable? {
-        return base.resources.getDrawable(id)
+        return base.getDrawable(id)
     }
 
     override fun getDrawable(@DrawableRes id: Int, theme: Theme?): Drawable? {
-        return base.resources.getDrawable(id, theme)
+        return base.getDrawable(id, theme)
     }
 
     @Deprecated("Proxied Deprecation")
     override fun getDrawableForDensity(@DrawableRes id: Int, density: Int): Drawable? {
-        return base.resources.getDrawableForDensity(id, density)
+        return base.getDrawableForDensity(id, density)
     }
 
     override fun getDrawableForDensity(@DrawableRes id: Int, density: Int, theme: Theme?): Drawable? {
-        return base.resources.getDrawableForDensity(id, density, theme)
+        return base.getDrawableForDensity(id, density, theme)
     }
 
     @Deprecated("Proxied Deprecation")
     override fun getMovie(@RawRes id: Int): Movie? {
-        return base.resources.getMovie(id)
+        return base.getMovie(id)
     }
 
     @ColorInt
     @Deprecated("Proxied Deprecation")
     override fun getColor(@ColorRes id: Int): Int {
-        return base.resources.getColor(id)
+        return base.getColor(id)
     }
 
     @ColorInt
     @RequiresApi(Build.VERSION_CODES.M)
     override fun getColor(@ColorRes id: Int, theme: Theme?): Int {
-        return base.resources.getColor(id, theme)
+        return base.getColor(id, theme)
     }
 
     @Deprecated("Proxied Deprecation")
     override fun getColorStateList(@ColorRes id: Int): ColorStateList {
-        return base.resources.getColorStateList(id)
+        return base.getColorStateList(id)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun getColorStateList(@ColorRes id: Int, theme: Theme?): ColorStateList {
-        return base.resources.getColorStateList(id, theme)
+        return base.getColorStateList(id, theme)
     }
 
     override fun getBoolean(@BoolRes id: Int): Boolean {
-        return base.resources.getBoolean(id)
+        return base.getBoolean(id)
     }
 
     override fun getInteger(@IntegerRes id: Int): Int {
-        return base.resources.getInteger(id)
+        return base.getInteger(id)
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun getFloat(@DimenRes id: Int): Float {
-        return base.resources.getFloat(id)
+        return base.getFloat(id)
     }
 
     override fun getLayout(@LayoutRes id: Int): XmlResourceParser {
-        return base.resources.getLayout(id)
+        return base.getLayout(id)
     }
 
     override fun getAnimation(@AnimatorRes @AnimRes id: Int): XmlResourceParser {
-        return base.resources.getAnimation(id)
+        return base.getAnimation(id)
     }
 
     override fun getXml(@XmlRes id: Int): XmlResourceParser {
-        return base.resources.getXml(id)
+        return base.getXml(id)
     }
 
     override fun openRawResource(@RawRes id: Int): InputStream {
-        return base.resources.openRawResource(id)
+        return base.openRawResource(id)
     }
 
     override fun openRawResource(@RawRes id: Int, value: TypedValue?): InputStream {
-        return base.resources.openRawResource(id, value)
+        return base.openRawResource(id, value)
     }
 
     override fun openRawResourceFd(@RawRes id: Int): AssetFileDescriptor? {
-        return base.resources.openRawResourceFd(id)
+        return base.openRawResourceFd(id)
     }
 
     override fun getValue(@AnyRes id: Int, outValue: TypedValue?, resolveRefs: Boolean) {
-        return base.resources.getValue(id, outValue, resolveRefs)
+        return base.getValue(id, outValue, resolveRefs)
     }
 
     override fun getValueForDensity(
@@ -217,73 +220,69 @@ internal class TolgeeResources(
         outValue: TypedValue?,
         resolveRefs: Boolean
     ) {
-        return base.resources.getValueForDensity(id, density, outValue, resolveRefs)
+        return base.getValueForDensity(id, density, outValue, resolveRefs)
     }
 
     @SuppressLint("DiscouragedApi")
     @Discouraged("Proxied Discourage")
     override fun getValue(name: String?, outValue: TypedValue?, resolveRefs: Boolean) {
-        return base.resources.getValue(name, outValue, resolveRefs)
+        return base.getValue(name, outValue, resolveRefs)
     }
 
     override fun obtainAttributes(set: AttributeSet?, @StyleableRes attrs: IntArray?): TypedArray? {
-        return base.resources.obtainAttributes(set, attrs)
+        return base.obtainAttributes(set, attrs)
     }
 
     @Deprecated("Proxied Deprecation")
     override fun updateConfiguration(config: Configuration?, metrics: DisplayMetrics?) {
-        return base.resources.updateConfiguration(config, metrics)
+        return base.updateConfiguration(config, metrics)
     }
 
     override fun getDisplayMetrics(): DisplayMetrics? {
-        return base.resources.displayMetrics
+        return base.displayMetrics
     }
 
     override fun getConfiguration(): Configuration? {
-        return base.resources.configuration
+        return base.configuration
     }
 
     @SuppressLint("DiscouragedApi")
     @Discouraged("Proxied Discourage")
     override fun getIdentifier(name: String?, defType: String?, defPackage: String?): Int {
-        return base.resources.getIdentifier(name, defType, defPackage)
+        return base.getIdentifier(name, defType, defPackage)
     }
 
     override fun getResourceName(@AnyRes resid: Int): String? {
-        return base.resources.getResourceName(resid)
+        return base.getResourceName(resid)
     }
 
     override fun getResourcePackageName(@AnyRes resid: Int): String? {
-        return base.resources.getResourcePackageName(resid)
+        return base.getResourcePackageName(resid)
     }
 
     override fun getResourceEntryName(@AnyRes resid: Int): String? {
-        return base.resources.getResourceEntryName(resid)
+        return base.getResourceEntryName(resid)
     }
 
     override fun parseBundleExtras(parser: XmlResourceParser?, outBundle: Bundle?) {
-        return base.resources.parseBundleExtras(parser, outBundle)
+        return base.parseBundleExtras(parser, outBundle)
     }
 
     override fun parseBundleExtra(tagName: String?, attrs: AttributeSet?, outBundle: Bundle?) {
-        return base.resources.parseBundleExtra(tagName, attrs, outBundle)
+        return base.parseBundleExtra(tagName, attrs, outBundle)
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun addLoaders(vararg loaders: ResourcesLoader?) {
-        return base.resources.addLoaders(*loaders)
+        return base.addLoaders(*loaders)
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun removeLoaders(vararg loaders: ResourcesLoader?) {
-        return base.resources.removeLoaders(*loaders)
+        return base.removeLoaders(*loaders)
     }
 
     override fun getResourceTypeName(@AnyRes resid: Int): String? {
-        return base.resources.getResourceTypeName(resid)
-    }
-
-    override fun getText(@StringRes id: Int, def: CharSequence?): CharSequence? {
-        return base.resources.getText(id, def)
+        return base.getResourceTypeName(resid)
     }
 }

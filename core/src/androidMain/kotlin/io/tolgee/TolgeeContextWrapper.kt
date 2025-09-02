@@ -19,8 +19,18 @@ class TolgeeContextWrapper(
     val tolgee: Tolgee
 ) : ContextWrapper(base) {
 
+    private var baseRes by atomic<Resources?>(null)
+    private var res by atomic<Resources?>(baseRes)
+
     override fun getResources(): Resources? {
-        return TolgeeResources(base, tolgee)
+        val base = super.getResources() ?: return res
+
+        if (res == null || baseRes != base) {
+            res = TolgeeResources(base, tolgee)
+            baseRes = base
+        }
+
+        return res ?: base
     }
 
     companion object {
