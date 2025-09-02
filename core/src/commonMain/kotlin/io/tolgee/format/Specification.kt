@@ -267,8 +267,8 @@ internal data class Specification(
                 val tz = TimeZone.currentSystemDefault()
                 time.toInstant(tz).toEpochMilliseconds().toString()
             }
-            'e' -> time.dayOfMonth.toString()
-            'd' -> "%02s".sprintf(time.dayOfMonth)
+            'e' -> time.day.toString()
+            'd' -> "%02s".sprintf(time.day)
             'm' -> "%02s".sprintf(time.month.number)
             'y' -> time.year.toString().takeLast(2)
             'Y' -> "%04d".sprintf(time.year)

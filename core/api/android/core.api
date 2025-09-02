@@ -165,15 +165,21 @@ public final class io/tolgee/TolgeeAndroid : io/tolgee/Tolgee {
 	public final fun preload (Landroidx/lifecycle/LifecycleOwner;)Lkotlinx/coroutines/Job;
 	public final fun t (Landroid/content/Context;I)Ljava/lang/String;
 	public final fun t (Landroid/content/Context;I[Ljava/lang/Object;)Ljava/lang/String;
+	public final fun t (Landroid/content/res/Resources;I)Ljava/lang/String;
+	public final fun t (Landroid/content/res/Resources;I[Ljava/lang/Object;)Ljava/lang/String;
 	public final fun tArray (Landroid/content/res/Resources;I)Ljava/util/List;
 	public final fun tArrayFlow (Landroid/content/res/Resources;I)Lkotlinx/coroutines/flow/Flow;
+	public final fun tArrayStyled (Landroid/content/res/Resources;I)[Ljava/lang/CharSequence;
 	public final fun tFlow (Landroid/content/Context;I)Lkotlinx/coroutines/flow/Flow;
 	public final fun tFlow (Landroid/content/Context;I[Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 	public final fun tPlural (Landroid/content/res/Resources;II)Ljava/lang/String;
 	public final fun tPlural (Landroid/content/res/Resources;II[Ljava/lang/Object;)Ljava/lang/String;
 	public final fun tPluralFlow (Landroid/content/res/Resources;II)Lkotlinx/coroutines/flow/Flow;
 	public final fun tPluralFlow (Landroid/content/res/Resources;II[Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public final fun tPluralStyled (Landroid/content/res/Resources;II)Ljava/lang/CharSequence;
 	public final fun tStyled (Landroid/content/Context;I)Ljava/lang/CharSequence;
+	public final fun tStyled (Landroid/content/res/Resources;I)Ljava/lang/CharSequence;
+	public final fun tStyled (Landroid/content/res/Resources;ILjava/lang/CharSequence;)Ljava/lang/CharSequence;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -202,12 +208,20 @@ public final class io/tolgee/common/ExtendTolgee_androidKt {
 	public static final fun getQuantityStringT (Landroid/content/res/Resources;II[Ljava/lang/Object;)Ljava/lang/String;
 	public static final fun getQuantityStringT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;II)Ljava/lang/String;
 	public static final fun getQuantityStringT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;II[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getQuantityTextT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;II)Ljava/lang/CharSequence;
 	public static final fun getStringArrayT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;I)[Ljava/lang/String;
 	public static final fun getStringT (Landroid/content/Context;I)Ljava/lang/String;
 	public static final fun getStringT (Landroid/content/Context;I[Ljava/lang/Object;)Ljava/lang/String;
 	public static final fun getStringT (Landroid/content/Context;Lio/tolgee/Tolgee;I)Ljava/lang/String;
 	public static final fun getStringT (Landroid/content/Context;Lio/tolgee/Tolgee;I[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getStringT (Landroid/content/res/Resources;I)Ljava/lang/String;
+	public static final fun getStringT (Landroid/content/res/Resources;I[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getStringT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;I)Ljava/lang/String;
+	public static final fun getStringT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;I[Ljava/lang/Object;)Ljava/lang/String;
+	public static final fun getTextArrayT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;I)[Ljava/lang/CharSequence;
 	public static final fun getTextT (Landroid/content/Context;Lio/tolgee/Tolgee;I)Ljava/lang/CharSequence;
+	public static final fun getTextT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;I)Ljava/lang/CharSequence;
+	public static final fun getTextT (Landroid/content/res/Resources;Lio/tolgee/Tolgee;ILjava/lang/CharSequence;)Ljava/lang/CharSequence;
 }
 
 public abstract interface class io/tolgee/model/TolgeeMessageParams : de/comahe/i18n4k/messages/formatter/MessageParameters {
