@@ -9,6 +9,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.tolgee.Tolgee.Companion.systemLocale
 import io.tolgee.api.TolgeeApi
+import io.tolgee.cache.TranslationCache
 import io.tolgee.common.PlatformTolgee
 import io.tolgee.common.createPlatformTolgee
 import io.tolgee.common.platformHttpClient
@@ -17,6 +18,7 @@ import io.tolgee.common.platformStorage
 import io.tolgee.model.TolgeeMessageParams
 import io.tolgee.model.TolgeeManifest
 import io.tolgee.model.TolgeeTranslation
+import io.tolgee.model.translation.TranslationEmpty
 import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.Dispatchers
@@ -80,16 +82,22 @@ open class Tolgee(
     private val cachedManifest = atomic<TolgeeManifest?>(null)
 
     /**
-     * A thread-safe atomic reference that holds the currently cached translation instance.
+     * LRU cache for storing multiple translation instances.
      *
-     * This property is used to store a `TolgeeTranslation` object representing the translations
-     * retrieved for a specific locale or the default locale. It supports concurrent read and
-     * write operations, ensuring synchronization and data integrity across threads or coroutines.
+     * This cache stores `TolgeeTranslation` objects for different locales, allowing
+     * switching between locales without reloading from network/storage.
      *
-     * The cached translation is updated during the `loadTranslations` function and is accessed
-     * in the `currentTranslation` function to retrieve the most recent translation for a given locale.
+     * The cache size is configured via `config.contentDelivery.maxLocalesInMemory`:
+     * - `null`: unlimited cache (no eviction)
+     * - `1`: default (single locale)
+     * - `2+`: multi-locale cache with LRU eviction
+     *
+     * The cache is updated during the `loadTranslations` function and is accessed
+     * in the `currentTranslation` function to retrieve translations for a given locale.
      */
-    private val cachedTranslation = atomic<TolgeeTranslation?>(null)
+    private val translationCache: TranslationCache by lazy {
+        TranslationCache(config.contentDelivery.maxLocalesInMemory)
+    }
 
     /**
      * A reactive flow that holds the current locale used for translation operations.
@@ -229,27 +237,47 @@ open class Tolgee(
     /**
      * Loads translations for a given locale or the default locale if none is specified.
      *
-     * This method attempts to retrieve the translation either from the currently cached data
-     * or by querying the Tolgee API. Newly retrieved translations are cached for future use.
+     * This method attempts to retrieve the translation either from the cache or by querying
+     * the Tolgee API. Newly retrieved translations are cached for future use according to
+     * the configured cache size limit.
+     *
      * Thread safety is ensured using a mutex lock.
      *
      * @param locale The target locale to load translations for. Defaults to the current value from `localeFlow`.
+     * @return The loaded or cached translation.
      */
     private suspend fun loadTranslations(locale: Locale?) = translationsMutex.withLock {
-        currentTranslation(locale) ?: withContext(config.network.context) {
-            TolgeeApi.getTranslations(
+        val localeTag = locale?.toTag("-")?.ifBlank { null }
+
+        // Check cache first
+        if (localeTag != null) {
+            translationCache.get(localeTag)?.let {
+                return@withLock it
+            }
+        }
+
+        // Load from network/storage
+        withContext(config.network.context) {
+            val translation = TolgeeApi.getTranslations(
                 client = config.network.client,
                 config = config,
-                currentLanguage = locale?.toTag("-")?.ifBlank { null },
-            ).also {
-                cachedTranslation.value = it
-                changeFlow.emit(Unit)
-                withContext(Dispatchers.Main) {
-                    changeListeners.forEach { listener ->
-                        listener.onTranslationsChanged()
-                    }
+                currentLanguage = localeTag,
+            )
+
+            // Cache the loaded translation (skip TranslationEmpty)
+            if (localeTag != null && translation !is TranslationEmpty) {
+                translationCache.put(localeTag, translation)
+            }
+
+            // Emit change events
+            changeFlow.emit(Unit)
+            withContext(Dispatchers.Main) {
+                changeListeners.forEach { listener ->
+                    listener.onTranslationsChanged()
                 }
             }
+
+            return@withContext translation
         }
     }
 
@@ -261,12 +289,10 @@ open class Tolgee(
      * @return The `TolgeeTranslation` instance matching the provided locale, or null if no applicable translation is found.
      */
     private fun currentTranslation(locale: Locale?): TolgeeTranslation? {
-        return cachedTranslation.value?.takeIf {
-            if (locale != null) {
-                it.hasLocale(locale)
-            } else {
-                true
-            }
+        val localeTag = locale?.toTag("-")?.ifBlank { null } ?: return null
+
+        return translationCache.get(localeTag)?.takeIf {
+            it.hasLocale(locale)
         }
     }
 
@@ -694,6 +720,7 @@ open class Tolgee(
             val storage: TolgeeStorageProvider? = platformStorage,
             val formatter: Formatter = Formatter.Sprintf,
             val manifestPath: String = path("manifest"),
+            val maxLocalesInMemory: Int? = 1,
         ) {
             /**
              * A builder class for constructing instances of `CDN` with configurable properties.
@@ -758,6 +785,18 @@ open class Tolgee(
                 var formatter: Formatter = Formatter.Sprintf
 
                 /**
+                 * Maximum number of locales to keep in memory cache.
+                 *
+                 * Uses LRU (Least Recently Used) eviction when the limit is reached.
+                 * - `null`: unlimited cache (no eviction)
+                 * - `1`: default (caches only one locale, same as current behavior)
+                 * - `2+`: caches multiple locales with LRU eviction
+                 *
+                 * Each cached locale consumes memory proportional to its translation file size.
+                 */
+                var maxLocalesInMemory: Int? = 1
+
+                /**
                  * Sets the URL for the CDN configuration.
                  *
                  * @param url The URL to be used for the CDN.
@@ -817,6 +856,37 @@ open class Tolgee(
                 }
 
                 /**
+                 * Sets the maximum number of locales to keep in memory cache.
+                 *
+                 * Uses LRU (Least Recently Used) eviction when the limit is reached.
+                 * Each cached locale consumes memory proportional to its translation file size.
+                 *
+                 * **Use Cases:**
+                 * - Multi-language apps with frequent locale switching
+                 * - Apps where users switch between 2-3 preferred languages
+                 *
+                 * **Default:** 1 (caches only one locale)
+                 *
+                 * @param max Maximum number of locales to cache. Use `null` for unlimited caching,
+                 *            or a positive integer (>= 1) for limited caching with LRU eviction.
+                 * @return The Builder instance, enabling method chaining.
+                 * @throws IllegalArgumentException if max < 1 (when not null)
+                 *
+                 * @sample
+                 * ```kotlin
+                 * contentDelivery {
+                 *     maxLocalesInMemory(3)  // Cache up to 3 locales
+                 * }
+                 * ```
+                 */
+                fun maxLocalesInMemory(max: Int?) = apply {
+                    require(max == null || max >= 1) {
+                        "maxLocalesInMemory must be null (unlimited) or at least 1, but was $max"
+                    }
+                    this.maxLocalesInMemory = max
+                }
+
+                /**
                  * Builds and returns a configured `CDN` instance.
                  *
                  * The method constructs the `CDN` using the defined URL and formatter properties.
@@ -832,7 +902,8 @@ open class Tolgee(
                     path = path,
                     manifestPath = manifestPath ?: path("manifest"),
                     storage = storage,
-                    formatter = formatter
+                    formatter = formatter,
+                    maxLocalesInMemory = maxLocalesInMemory
                 )
             }
 

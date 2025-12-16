@@ -93,9 +93,11 @@ public final class io/tolgee/Tolgee$Config$ContentDelivery {
 	public final fun component3 ()Lio/tolgee/storage/TolgeeStorageProvider;
 	public final fun component4 ()Lio/tolgee/Tolgee$Formatter;
 	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/Integer;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
 	public final fun getManifestPath ()Ljava/lang/String;
+	public final fun getMaxLocalesInMemory ()Ljava/lang/Integer;
 	public final fun getPath ()Lkotlin/jvm/functions/Function1;
 	public final fun getStorage ()Lio/tolgee/storage/TolgeeStorageProvider;
 	public final fun getUrl ()Ljava/lang/String;
@@ -109,13 +111,16 @@ public final class io/tolgee/Tolgee$Config$ContentDelivery$Builder {
 	public final fun formatter (Lio/tolgee/Tolgee$Formatter;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
 	public final fun getManifestPath ()Ljava/lang/String;
+	public final fun getMaxLocalesInMemory ()Ljava/lang/Integer;
 	public final fun getPath ()Lkotlin/jvm/functions/Function1;
 	public final fun getStorage ()Lio/tolgee/storage/TolgeeStorageProvider;
 	public final fun getUrl ()Ljava/lang/String;
 	public final fun manifestPath (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
+	public final fun maxLocalesInMemory (Ljava/lang/Integer;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun path (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun setFormatter (Lio/tolgee/Tolgee$Formatter;)V
 	public final fun setManifestPath (Ljava/lang/String;)V
+	public final fun setMaxLocalesInMemory (Ljava/lang/Integer;)V
 	public final fun setPath (Lkotlin/jvm/functions/Function1;)V
 	public final fun setStorage (Lio/tolgee/storage/TolgeeStorageProvider;)V
 	public final fun setUrl (Ljava/lang/String;)V
