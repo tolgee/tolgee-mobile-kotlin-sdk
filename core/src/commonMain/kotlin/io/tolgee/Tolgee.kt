@@ -378,6 +378,50 @@ open class Tolgee(
     }
 
     /**
+     * Preloads all available languages and their translations into memory.
+     *
+     * This method loads translations for all locales defined in the manifest or configuration.
+     * Translations are loaded into the LRU cache according to the configured cache size limit
+     * (see [Config.ContentDelivery.maxLocalesInMemory]).
+     *
+     * The current locale is always loaded last to ensure it remains in the cache even when
+     * the cache size is limited and other locales might be evicted due to LRU policy.
+     *
+     * Use cases:
+     * - Applications that support frequent locale switching
+     * - Offline-first applications that want to cache multiple languages
+     * - Improving performance by preloading translations at app startup
+     *
+     * Individual locale loading failures are silently ignored, allowing other locales to load.
+     *
+     * @see preload For loading only the current locale
+     */
+    open suspend fun preloadAll() {
+        suspendCatching {
+            loadManifest()
+
+            val availableLocales = config.availableLocales
+                ?: cachedManifest.value?.availableLocales
+                ?: emptyList()
+
+            val currentLocale = resolveLocale(localeFlow.value)
+            val otherLocales = availableLocales.filter { it != currentLocale }
+
+            otherLocales.forEach { locale ->
+                suspendCatching {
+                    loadTranslations(locale)
+                }
+            }
+
+            if (currentLocale != null) {
+                suspendCatching {
+                    loadTranslations(currentLocale)
+                }
+            }
+        }
+    }
+
+    /**
      * Sets the current locale for the Tolgee instance, updating it in the reactive locale flow.
      *
      * @param locale The locale to be set for translations and related operations.

@@ -217,6 +217,29 @@ data class TolgeeAndroid internal constructor(
     }
 
     /**
+     * Preloads all available languages and their translations into memory.
+     *
+     * This is a convenience method that launches a coroutine in the provided [LifecycleOwner]'s
+     * lifecycle scope and calls the suspend [preloadAll] function.
+     *
+     * This method loads translations for all locales defined in the manifest or configuration.
+     * Translations are loaded into the LRU cache according to the configured cache size limit
+     * (see [Config.ContentDelivery.maxLocalesInMemory]).
+     *
+     * Use cases:
+     * - Applications that support frequent locale switching
+     * - Offline-first applications that want to cache multiple languages
+     * - Improving performance by preloading translations at app startup
+     *
+     * @param lifecycleOwner any [LifecycleOwner] to launch the coroutine from, e.g. Activity or Fragment
+     * @see preloadAll For the base suspend function
+     * @see preload For loading only the current locale
+     */
+    fun preloadAll(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycleScope.launch {
+        preloadAll()
+    }
+
+    /**
      * A companion object for utility functions related to string resources and key retrieval.
      */
     companion object {
