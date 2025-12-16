@@ -4,8 +4,7 @@ import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.cldr.plurals.PluralCategory
 import de.comahe.i18n4k.cldr.plurals.PluralRule
 import de.comahe.i18n4k.cldr.plurals.PluralRuleType
-import de.comahe.i18n4k.createLocale
-import de.comahe.i18n4k.language
+import de.comahe.i18n4k.toTag
 import io.tolgee.common.sprintf
 import io.tolgee.model.TolgeeKey
 import io.tolgee.model.TolgeeMessageParams
@@ -52,8 +51,8 @@ internal data class TranslationSprintf(
         }
 
         return when (val data = requestedKey.translationForOrFirst(
-            locale?.language?.ifBlank { null }
-                ?: this.usedLocale?.language?.ifBlank { null }
+            locale?.toTag("-")?.ifBlank { null }
+                ?: this.usedLocale?.toTag("-")?.ifBlank { null }
         )) {
             is TolgeeKey.Data.Text -> return data.text.sprintf(*args)
             is TolgeeKey.Data.Plural -> {
@@ -68,7 +67,7 @@ internal data class TranslationSprintf(
         if (number == null) return PluralCategory.OTHER.id
         val locale = usedLocale ?: return PluralCategory.OTHER.id
 
-        val pluralRule = PluralRule.create(createLocale(locale.language), PluralRuleType.CARDINAL)
+        val pluralRule = PluralRule.create(locale, PluralRuleType.CARDINAL)
 
         val pluralCategory = when (number) {
             is Number -> pluralRule?.select(number)
@@ -86,12 +85,12 @@ internal data class TranslationSprintf(
      * @return `true` if the given locale matches the currently used locale or shares the same language; `false` otherwise.
      */
     override fun hasLocale(locale: Locale): Boolean {
-        return locale == this.usedLocale || locale.language == this.usedLocale?.language
+        return locale == this.usedLocale || locale.toTag("-") == this.usedLocale?.toTag("-")
     }
 
     override fun stringArray(key: String, locale: Locale?): List<String> {
         val foundTolgeeKey = stringArrayKeys.firstOrNull { it.keyName == key } ?: return emptyList()
-        return when (val data = foundTolgeeKey.translationForOrFirst(locale?.language)) {
+        return when (val data = foundTolgeeKey.translationForOrFirst(locale?.toTag("-"))) {
             is TolgeeKey.Data.Array -> data.array
             is TolgeeKey.Data.Plural -> data.plurals.map { it.value }
             is TolgeeKey.Data.Text -> listOf(data.text)

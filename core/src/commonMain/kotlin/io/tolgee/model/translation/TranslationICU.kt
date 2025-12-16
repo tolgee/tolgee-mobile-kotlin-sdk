@@ -3,11 +3,11 @@ package io.tolgee.model.translation
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.i18n4kInitCldrPluralRules
-import de.comahe.i18n4k.language
 import de.comahe.i18n4k.messages.MessageBundle
 import de.comahe.i18n4k.messages.formatter.MessageParameters
 import de.comahe.i18n4k.messages.providers.MessagesProvider
 import de.comahe.i18n4k.strings.LocalizedString
+import de.comahe.i18n4k.toTag
 import io.tolgee.model.TolgeeKey
 import io.tolgee.model.TolgeeMessageParams
 import io.tolgee.model.TolgeeTranslation
@@ -146,13 +146,13 @@ internal data class TranslationICU(
      */
     override fun hasLocale(locale: Locale): Boolean {
         return locales.contains(locale) || locales.any {
-            it.language == locale.language
+            it.toTag("-") == locale.toTag("-")
         }
     }
 
     override fun stringArray(key: String, locale: Locale?): List<String> {
         val foundTolgeeKey = stringArrayKeys.firstOrNull { it.keyName == key } ?: return emptyList()
-        return when (val data = foundTolgeeKey.translationForOrFirst(locale?.language)) {
+        return when (val data = foundTolgeeKey.translationForOrFirst(locale?.toTag("-"))) {
             is TolgeeKey.Data.Array -> data.array
             is TolgeeKey.Data.Text -> listOf(data.text)
             else -> emptyList()

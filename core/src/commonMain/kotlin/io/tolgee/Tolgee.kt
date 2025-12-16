@@ -3,6 +3,7 @@ package io.tolgee
 import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
+import de.comahe.i18n4k.toTag
 import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
 import io.ktor.client.engine.*
@@ -14,6 +15,7 @@ import io.tolgee.common.platformHttpClient
 import io.tolgee.common.platformNetworkContext
 import io.tolgee.common.platformStorage
 import io.tolgee.model.TolgeeMessageParams
+import io.tolgee.model.TolgeeManifest
 import io.tolgee.model.TolgeeTranslation
 import io.tolgee.storage.TolgeeStorageProvider
 import kotlinx.atomicfu.atomic
@@ -71,6 +73,11 @@ open class Tolgee(
      * such as loading or caching translations.
      */
     private val translationsMutex = Mutex()
+
+    /**
+     * In-memory cache of loaded manifest.
+     */
+    private val cachedManifest = atomic<TolgeeManifest?>(null)
 
     /**
      * A thread-safe atomic reference that holds the currently cached translation instance.
@@ -144,6 +151,80 @@ open class Tolgee(
         return changeListeners.remove(listener)
     }
 
+    /**
+     * Resolves the most appropriate available locale from the given locale.
+     *
+     * Resolution strategy:
+     * 1. If the exact locale is available, return it (e.g., "en-US" → "en-US")
+     * 2. Otherwise, try to find an exact match for the base language (e.g., "en-US" → "en")
+     *
+     * Available locales are determined from:
+     * 1. `config.availableLocales` (if manually specified)
+     * 2. `loadedManifest.value.availableLocales` (if fetched from CDN)
+     * 3. If neither is available, fallback is disabled (returns input locale as-is)
+     *
+     * @param locale The desired locale to resolve. Can be null.
+     * @return The resolved locale, or null if the input is null.
+     */
+     protected fun resolveLocale(locale: Locale?): Locale? {
+        if (locale == null) return null
+
+        // Get available locales from config or loaded manifest
+        val availableLocales = config.availableLocales
+            ?: cachedManifest.value?.availableLocales
+
+        if (availableLocales == null) {
+            // Available locales not found in either config or manifest,
+            // fallback mechanism disabled - return input locale as-is
+            return locale
+        }
+
+        // First, check if exact locale is available
+        if (locale in availableLocales) {
+            return locale
+        }
+
+        // Fallback: Look for exact base language match only
+        // Find exact match for base language (e.g., "en" without region/script)
+        return availableLocales.firstOrNull { availableLocale ->
+            // Match only if:
+            // 1. The language matches
+            // 2. It's a base language (no region/script), checked by comparing tag to language
+            availableLocale.language == locale.language &&
+            availableLocale.toTag("-") == availableLocale.language
+        }
+    }
+
+    /**
+     * Loads manifest about available locales from the CDN or cache.
+     *
+     * This method fetches the manifest file which contains information
+     * about which locales are available in the project. The manifest is used
+     * for locale fallback (e.g., falling back from "en-US" to "en").
+     *
+     * This method is thread-safe but does NOT use mutex locking since:
+     * - Multiple concurrent loads are acceptable (idempotent operation)
+     * - The atomic update ensures thread safety
+     * - Avoids blocking translation loading
+     */
+    private suspend fun loadManifest() {
+        // Skip if manually configured
+        if (config.availableLocales != null) return
+
+        // Skip if already loaded
+        if (cachedManifest.value != null) return
+
+        withContext(config.network.context) {
+            // Try to fetch fresh manifest from CDN
+            val manifest = TolgeeApi.getManifest(
+                client = config.network.client,
+                config = config
+            )
+
+            cachedManifest.value = manifest
+            changeFlow.emit(Unit)
+        }
+    }
 
     /**
      * Loads translations for a given locale or the default locale if none is specified.
@@ -154,14 +235,12 @@ open class Tolgee(
      *
      * @param locale The target locale to load translations for. Defaults to the current value from `localeFlow`.
      */
-    private suspend fun loadTranslations(
-        locale: Locale? = localeFlow.value
-    ) = translationsMutex.withLock {
+    private suspend fun loadTranslations(locale: Locale?) = translationsMutex.withLock {
         currentTranslation(locale) ?: withContext(config.network.context) {
             TolgeeApi.getTranslations(
                 client = config.network.client,
                 config = config,
-                currentLanguage = locale?.language?.ifBlank { null },
+                currentLanguage = locale?.toTag("-")?.ifBlank { null },
             ).also {
                 cachedTranslation.value = it
                 changeFlow.emit(Unit)
@@ -181,9 +260,7 @@ open class Tolgee(
      * @param locale The locale for which the translation is being requested. If null, uses the default or current value from `localeFlow`.
      * @return The `TolgeeTranslation` instance matching the provided locale, or null if no applicable translation is found.
      */
-    private fun currentTranslation(
-        locale: Locale? = localeFlow.value,
-    ): TolgeeTranslation? {
+    private fun currentTranslation(locale: Locale?): TolgeeTranslation? {
         return cachedTranslation.value?.takeIf {
             if (locale != null) {
                 it.hasLocale(locale)
@@ -204,6 +281,8 @@ open class Tolgee(
         key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): Flow<String> = localeFlow.mapLatest { locale ->
+        loadManifest()
+        val locale = resolveLocale(locale)
         val translation = currentTranslation(locale) ?: suspendCatching {
             loadTranslations(locale)
         }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest t(key, parameters)
@@ -215,6 +294,8 @@ open class Tolgee(
     open fun tArrayFlow(
         key: String
     ): Flow<List<String>> = localeFlow.mapLatest { locale ->
+        loadManifest()
+        val locale = resolveLocale(locale)
         val translation = currentTranslation(locale) ?: suspendCatching {
             loadTranslations(locale)
         }.getOrNull() ?: currentTranslation(locale) ?: return@mapLatest tArray(key)
@@ -235,17 +316,19 @@ open class Tolgee(
         key: String,
         parameters: TolgeeMessageParams = TolgeeMessageParams.None
     ): String? {
-        val translation = currentTranslation() ?: return null
+        val locale = resolveLocale(localeFlow.value)
+        val translation = currentTranslation(locale) ?: return null
 
-        return translation.localized(key, parameters, localeFlow.value)
+        return translation.localized(key, parameters, locale)
     }
 
     open fun tArray(
         key: String
     ): List<String> {
-        val translation = currentTranslation() ?: return emptyList()
+        val locale = resolveLocale(localeFlow.value)
+        val translation = currentTranslation(locale) ?: return emptyList()
 
-        return translation.stringArray(key, localeFlow.value)
+        return translation.stringArray(key, locale)
     }
 
     /**
@@ -262,7 +345,10 @@ open class Tolgee(
      * operations.
      */
     open suspend fun preload() {
-        suspendCatching { loadTranslations() }
+        suspendCatching {
+            loadManifest()
+            loadTranslations(resolveLocale(localeFlow.value))
+        }
     }
 
     /**
@@ -300,6 +386,7 @@ open class Tolgee(
         val locale: Locale?,
         val network: Network,
         val contentDelivery: ContentDelivery,
+        val availableLocales: List<Locale>?,
     ) {
 
         /**
@@ -320,6 +407,18 @@ open class Tolgee(
             var locale: Locale? = systemLocale
 
             /**
+             * A list of available locales. If specified, the app won't try to fetch a manifest from the server.
+             * Instead, it will use the provided list of locales. Can be used to save on network requests.
+             *
+             * This list is used when determining the fallback language for translations.
+             * For example, if the requested language doesn't exist, but it's non-regional variant
+             * exists (`en-US` doesn't exist, but `en` does),we can use that instead. If we don't
+             * have a list of available locales and manifest fetching fails, the fallback mechanism
+             * will be disabled and only exactly matching locale will be used.
+             */
+            var availableLocales: List<Locale>? = null
+
+            /**
              * Represents the network configuration used within the `Builder`.
              * This property defines the HTTP client and coroutine context used for executing network operations.
              * Can be customized directly by setting a `Network` instance or using a builder lambda function.
@@ -330,6 +429,7 @@ open class Tolgee(
              * @see Network.Builder
              */
             var network: Network = Network()
+
             /**
              * Represents the content delivery network (CDN) configuration associated with the builder.
              *
@@ -360,6 +460,39 @@ open class Tolgee(
              * @param localeTag The locale string in the format of a language tag (e.g., "en", "fr", "es").
              */
             fun locale(localeTag: String) = locale(forLocaleTag(localeTag))
+
+            /**
+             * Sets the available locales configuration for the builder and returns the instance for further customization.
+             *
+             * @param locales A list of locales to be set for the configuration.
+             */
+            fun availableLocales(locales: List<Locale>) = apply {
+                this.availableLocales = locales
+            }
+
+            /**
+             * Sets the available locales configuration for the builder and returns the instance for further customization.
+             *
+             * @param locales A list of locales to be set for the configuration.
+             */
+            fun availableLocales(vararg locales: Locale) = apply {
+                this.availableLocales = locales.toList()
+            }
+
+            /**
+             * Sets the available locales configuration for the builder and returns the instance for further customization.
+             *
+             * @param localeTags A list of locale strings in the format of a language tag (e.g., "en", "fr", "es").
+             */
+            fun availableLocaleTags(localeTags: List<String>) = availableLocales(localeTags.map(::forLocaleTag))
+
+            /**
+             * Sets the available locales configuration for the builder and returns the instance for further customization.
+             *
+             * @param localeTags A list of locale strings in the format of a language tag (e.g., "en", "fr", "es").
+             */
+            fun availableLocaleTags(vararg localeTags: String) = availableLocales(localeTags.map(::forLocaleTag))
+
 
             /**
              * Configures the network settings for the builder.
@@ -430,6 +563,7 @@ open class Tolgee(
              */
             fun build(): Config = Config(
                 locale = locale,
+                availableLocales = availableLocales,
                 network = network,
                 contentDelivery = contentDelivery,
             )
@@ -559,6 +693,7 @@ open class Tolgee(
             val path: (language: String) -> String = { "$it.json" },
             val storage: TolgeeStorageProvider? = platformStorage,
             val formatter: Formatter = Formatter.Sprintf,
+            val manifestPath: String = path("manifest"),
         ) {
             /**
              * A builder class for constructing instances of `CDN` with configurable properties.
@@ -586,6 +721,14 @@ open class Tolgee(
                  * @return The generated file path, typically in the format `<language>.json`.
                  */
                 var path: (language: String) -> String = { "$it.json" }
+
+                /**
+                 * Represents the manifest file path within the CDN configuration.
+                 *
+                 * This variable holds the path to the manifest file within the CDN configuration.
+                 * The default value is "manifest.json".
+                 */
+                var manifestPath: String? = null
 
                 /**
                  * Represents the storage configuration for the Builder.
@@ -639,6 +782,16 @@ open class Tolgee(
                 }
 
                 /**
+                 * Sets the manifest path for the CDN configuration.
+                 *
+                 * @param manifestPath The manifest path to be used for the CDN.
+                 * @return The Builder instance with the updated manifest path.
+                 */
+                fun manifestPath(manifestPath: String) = apply {
+                    this.manifestPath = manifestPath
+                }
+
+                /**
                  * Configures the storage settings for the builder.
                  *
                  * This method allows the binding of a specific storage implementation
@@ -677,6 +830,7 @@ open class Tolgee(
                 fun build(): ContentDelivery = ContentDelivery(
                     url = url?.ifBlank { null },
                     path = path,
+                    manifestPath = manifestPath ?: path("manifest"),
                     storage = storage,
                     formatter = formatter
                 )

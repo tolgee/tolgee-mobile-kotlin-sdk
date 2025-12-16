@@ -14,6 +14,7 @@ public class io/tolgee/Tolgee {
 	public static final fun new (Lkotlin/jvm/functions/Function1;)Lio/tolgee/TolgeeAndroid;
 	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun removeChangeListener (Lio/tolgee/Tolgee$ChangeListener;)Z
+	protected final fun resolveLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
 	public fun setLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public final fun t (Ljava/lang/String;)Ljava/lang/String;
@@ -45,7 +46,9 @@ public final class io/tolgee/Tolgee$Config {
 	public final fun component1 ()Ljava/util/Locale;
 	public final fun component2 ()Lio/tolgee/Tolgee$Config$Network;
 	public final fun component3 ()Lio/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun component4 ()Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAvailableLocales ()Ljava/util/List;
 	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun getLocale ()Ljava/util/Locale;
 	public final fun getNetwork ()Lio/tolgee/Tolgee$Config$Network;
@@ -55,12 +58,17 @@ public final class io/tolgee/Tolgee$Config {
 
 public final class io/tolgee/Tolgee$Config$Builder {
 	public fun <init> ()V
+	public final fun availableLocaleTags (Ljava/util/List;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun availableLocaleTags ([Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun availableLocales (Ljava/util/List;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun availableLocales ([Ljava/util/Locale;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun build ()Lio/tolgee/Tolgee$Config;
 	public final fun contentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public static synthetic fun contentDelivery$default (Lio/tolgee/Tolgee$Config$Builder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun getAvailableLocales ()Ljava/util/List;
 	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun getLocale ()Ljava/util/Locale;
 	public final fun getNetwork ()Lio/tolgee/Tolgee$Config$Network;
@@ -68,6 +76,7 @@ public final class io/tolgee/Tolgee$Config$Builder {
 	public final fun locale (Ljava/util/Locale;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun network (Lio/tolgee/Tolgee$Config$Network;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun network (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun setAvailableLocales (Ljava/util/List;)V
 	public final fun setContentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)V
 	public final fun setLocale (Ljava/util/Locale;)V
 	public final fun setNetwork (Lio/tolgee/Tolgee$Config$Network;)V
@@ -83,8 +92,10 @@ public final class io/tolgee/Tolgee$Config$ContentDelivery {
 	public final fun component2 ()Lkotlin/jvm/functions/Function1;
 	public final fun component3 ()Lio/tolgee/storage/TolgeeStorageProvider;
 	public final fun component4 ()Lio/tolgee/Tolgee$Formatter;
+	public final fun component5 ()Ljava/lang/String;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
+	public final fun getManifestPath ()Ljava/lang/String;
 	public final fun getPath ()Lkotlin/jvm/functions/Function1;
 	public final fun getStorage ()Lio/tolgee/storage/TolgeeStorageProvider;
 	public final fun getUrl ()Ljava/lang/String;
@@ -97,11 +108,14 @@ public final class io/tolgee/Tolgee$Config$ContentDelivery$Builder {
 	public final fun build ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun formatter (Lio/tolgee/Tolgee$Formatter;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun getFormatter ()Lio/tolgee/Tolgee$Formatter;
+	public final fun getManifestPath ()Ljava/lang/String;
 	public final fun getPath ()Lkotlin/jvm/functions/Function1;
 	public final fun getStorage ()Lio/tolgee/storage/TolgeeStorageProvider;
 	public final fun getUrl ()Ljava/lang/String;
+	public final fun manifestPath (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun path (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$ContentDelivery$Builder;
 	public final fun setFormatter (Lio/tolgee/Tolgee$Formatter;)V
+	public final fun setManifestPath (Ljava/lang/String;)V
 	public final fun setPath (Lkotlin/jvm/functions/Function1;)V
 	public final fun setStorage (Lio/tolgee/storage/TolgeeStorageProvider;)V
 	public final fun setUrl (Ljava/lang/String;)V

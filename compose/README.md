@@ -161,7 +161,7 @@ fun LocaleSwitcher() {
     }.collectAsState(initial = tolgee.getLocale())
 
     Row {
-        Text(text = stringResource(tolgee, R.string.selected_locale, currentLocale.language))
+        Text(text = stringResource(tolgee, R.string.selected_locale, currentLocale.toTag("-")))
         Button(onClick = { tolgee.setLocale("en") }) {
             Text("English")
         }
@@ -188,7 +188,7 @@ fun LocaleAwareComponent() {
     }.collectAsState(initial = tolgee.getLocale())
 
     // Your UI that depends on the current locale
-    Text(text = currentLocale.language)
+    Text(text = currentLocale.toTag("-"))
 }
 ```
 
