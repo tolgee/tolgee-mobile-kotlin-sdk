@@ -165,6 +165,7 @@ open class Tolgee(
      * Resolution strategy:
      * 1. If the exact locale is available, return it (e.g., "en-US" → "en-US")
      * 2. Otherwise, try to find an exact match for the base language (e.g., "en-US" → "en")
+     * 3. If still not found, use the default language if configured
      *
      * Available locales are determined from:
      * 1. `config.availableLocales` (if manually specified)
@@ -194,13 +195,21 @@ open class Tolgee(
 
         // Fallback: Look for exact base language match only
         // Find exact match for base language (e.g., "en" without region/script)
-        return availableLocales.firstOrNull { availableLocale ->
+        val baseLanguageMatch = availableLocales.firstOrNull { availableLocale ->
             // Match only if:
             // 1. The language matches
             // 2. It's a base language (no region/script), checked by comparing tag to language
             availableLocale.language == locale.language &&
             availableLocale.toTag("-") == availableLocale.language
         }
+
+        if (baseLanguageMatch != null) {
+            return baseLanguageMatch
+        }
+
+        // Final fallback: Use default language if configured, otherwise null
+        // We assume the default language is available
+        return config.defaultLanguage
     }
 
     /**
@@ -462,6 +471,7 @@ open class Tolgee(
         val network: Network,
         val contentDelivery: ContentDelivery,
         val availableLocales: List<Locale>?,
+        val defaultLanguage: Locale?,
     ) {
 
         /**
@@ -492,6 +502,21 @@ open class Tolgee(
              * will be disabled and only exactly matching locale will be used.
              */
             var availableLocales: List<Locale>? = null
+
+            /**
+             * The default language to use as a final fallback when the requested locale
+             * and its base language are not available. This ensures that users with
+             * unsupported languages receive translations from the CDN (in the default language)
+             * instead of falling back to native bundled translations.
+             *
+             * Example: If a user has locale "zh-CN" and it's not available, but "en" is set
+             * as the default language, the app will fetch and display English translations
+             * from the CDN rather than using bundled translations.
+             *
+             * If null (default), the fallback chain ends with returning null from resolveLocale(),
+             * which eventually leads to using TranslationEmpty and bundled translations.
+             */
+            var defaultLanguage: Locale? = null
 
             /**
              * Represents the network configuration used within the `Builder`.
@@ -568,6 +593,21 @@ open class Tolgee(
              */
             fun availableLocaleTags(vararg localeTags: String) = availableLocales(localeTags.map(::forLocaleTag))
 
+            /**
+             * Sets the default language to use as a final fallback when the requested locale is not available.
+             *
+             * @param locale The locale to use as the default fallback language.
+             */
+            fun defaultLanguage(locale: Locale) = apply {
+                this.defaultLanguage = locale
+            }
+
+            /**
+             * Sets the default language to use as a final fallback when the requested locale is not available.
+             *
+             * @param localeTag A locale string in the format of a language tag (e.g., "en", "fr", "es").
+             */
+            fun defaultLanguage(localeTag: String) = defaultLanguage(forLocaleTag(localeTag))
 
             /**
              * Configures the network settings for the builder.
@@ -641,6 +681,7 @@ open class Tolgee(
                 availableLocales = availableLocales,
                 network = network,
                 contentDelivery = contentDelivery,
+                defaultLanguage = defaultLanguage,
             )
         }
 

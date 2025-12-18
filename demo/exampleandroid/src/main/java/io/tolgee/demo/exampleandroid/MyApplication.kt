@@ -15,6 +15,7 @@ class MyApplication : Application() {
         storage = TolgeeStorageProviderAndroid(this@MyApplication, BuildConfig.VERSION_CODE)
         availableLocaleTags("cs", "en", "fr", "sv")
       }
+      defaultLanguage("en")
     }
   }
 }

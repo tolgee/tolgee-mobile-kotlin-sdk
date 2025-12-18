@@ -13,6 +13,7 @@ public class io/tolgee/Tolgee {
 	public static final fun new (Lio/tolgee/Tolgee$Config;)Lio/tolgee/TolgeeAndroid;
 	public static final fun new (Lkotlin/jvm/functions/Function1;)Lio/tolgee/TolgeeAndroid;
 	public fun preload (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun preloadAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun removeChangeListener (Lio/tolgee/Tolgee$ChangeListener;)Z
 	protected final fun resolveLocale (Ljava/util/Locale;)Ljava/util/Locale;
 	public fun setLocale (Ljava/lang/String;)Ljava/util/Locale;
@@ -47,9 +48,11 @@ public final class io/tolgee/Tolgee$Config {
 	public final fun component2 ()Lio/tolgee/Tolgee$Config$Network;
 	public final fun component3 ()Lio/tolgee/Tolgee$Config$ContentDelivery;
 	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Ljava/util/Locale;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAvailableLocales ()Ljava/util/List;
 	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun getDefaultLanguage ()Ljava/util/Locale;
 	public final fun getLocale ()Ljava/util/Locale;
 	public final fun getNetwork ()Lio/tolgee/Tolgee$Config$Network;
 	public fun hashCode ()I
@@ -68,8 +71,11 @@ public final class io/tolgee/Tolgee$Config$Builder {
 	public final fun contentDelivery (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun contentDelivery (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public static synthetic fun contentDelivery$default (Lio/tolgee/Tolgee$Config$Builder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun defaultLanguage (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
+	public final fun defaultLanguage (Ljava/util/Locale;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun getAvailableLocales ()Ljava/util/List;
 	public final fun getContentDelivery ()Lio/tolgee/Tolgee$Config$ContentDelivery;
+	public final fun getDefaultLanguage ()Ljava/util/Locale;
 	public final fun getLocale ()Ljava/util/Locale;
 	public final fun getNetwork ()Lio/tolgee/Tolgee$Config$Network;
 	public final fun locale (Ljava/lang/String;)Lio/tolgee/Tolgee$Config$Builder;
@@ -78,6 +84,7 @@ public final class io/tolgee/Tolgee$Config$Builder {
 	public final fun network (Lkotlin/jvm/functions/Function1;)Lio/tolgee/Tolgee$Config$Builder;
 	public final fun setAvailableLocales (Ljava/util/List;)V
 	public final fun setContentDelivery (Lio/tolgee/Tolgee$Config$ContentDelivery;)V
+	public final fun setDefaultLanguage (Ljava/util/Locale;)V
 	public final fun setLocale (Ljava/util/Locale;)V
 	public final fun setNetwork (Lio/tolgee/Tolgee$Config$Network;)V
 }
@@ -182,6 +189,9 @@ public final class io/tolgee/TolgeeAndroid : io/tolgee/Tolgee {
 	public fun getConfig ()Lio/tolgee/Tolgee$Config;
 	public fun hashCode ()I
 	public final fun preload (Landroidx/lifecycle/LifecycleOwner;)Lkotlinx/coroutines/Job;
+	public final fun preloadAll (Landroidx/lifecycle/LifecycleOwner;)Lkotlinx/coroutines/Job;
+	public final fun retranslate (Landroid/app/Activity;)V
+	public final fun retranslate (Landroid/view/View;)V
 	public final fun t (Landroid/content/Context;I)Ljava/lang/String;
 	public final fun t (Landroid/content/Context;I[Ljava/lang/Object;)Ljava/lang/String;
 	public final fun t (Landroid/content/res/Resources;I)Ljava/lang/String;
@@ -209,9 +219,14 @@ public final class io/tolgee/TolgeeAndroid$Companion {
 
 public final class io/tolgee/TolgeeContextWrapper : android/content/ContextWrapper {
 	public static final field Companion Lio/tolgee/TolgeeContextWrapper$Companion;
-	public fun <init> (Landroid/content/Context;Lio/tolgee/Tolgee;)V
+	public fun <init> (Landroid/content/Context;Lio/tolgee/Tolgee;ZZZ)V
+	public synthetic fun <init> (Landroid/content/Context;Lio/tolgee/Tolgee;ZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getArgumentLayoutInflater ()Z
 	public final fun getBase ()Landroid/content/Context;
+	public final fun getInterceptGetString ()Z
+	public final fun getInterceptGetText ()Z
 	public fun getResources ()Landroid/content/res/Resources;
+	public fun getSystemService (Ljava/lang/String;)Ljava/lang/Object;
 	public final fun getTolgee ()Lio/tolgee/Tolgee;
 	public static final fun wrap (Landroid/content/Context;)Landroid/content/ContextWrapper;
 	public static final fun wrap (Landroid/content/Context;Lio/tolgee/Tolgee;)Landroid/content/ContextWrapper;

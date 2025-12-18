@@ -161,6 +161,24 @@ Tolgee.init {
 }
 ```
 
+#### Default Language Fallback
+
+Configure a default language to use when the user's locale is not available:
+
+```kotlin
+Tolgee.init {
+    contentDelivery {
+        url = "https://cdn.tolg.ee/your-cdn-url-prefix"
+    }
+    defaultLanguage("en") // Fallback to English when user's locale is unavailable
+}
+```
+
+When a user's locale (e.g., "zh-CN") is not available in your project:
+1. Tolgee first tries to find the exact locale match
+2. If not found, tries the base language (e.g., "zh-CN" → "zh")
+3. If still not found, uses the default language (e.g., "en")
+
 #### Preloading Translations
 
 ```kotlin
