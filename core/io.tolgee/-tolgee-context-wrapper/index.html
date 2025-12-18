@@ -96,26 +96,26 @@
     <h1 class="cover"><span>Tolgee</span><wbr><span>Context</span><wbr><span><span>Wrapper</span></span></h1>
     <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
       <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
-<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TolgeeContextWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>base<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>tolgee<span class="token operator">: </span><a href="../-tolgee/index.html">Tolgee</a></span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/android/content/ContextWrapper.html">ContextWrapper</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tolgee/tolgee-mobile-kotlin-sdk/tree/master/core/src/androidMain/kotlin/io/tolgee/TolgeeContextWrapper.kt#L17">source</a>)</span></span></div><p class="paragraph">A custom <a href="https://developer.android.com/reference/kotlin/android/content/ContextWrapper.html">ContextWrapper</a> that overrides string retrieval to fetch translations from the Tolgee platform.</p><p class="paragraph">This class intercepts calls to <span data-unresolved-link="io.tolgee/TolgeeContextWrapper/getString/#kotlin.Int/PointingToDeclaration/">getString</span> and attempts to load the string from Tolgee. If no translation is loaded or found, it falls back to the default <a href="index.html#-1083071447%2FFunctions%2F605213360">Context.getString</a> implementation.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>base</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The base <a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a> to wrap.</p></div></div></div></div><div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>tolgee</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The Tolgee translation service used for retrieving localized strings.</p></div></div></div></div></div></div>    </div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TolgeeContextWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>base<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>tolgee<span class="token operator">: </span><a href="../-tolgee/index.html">Tolgee</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>interceptGetString<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>interceptGetText<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>argumentLayoutInflater<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/android/content/ContextWrapper.html">ContextWrapper</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tolgee/tolgee-mobile-kotlin-sdk/tree/master/core/src/androidMain/kotlin/io/tolgee/TolgeeContextWrapper.kt#L23">source</a>)</span></span></div><p class="paragraph">A custom <a href="https://developer.android.com/reference/kotlin/android/content/ContextWrapper.html">ContextWrapper</a> that overrides string retrieval to fetch translations from the Tolgee platform.</p><p class="paragraph">This class intercepts calls to <span data-unresolved-link="io.tolgee/TolgeeContextWrapper/getString/#kotlin.Int/PointingToDeclaration/">getString</span> and attempts to load the string from Tolgee. If no translation is loaded or found, it falls back to the default <a href="index.html#-1083071447%2FFunctions%2F605213360">Context.getString</a> implementation. Calls to <span data-unresolved-link="io.tolgee/TolgeeContextWrapper/getText/#kotlin.Int/PointingToDeclaration/">getText</span> are also intercepted, if the string is found in Tolgee. The returned value is not formatted. (behaves like <a href="index.html#-1417941683%2FFunctions%2F605213360">Context.getText</a>)</p><p class="paragraph">Additionally, this wrapper installs a <span data-unresolved-link="io.tolgee/TolgeeLayoutInflaterFactory///PointingToDeclaration/">TolgeeLayoutInflaterFactory</span> to automatically translate text attributes during layout inflation.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>base</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The base <a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a> to wrap.</p></div></div></div></div><div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>tolgee</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The Tolgee translation service used for retrieving localized strings.</p></div></div></div></div></div></div>    </div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
-        <div class="table"><a data-name="1379919185%2FConstructors%2F605213360" anchor-label="TolgeeContextWrapper" id="1379919185%2FConstructors%2F605213360" data-filterable-set=":core/androidMain"></a>
+        <div class="table"><a data-name="-1574787501%2FConstructors%2F605213360" anchor-label="TolgeeContextWrapper" id="-1574787501%2FConstructors%2F605213360" data-filterable-set=":core/androidMain"></a>
           <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-tolgee-context-wrapper.html"><span>Tolgee</span><wbr><span>Context</span><wbr><span><span>Wrapper</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1379919185%2FConstructors%2F605213360"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1574787501%2FConstructors%2F605213360"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
                   <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
                     <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
-<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">base<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">tolgee<span class="token operator">: </span><a href="../-tolgee/index.html">Tolgee</a></span></span><span class="token punctuation">)</span></div></div>                  </div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">base<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">tolgee<span class="token operator">: </span><a href="../-tolgee/index.html">Tolgee</a><span class="token punctuation">, </span></span><span class="parameter ">interceptGetString<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">interceptGetText<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">argumentLayoutInflater<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div></div>                  </div>
                 </div>
               </div>
             </div>
@@ -145,7 +145,24 @@
       </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="-155132856%2FProperties%2F605213360" anchor-label="base" id="-155132856%2FProperties%2F605213360" data-filterable-set=":core/androidMain"></a>
+        <div class="table"><a data-name="1151785607%2FProperties%2F605213360" anchor-label="argumentLayoutInflater" id="1151785607%2FProperties%2F605213360" data-filterable-set=":core/androidMain"></a>
+          <div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="argument-layout-inflater.html"><span>argument</span><wbr><span>Layout</span><wbr><span><span>Inflater</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1151785607%2FProperties%2F605213360"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="argument-layout-inflater.html">argumentLayoutInflater</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-155132856%2FProperties%2F605213360" anchor-label="base" id="-155132856%2FProperties%2F605213360" data-filterable-set=":core/androidMain"></a>
           <div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
@@ -158,6 +175,40 @@
                   <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
                     <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
 <div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="base.html">base</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-226771916%2FProperties%2F605213360" anchor-label="interceptGetString" id="-226771916%2FProperties%2F605213360" data-filterable-set=":core/androidMain"></a>
+          <div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="intercept-get-string.html"><span>intercept</span><wbr><span>Get</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-226771916%2FProperties%2F605213360"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="intercept-get-string.html">interceptGetString</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1095677800%2FProperties%2F605213360" anchor-label="interceptGetText" id="-1095677800%2FProperties%2F605213360" data-filterable-set=":core/androidMain"></a>
+          <div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="intercept-get-text.html"><span>intercept</span><wbr><span>Get</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1095677800%2FProperties%2F605213360"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="intercept-get-text.html">interceptGetText</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></div></div>                  </div>
                 </div>
               </div>
             </div>
@@ -1458,19 +1509,19 @@
               </div>
             </div>
           </div>
-<a data-name="300309346%2FFunctions%2F605213360" anchor-label="getSystemService" id="300309346%2FFunctions%2F605213360" data-filterable-set=":core/androidMain"></a>
+<a data-name="2049121424%2FFunctions%2F605213360" anchor-label="getSystemService" id="2049121424%2FFunctions%2F605213360" data-filterable-set=":core/androidMain"></a>
           <div class="table-row" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="index.html#-1033418729%2FFunctions%2F605213360"><span>get</span><wbr><span>System</span><wbr><span><span>Service</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="300309346%2FFunctions%2F605213360"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2049121424%2FFunctions%2F605213360"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
                   <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
                     <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":core/androidMain" data-filterable-set=":core/androidMain" data-active="" data-toggle=":core/androidMain">android</button></div>
-<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#-1033418729%2FFunctions%2F605213360">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#-1033418729%2FFunctions%2F605213360"><span class="token function">getSystemService</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><a href="index.html#-1033418729%2FFunctions%2F605213360">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-1033418729%2FFunctions%2F605213360">T</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1204794803%2FFunctions%2F605213360"><span class="token function">getSystemService</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a></div></div>                  </div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":core/androidMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#-1033418729%2FFunctions%2F605213360">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#-1033418729%2FFunctions%2F605213360"><span class="token function">getSystemService</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><a href="index.html#-1033418729%2FFunctions%2F605213360">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-1033418729%2FFunctions%2F605213360">T</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-system-service.html"><span class="token function">getSystemService</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></div></div>                  </div>
                 </div>
               </div>
             </div>
