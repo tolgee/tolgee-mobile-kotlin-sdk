@@ -174,10 +174,13 @@ Tolgee.init {
 }
 ```
 
-When a user's locale (e.g., "zh-CN") is not available in your project:
+When a user's locale (e.g., "zh-Hans-CN") is not available in your project:
 1. Tolgee first tries to find the exact locale match
-2. If not found, tries the base language (e.g., "zh-CN" → "zh")
-3. If still not found, uses the default language (e.g., "en")
+2. If not found, tries intermediate variations (e.g., "zh-Hans-CN" → "zh-Hans")
+3. Then tries the base language (e.g., "zh-Hans" → "zh")
+4. If still not found, uses the default language (e.g., "en")
+
+This progressive fallback follows BCP 47 locale tag structure.
 
 #### Preloading Translations
 
