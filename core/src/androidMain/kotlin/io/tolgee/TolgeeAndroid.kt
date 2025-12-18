@@ -1,7 +1,9 @@
 package io.tolgee
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.view.View
 import androidx.annotation.AnyRes
 import androidx.annotation.ArrayRes
 import androidx.annotation.PluralsRes
@@ -237,6 +239,55 @@ data class TolgeeAndroid internal constructor(
      */
     fun preloadAll(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycleScope.launch {
         preloadAll()
+    }
+
+    /**
+     * Re-translates all views in the given view hierarchy that were automatically
+     * translated during layout inflation.
+     *
+     * This method walks the view hierarchy and re-applies translations to any views
+     * that have stored resource IDs from the [TolgeeLayoutInflaterFactory].
+     *
+     * Use this after language changes if you prefer not to recreate the Activity.
+     * It provides a smoother UX than `Activity.recreate()` by avoiding the full
+     * Activity lifecycle restart.
+     *
+     * Example usage:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     tolgee.changeFlow.collect {
+     *         tolgee.retranslate(this@MainActivity)
+     *     }
+     * }
+     * ```
+     *
+     * @param rootView The root view to start re-translation from (typically content view)
+     * @see retranslate(Activity) For a convenience method that finds the content view automatically
+     */
+    fun retranslate(rootView: View) {
+        TolgeeLayoutInflaterFactory.retranslateViewHierarchy(rootView, this)
+    }
+
+    /**
+     * Re-translates all views in the Activity's content view.
+     *
+     * This is a convenience method that automatically finds the Activity's content view
+     * (android.R.id.content) and re-translates all views in that hierarchy.
+     *
+     * Example usage:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     tolgee.changeFlow.collect {
+     *         tolgee.retranslate(this@MainActivity)
+     *     }
+     * }
+     * ```
+     *
+     * @param activity The activity whose views should be re-translated
+     * @see retranslate(View) For the base method that accepts a root view
+     */
+    fun retranslate(activity: Activity) {
+        activity.findViewById<View>(android.R.id.content)?.let { retranslate(it) }
     }
 
     /**

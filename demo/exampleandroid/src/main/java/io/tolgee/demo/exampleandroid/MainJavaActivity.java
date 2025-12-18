@@ -34,21 +34,15 @@ public class MainJavaActivity extends ComponentActivity implements Tolgee.Change
         // Make sure the app title stays updated
         setTitle(R.string.app_name);
 
-        TextView name = findViewById(R.id.app_name_text);
-        TextView basic = findViewById(R.id.basic_text);
-        TextView parameter = findViewById(R.id.parameterized_text);
-        TextView plural = findViewById(R.id.plural_text);
-        TextView array = findViewById(R.id.array_text);
+        // Simple strings (app_name, description) are automatically translated by TolgeeLayoutInflaterFactory!
+        // No need to manually set them - they're handled during layout inflation
+
+        // Only parameterized strings and plurals need manual handling
+        updateParameterizedStrings();
+
         Button buttonEn = findViewById(R.id.button_en);
         Button buttonFr = findViewById(R.id.button_fr);
         Button buttonCs = findViewById(R.id.button_cs);
-
-        // Update texts within the app with translated ones
-        name.setText(getString(R.string.app_name));
-        basic.setText(getString(R.string.description));
-        parameter.setText(getString(R.string.percentage_placeholder, "87"));
-        plural.setText(getResources().getQuantityString(R.plurals.plr_test_placeholder_2, 2, 3, "Plurals"));
-        array.setText(String.join(", ", getResources().getStringArray(R.array.array_test)));
 
         buttonEn.setOnClickListener(v -> {
             tolgee.setLocale(Locale.ENGLISH);
@@ -62,6 +56,17 @@ public class MainJavaActivity extends ComponentActivity implements Tolgee.Change
             tolgee.setLocale("cs");
             tolgee.preload(this);
         });
+    }
+
+    private void updateParameterizedStrings() {
+        // These require manual handling because they have format arguments or are plurals
+        TextView parameter = findViewById(R.id.parameterized_text);
+        TextView plural = findViewById(R.id.plural_text);
+        TextView array = findViewById(R.id.array_text);
+
+        parameter.setText(getString(R.string.percentage_placeholder, "87"));
+        plural.setText(getResources().getQuantityString(R.plurals.plr_test_placeholder_2, 2, 3, "Plurals"));
+        array.setText(String.join(", ", getResources().getStringArray(R.array.array_test)));
     }
 
     @Override
@@ -83,7 +88,13 @@ public class MainJavaActivity extends ComponentActivity implements Tolgee.Change
 
     @Override
     public void onTranslationsChanged() {
-        // we want to reload activity after a language change
-        recreate();
+        // Re-translate views without recreating the Activity for smoother UX
+        tolgee.retranslate(this); // or recreate() for more complex activities
+
+        // Make sure the app title is updated
+        setTitle(R.string.app_name);
+
+        // Still need to manually update parameterized strings and plurals
+        updateParameterizedStrings();
     }
 }

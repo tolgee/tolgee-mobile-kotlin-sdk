@@ -231,6 +231,11 @@ open class Tolgee(
 
             cachedManifest.value = manifest
             changeFlow.emit(Unit)
+            withContext(Dispatchers.Main) {
+                changeListeners.forEach { listener ->
+                    listener.onTranslationsChanged()
+                }
+            }
         }
     }
 
