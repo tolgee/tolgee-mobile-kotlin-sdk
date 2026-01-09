@@ -14,6 +14,7 @@ import platform.Foundation.NSString
 import platform.Foundation.countryCode
 import platform.Foundation.languageCode
 import platform.Foundation.localizedStringWithFormat
+import platform.Foundation.scriptCode
 import platform.Foundation.variantCode
 
 /**
@@ -118,6 +119,7 @@ data class TolgeeApple internal constructor(
     fun setLocale(nsLocale: NSLocale) = setLocale(
         createLocale(
             language = nsLocale.languageCode,
+            script = nsLocale.scriptCode?.ifBlank { null },
             country = nsLocale.countryCode?.ifBlank { null },
             variant = nsLocale.variantCode?.ifBlank { null }
         )

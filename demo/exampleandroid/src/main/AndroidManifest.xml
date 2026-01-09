@@ -13,6 +13,7 @@
             android:supportsRtl="true">
         <activity
                 android:name=".MainJavaActivity"
+                android:label="@string/app_name_java"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -22,6 +23,7 @@
         </activity>
         <activity
                 android:name=".MainActivity"
+                android:label="@string/app_name_kotlin"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

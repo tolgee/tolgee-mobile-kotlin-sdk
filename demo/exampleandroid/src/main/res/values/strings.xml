@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">TolgeeView</string>
+  <string name="app_name_java">TolgeeView Java</string>
+  <string name="app_name_kotlin">TolgeeView Kotlin</string>
   <string-array name="array_test">
     <item>First</item>
     <item>Second</item>

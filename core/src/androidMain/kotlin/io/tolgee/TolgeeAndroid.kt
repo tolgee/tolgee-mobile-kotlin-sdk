@@ -1,7 +1,9 @@
 package io.tolgee
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.view.View
 import androidx.annotation.AnyRes
 import androidx.annotation.ArrayRes
 import androidx.annotation.PluralsRes
@@ -214,6 +216,78 @@ data class TolgeeAndroid internal constructor(
      */
     fun preload(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycleScope.launch {
         preload()
+    }
+
+    /**
+     * Preloads all available languages and their translations into memory.
+     *
+     * This is a convenience method that launches a coroutine in the provided [LifecycleOwner]'s
+     * lifecycle scope and calls the suspend [preloadAll] function.
+     *
+     * This method loads translations for all locales defined in the manifest or configuration.
+     * Translations are loaded into the LRU cache according to the configured cache size limit
+     * (see [Config.ContentDelivery.maxLocalesInMemory]).
+     *
+     * Use cases:
+     * - Applications that support frequent locale switching
+     * - Offline-first applications that want to cache multiple languages
+     * - Improving performance by preloading translations at app startup
+     *
+     * @param lifecycleOwner any [LifecycleOwner] to launch the coroutine from, e.g. Activity or Fragment
+     * @see preloadAll For the base suspend function
+     * @see preload For loading only the current locale
+     */
+    fun preloadAll(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycleScope.launch {
+        preloadAll()
+    }
+
+    /**
+     * Re-translates all views in the given view hierarchy that were automatically
+     * translated during layout inflation.
+     *
+     * This method walks the view hierarchy and re-applies translations to any views
+     * that have stored resource IDs from the [TolgeeLayoutInflaterFactory].
+     *
+     * Use this after language changes if you prefer not to recreate the Activity.
+     * It provides a smoother UX than `Activity.recreate()` by avoiding the full
+     * Activity lifecycle restart.
+     *
+     * Example usage:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     tolgee.changeFlow.collect {
+     *         tolgee.retranslate(this@MainActivity)
+     *     }
+     * }
+     * ```
+     *
+     * @param rootView The root view to start re-translation from (typically content view)
+     * @see retranslate(Activity) For a convenience method that finds the content view automatically
+     */
+    fun retranslate(rootView: View) {
+        TolgeeLayoutInflaterFactory.retranslateViewHierarchy(rootView, this)
+    }
+
+    /**
+     * Re-translates all views in the Activity's content view.
+     *
+     * This is a convenience method that automatically finds the Activity's content view
+     * (android.R.id.content) and re-translates all views in that hierarchy.
+     *
+     * Example usage:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     tolgee.changeFlow.collect {
+     *         tolgee.retranslate(this@MainActivity)
+     *     }
+     * }
+     * ```
+     *
+     * @param activity The activity whose views should be re-translated
+     * @see retranslate(View) For the base method that accepts a root view
+     */
+    fun retranslate(activity: Activity) {
+        activity.findViewById<View>(android.R.id.content)?.let { retranslate(it) }
     }
 
     /**

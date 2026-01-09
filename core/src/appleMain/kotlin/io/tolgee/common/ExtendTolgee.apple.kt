@@ -12,6 +12,7 @@ import kotlinx.coroutines.IO
 import platform.Foundation.NSLocale
 import platform.Foundation.countryCode
 import platform.Foundation.languageCode
+import platform.Foundation.scriptCode
 import platform.Foundation.variantCode
 import kotlin.coroutines.CoroutineContext
 
@@ -66,6 +67,7 @@ actual typealias PlatformTolgee = TolgeeApple
 fun Tolgee.Config.Builder.locale(nsLocale: NSLocale) = locale(
     createLocale(
         language = nsLocale.languageCode,
+        script = nsLocale.scriptCode?.ifBlank { null },
         country = nsLocale.countryCode?.ifBlank { null },
         variant = nsLocale.variantCode?.ifBlank { null }
     )

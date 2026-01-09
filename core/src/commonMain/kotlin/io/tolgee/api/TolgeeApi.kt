@@ -1,7 +1,7 @@
 package io.tolgee.api
 
 import de.comahe.i18n4k.forLocaleTag
-import de.comahe.i18n4k.language
+import de.comahe.i18n4k.toTag
 import dev.datlag.tooling.async.suspendCatching
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -11,6 +11,7 @@ import io.ktor.utils.io.core.toByteArray
 import io.tolgee.Tolgee
 import io.tolgee.common.keyData
 import io.tolgee.model.TolgeeKey
+import io.tolgee.model.TolgeeManifest
 import io.tolgee.model.TolgeeTranslation
 import io.tolgee.model.translation.TranslationEmpty
 import kotlinx.collections.immutable.toImmutableList
@@ -53,8 +54,8 @@ internal data object TolgeeApi {
     ): TolgeeTranslation {
         val storage = config.contentDelivery.storage
         val language = currentLanguage?.ifBlank { null }
-            ?: config.locale?.language?.ifBlank { null }
-            ?: Tolgee.systemLocale.language.ifBlank { null }
+            ?: config.locale?.toTag("-")?.ifBlank { null }
+            ?: Tolgee.systemLocale.toTag("-").ifBlank { null }
             ?: return TranslationEmpty
         val path = config.contentDelivery.path(language)
 
@@ -68,6 +69,50 @@ internal data object TolgeeApi {
 
         val cached = storage?.get(path)?.decodeToString()?.decodeTranslation(config, language)
         return cached ?: TranslationEmpty
+    }
+
+    /**
+     * Retrieves project manifest from the Content Delivery Network (CDN).
+     *
+     * @param client The HTTP client used to perform the network request.
+     * @param config The Tolgee configuration object containing CDN-related settings.
+     * @return A [TolgeeManifest] object containing available locales, or null if fetch fails.
+     */
+    suspend fun getManifest(
+        client: HttpClient,
+        config: Tolgee.Config,
+    ): TolgeeManifest {
+        val storage = config.contentDelivery.storage
+        val path = config.contentDelivery.manifestPath
+
+        // Try to fetch fresh manifest from CDN
+        val fresh = getTranslationFromCDN(client, config, path)
+        val decoded = fresh?.decodeManifest()
+
+        if (decoded != null) {
+            // Cache the fresh manifest to storage
+            storage?.put(path, fresh.toByteArray())
+            return decoded
+        }
+
+        val cached = storage?.get(path)?.decodeToString()?.decodeManifest()
+        return cached ?: getFallbackManifest()
+    }
+
+    /**
+     * Retrieves a fallback instance of [TolgeeManifest]. The fallback instance disables locale
+     * fallback mechanism.
+     *
+     * This method is used when manifest fetching fails, no further attempts to fetch manifest
+     * are made during the application's lifecycle. By setting the `locales` to `null`, it disables
+     * the locale fallback mechanism, where translations progressively fallback through intermediate
+     * locale variations to the base language (e.g., "zh-Hans-CN" → "zh-Hans" → "zh").
+     *
+     * @return A [TolgeeManifest] instance with `locales` set to `null`, effectively disabling
+     *         all locale fallback logic.
+     */
+    private fun getFallbackManifest(): TolgeeManifest {
+        return TolgeeManifest(locales = null)
     }
 
     /**
@@ -96,6 +141,19 @@ internal data object TolgeeApi {
             formatter = config.contentDelivery.formatter,
             usedLocale = forLocaleTag(language),
         )
+    }
+
+    /**
+     * Decodes a JSON string into a `TolgeeManifest` object.
+     *
+     * @return The decoded manifest, or null if parsing fails.
+     */
+    private fun String.decodeManifest(): TolgeeManifest? {
+        return try {
+            json.decodeFromString<TolgeeManifest>(this@decodeManifest)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     /**

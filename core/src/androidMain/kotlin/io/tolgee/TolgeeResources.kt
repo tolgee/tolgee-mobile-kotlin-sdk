@@ -52,7 +52,9 @@ import java.io.InputStream
 @Suppress("DEPRECATION")
 internal class TolgeeResources(
     val base: Resources,
-    val tolgee: Tolgee
+    val tolgee: Tolgee,
+    val interceptGetString: Boolean = true,
+    val interceptGetText: Boolean = true
 ) : Resources(base.assets, base.displayMetrics, base.configuration) {
 
     /**
@@ -60,38 +62,47 @@ internal class TolgeeResources(
      */
 
     override fun getString(@StringRes id: Int): String {
+        if (!interceptGetString) return base.getString(id)
         return base.getStringT(tolgee, id)
     }
 
     override fun getString(@StringRes id: Int, vararg formatArgs: Any?): String {
+        if (!interceptGetString) return base.getString(id, *formatArgs)
         return base.getStringT(tolgee, id, *formatArgs.filterNotNull().toTypedArray())
     }
 
     override fun getQuantityString(@PluralsRes id: Int, quantity: Int): String {
+        if (!interceptGetString) return base.getQuantityString(id, quantity)
         return base.getQuantityStringT(tolgee, id, quantity)
     }
 
     override fun getQuantityString(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any?): String {
+        if (!interceptGetString) return base.getQuantityString(id, quantity, *formatArgs)
         return base.getQuantityStringT(tolgee, id, quantity, *formatArgs.filterNotNull().toTypedArray())
     }
 
     override fun getStringArray(@ArrayRes id: Int): Array<out String?> {
+        if (!interceptGetString) return base.getStringArray(id)
         return base.getStringArrayT(tolgee, id)
     }
 
     override fun getText(@StringRes id: Int): CharSequence {
+        if (!interceptGetText) return base.getText(id)
         return base.getTextT(tolgee, id)
     }
 
     override fun getQuantityText(@PluralsRes id: Int, quantity: Int): CharSequence {
+        if (!interceptGetText) return base.getQuantityText(id, quantity)
         return base.getQuantityTextT(tolgee, id, quantity)
     }
 
     override fun getTextArray(id: Int): Array<out CharSequence?> {
+        if (!interceptGetText) return base.getTextArray(id)
         return base.getTextArrayT(tolgee, id)
     }
 
     override fun getText(@StringRes id: Int, def: CharSequence?): CharSequence? {
+        if (!interceptGetText) return base.getText(id, def)
         return base.getTextT(tolgee, id, def)
     }
 

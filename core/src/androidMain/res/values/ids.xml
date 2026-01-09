@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- View tags for storing resource IDs for dynamic re-translation -->
+    <item name="tolgee_text_res_id" type="id"/>
+    <item name="tolgee_hint_res_id" type="id"/>
+    <item name="tolgee_content_desc_res_id" type="id"/>
+</resources>
