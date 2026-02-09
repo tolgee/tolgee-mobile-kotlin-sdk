@@ -2,6 +2,8 @@ public class io/tolgee/Tolgee {
 	public static final field Companion Lio/tolgee/Tolgee$Companion;
 	public fun <init> (Lio/tolgee/Tolgee$Config;)V
 	public final fun addChangeListener (Lio/tolgee/Tolgee$ChangeListener;)V
+	public fun getAvailableLocaleTags ()Ljava/util/List;
+	public fun getAvailableLocales ()Ljava/util/List;
 	public final fun getChangeFlow ()Lkotlinx/coroutines/flow/MutableSharedFlow;
 	public fun getConfig ()Lio/tolgee/Tolgee$Config;
 	public static final fun getInstance ()Lio/tolgee/TolgeeAndroid;
