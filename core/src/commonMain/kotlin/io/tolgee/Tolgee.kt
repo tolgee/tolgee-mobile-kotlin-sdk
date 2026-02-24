@@ -504,6 +504,37 @@ open class Tolgee(
     open fun getLocale() = localeFlow.value ?: systemLocale
 
     /**
+     * The list of available locales from the manifest or configuration.
+     *
+     * Returns the locales configured via [Config.Builder.availableLocales], or if not
+     * manually configured, the locales fetched from the CDN manifest.
+     *
+     * Returns null if the manifest hasn't been loaded yet and no manual config was provided.
+     * Call [preload] first to ensure the manifest is loaded.
+     *
+     * For reactive updates, combine with [changeFlow]:
+     * ```kotlin
+     * tolgee.changeFlow.collect {
+     *     val locales = tolgee.availableLocales
+     * }
+     * ```
+     */
+    open val availableLocales: List<Locale>?
+        get() = config.availableLocales ?: cachedManifest.value?.availableLocales
+
+    /**
+     * The list of available locale tags (e.g., `["en", "fr", "de"]`) from the manifest or configuration.
+     *
+     * Returns null if the manifest hasn't been loaded yet and no manual config was provided.
+     * Call [preload] first to ensure the manifest is loaded.
+     *
+     * @see availableLocales
+     */
+    open val availableLocaleTags: List<String>?
+        get() = config.availableLocales?.map { it.toTag("-") }
+            ?: cachedManifest.value?.locales
+
+    /**
      * Represents the configuration used for API integration and content management.
      *
      * @property locale The target locale used for translations or project-specific setup.
