@@ -236,13 +236,19 @@ open class Tolgee(
             return locale
         }
 
+        // Build a map keyed by lowercase tag for case-insensitive matching.
+        // Returns the original available locale to preserve the exact casing
+        // needed for CDN file paths.
+        val localesByTag = availableLocales.associateBy { it.toTag("-").lowercase() }
+
         // Generate progressive fallback variations
         val fallbackCandidates = generateLocaleFallbacks(locale)
 
-        // Try each fallback candidate in order
+        // Try each fallback candidate in order (case-insensitive)
         for (candidate in fallbackCandidates) {
-            if (candidate in availableLocales) {
-                return candidate
+            val matchedLocale = localesByTag[candidate.toTag("-").lowercase()]
+            if (matchedLocale != null) {
+                return matchedLocale
             }
         }
 
@@ -457,7 +463,8 @@ open class Tolgee(
                 ?: emptyList()
 
             val currentLocale = resolveLocale(localeFlow.value)
-            val otherLocales = availableLocales.filter { it != currentLocale }
+            val currentLocaleTag = currentLocale?.toTag("-")?.lowercase()
+            val otherLocales = availableLocales.filter { it.toTag("-").lowercase() != currentLocaleTag }
 
             otherLocales.forEach { locale ->
                 suspendCatching {
