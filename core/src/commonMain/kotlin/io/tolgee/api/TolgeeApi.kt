@@ -105,8 +105,7 @@ internal data object TolgeeApi {
      *
      * This method is used when manifest fetching fails, no further attempts to fetch manifest
      * are made during the application's lifecycle. By setting the `locales` to `null`, it disables
-     * the locale fallback mechanism, where translations progressively fallback through intermediate
-     * locale variations to the base language (e.g., "zh-Hans-CN" → "zh-Hans" → "zh").
+     * the locale fallback mechanism.
      *
      * @return A [TolgeeManifest] instance with `locales` set to `null`, effectively disabling
      *         all locale fallback logic.

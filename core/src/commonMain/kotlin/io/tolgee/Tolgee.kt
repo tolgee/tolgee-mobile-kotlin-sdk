@@ -4,7 +4,6 @@ import de.comahe.i18n4k.Locale
 import de.comahe.i18n4k.country
 import de.comahe.i18n4k.forLocaleTag
 import de.comahe.i18n4k.language
-import de.comahe.i18n4k.removeExtensions
 import de.comahe.i18n4k.script
 import de.comahe.i18n4k.toTag
 import de.comahe.i18n4k.variant
@@ -164,96 +163,7 @@ open class Tolgee(
     }
 
     /**
-     * Generates progressive fallback variations for a locale by removing components
-     * from right to left following BCP 47 structure (language-script-region-variant).
-     *
-     * When both script and region are present, also tries language-region (dropping script)
-     * after language-script. This matches common CDN layouts (e.g. en-Latn-US → en-US).
-     *
-     * Examples:
-     * - "zh-Hans-CN" → ["zh-Hans-CN", "zh-Hans", "zh-CN", "zh"]
-     * - "en-Latn-US" → ["en-Latn-US", "en-Latn", "en-US", "en"]
-     * - "en-US" → ["en-US", "en"]
-     * - "sr-Cyrl" → ["sr-Cyrl", "sr"]
-     * - "en" → ["en"]
-     *
-     * @param locale The locale to generate fallbacks for
-     * @return List of locales in fallback order (most specific to least specific)
-     */
-    private fun generateLocaleFallbacks(locale: Locale): List<Locale> {
-        val fallbacks = mutableListOf<Locale>()
-        val seenTags = mutableSetOf<String>()
-
-        fun addCandidate(candidate: Locale) {
-            val tagKey = candidate.toTag("-").lowercase()
-            if (seenTags.add(tagKey)) {
-                fallbacks.add(candidate)
-            }
-        }
-
-        addCandidate(locale)
-
-        // Extensions (u, t, x) are atomic in BCP 47 and must not be truncated piecemeal.
-        val coreLocale = locale.removeExtensions()
-        if (coreLocale != locale) {
-            addCandidate(coreLocale)
-        }
-
-        val language = coreLocale.language
-        if (language.isBlank()) return fallbacks
-
-        val script = coreLocale.script.takeIf { it.isNotBlank() }
-        val region = coreLocale.country.takeIf { it.isNotBlank() }
-        val variant = coreLocale.variant.takeIf { it.isNotBlank() }
-
-        val subtags = buildList {
-            add(language)
-            script?.let(::add)
-            region?.let(::add)
-            variant?.let(::add)
-        }
-
-        val coreFallbackTags = buildList {
-            for (count in subtags.size - 1 downTo 1) {
-                add(subtags.take(count).joinToString("-"))
-            }
-        }.toMutableList()
-
-        // When both script and region are present, also try language-region (e.g. en-Latn-US → en-US).
-        // Insert after language-script so script-specific matches (zh-Hans) stay preferred over regional ones (zh-CN).
-        if (script != null && region != null) {
-            val langScriptTag = "$language-$script"
-            val langRegionTag = "$language-$region"
-            val scriptIndex = coreFallbackTags.indexOf(langScriptTag)
-            if (scriptIndex >= 0 && langRegionTag !in coreFallbackTags) {
-                coreFallbackTags.add(scriptIndex + 1, langRegionTag)
-            }
-        }
-
-        coreFallbackTags.forEach { addCandidate(forLocaleTag(it)) }
-
-        return fallbacks
-    }
-
-    /**
      * Resolves the most appropriate available locale from the given locale.
-     *
-     * Resolution strategy:
-     * 1. Try exact locale match (e.g., "zh-Hans-CN" → "zh-Hans-CN")
-     * 2. Try intermediate variations by progressively removing components:
-     *    - "zh-Hans-CN" → "zh-Hans"
-     *    - "zh-Hans" → "zh"
-     * 3. Use the default language if configured
-     *
-     * The fallback process follows BCP 47 locale tag structure, removing
-     * rightmost components (variant, region, script) one at a time until
-     * a match is found.
-     *
-     * Examples:
-     * - "zh-Hans-CN" → "zh-Hans-CN" → "zh-Hans" → "zh-CN" → "zh" → default
-     * - "en-Latn-US" → "en-Latn-US" → "en-Latn" → "en-US" → "en" → default
-     * - "sr-Cyrl" → "sr-Cyrl" → "sr" → default
-     * - "en-US" → "en-US" → "en" → default
      *
      * Available locales are determined from:
      * 1. `config.availableLocales` (if manually specified)
@@ -263,10 +173,9 @@ open class Tolgee(
      * @param locale The desired locale to resolve. Can be null.
      * @return The resolved locale, or null if the input is null.
      */
-     protected fun resolveLocale(locale: Locale?): Locale? {
+    protected fun resolveLocale(locale: Locale?): Locale? {
         if (locale == null) return null
 
-        // Get available locales from config or loaded manifest
         val availableLocales = config.availableLocales
             ?: cachedManifest.value?.availableLocales
 
@@ -281,19 +190,30 @@ open class Tolgee(
         // needed for CDN file paths.
         val localesByTag = availableLocales.associateBy { it.toTag("-").lowercase() }
 
-        // Generate progressive fallback variations
-        val fallbackCandidates = generateLocaleFallbacks(locale)
+        return generateLocaleFallbackTags(locale).firstNotNullOfOrNull { localesByTag[it] }
+            ?: config.defaultLanguage
+    }
 
-        // Try each fallback candidate in order (case-insensitive)
-        for (candidate in fallbackCandidates) {
-            val matchedLocale = localesByTag[candidate.toTag("-").lowercase()]
-            if (matchedLocale != null) {
-                return matchedLocale
-            }
-        }
+    /**
+     * Generates the fallback tags to try for a locale, most specific first.
+     *
+     * @return lowercase BCP 47 tags
+     */
+    private fun generateLocaleFallbackTags(locale: Locale): List<String> {
+        val language = locale.language
+        val script = locale.script
+        val region = locale.country
+        val variant = locale.variant
 
-        // Final fallback: Use default language if configured
-        return config.defaultLanguage
+        return listOf(
+            listOf(locale.toTag("-")),
+            listOf(language, script, region, variant),
+            listOf(language, script, region),
+            listOf(language, script),
+            listOf(language, region, variant),
+            listOf(language, region),
+            listOf(language),
+        ).map { parts -> parts.filter { it.isNotBlank() }.joinToString("-").lowercase() }.distinct()
     }
 
     /**
@@ -612,10 +532,8 @@ open class Tolgee(
              * Instead, it will use the provided list of locales. Can be used to save on network requests.
              *
              * This list is used when determining the fallback language for translations.
-             * The SDK performs progressive fallback through intermediate locale variations:
-             * - If "zh-Hans-CN" doesn't exist, tries "zh-Hans"
-             * - If "zh-Hans" doesn't exist, tries "zh"
-             * - Finally uses the default language if configured
+             * The SDK performs progressive fallback through intermediate locale variations,
+             * and finally uses the default language if configured.
              *
              * If we don't have a list of available locales and manifest fetching fails, the fallback
              * mechanism will be disabled and only exactly matching locale will be used.

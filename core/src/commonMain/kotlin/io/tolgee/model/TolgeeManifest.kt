@@ -10,8 +10,7 @@ import kotlinx.serialization.Serializable
  * This metadata is fetched from the CDN and contains information about
  * which locales are available for translation fallback logic.
  *
- * The fallback logic progressively tries intermediate locale variations before
- * falling back to the base language (e.g., "zh-Hans-CN" → "zh-Hans" → "zh").
+ * See `Tolgee.resolveLocale` for the fallback order.
  *
  * @property locales List of locale tags (e.g., ["en", "en-US", "zh", "zh-Hans", "zh-Hans-CN"])
  *                   that are available in this Tolgee project. If null, the

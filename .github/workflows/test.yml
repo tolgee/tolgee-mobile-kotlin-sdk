@@ -28,3 +28,21 @@ jobs:
 
       - name: Test Gradle Plugin
         run: ./gradlew gradle-plugin:test
+
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Test Core
+        run: ./gradlew core:jvmTest
