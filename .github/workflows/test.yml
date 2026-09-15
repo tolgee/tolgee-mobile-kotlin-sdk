@@ -2,10 +2,16 @@ name: Test Modules
 
 on:
   push:
+    branches: [ master ]
+  pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  gradle-plugin:
+  linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,11 +32,11 @@ jobs:
       - name: Install Tolgee CLI
         run: npm install --global @tolgee/cli
 
-      - name: Test Gradle Plugin
-        run: ./gradlew gradle-plugin:test
+      - name: Build and test
+        run: ./gradlew build
 
-  core:
-    runs-on: ubuntu-latest
+  apple:
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,5 +50,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Test Core
-        run: ./gradlew core:jvmTest
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
+      - name: Install Tolgee CLI
+        run: npm install --global @tolgee/cli
+
+      - name: Build and test
+        run: ./gradlew build
