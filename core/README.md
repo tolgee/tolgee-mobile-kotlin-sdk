@@ -174,13 +174,17 @@ Tolgee.init {
 }
 ```
 
-When a user's locale (e.g., "zh-Hans-CN") is not available in your project:
-1. Tolgee first tries to find the exact locale match
-2. If not found, tries intermediate variations (e.g., "zh-Hans-CN" → "zh-Hans")
-3. Then tries the base language (e.g., "zh-Hans" → "zh")
-4. If still not found, uses the default language (e.g., "en")
+When a user's locale is not available in your project, Tolgee tries progressively less
+specific variations of it, most specific first, and falls back to the default language
+if none of them match:
 
-This progressive fallback follows BCP 47 locale tag structure.
+```
+zh-Hans-CN → zh-Hans → zh-CN → zh → en (default)
+```
+
+The variations follow BCP 47 locale tag structure (language-script-region-variant). A
+script-specific match is preferred over a region-specific one. Unicode extensions (such
+as the `-u-ms-metric` some Android devices report) only take part in the exact match.
 
 #### Preloading Translations
 

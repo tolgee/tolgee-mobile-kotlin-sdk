@@ -87,4 +87,60 @@ class ResolveLocaleTest {
         val result = tolgee.testResolveLocale(locale)
         assertEquals("zh-Hans", result?.toTag("-"))
     }
+
+    @Test
+    fun unicodeExtensionFallsBackToBaseLanguage() {
+        val tolgee = createTolgee(listOf(forLocaleTag("en"), forLocaleTag("es")))
+        val result = tolgee.testResolveLocale(forLocaleTag("es-u-ms-metric"))
+        assertEquals("es", result?.toTag("-"))
+    }
+
+    @Test
+    fun unicodeExtensionExactMatchIsPreferredOverBaseLanguage() {
+        val tolgee = createTolgee(listOf(forLocaleTag("es"), forLocaleTag("es-u-ms-metric")))
+        val result = tolgee.testResolveLocale(forLocaleTag("es-u-ms-metric"))
+        assertEquals("es-u-ms-metric", result?.toTag("-"))
+    }
+
+    @Test
+    fun unicodeExtensionOnRegionalLocaleFallsBackToRegion() {
+        val tolgee = createTolgee(listOf(forLocaleTag("en"), forLocaleTag("en-US")))
+        val result = tolgee.testResolveLocale(forLocaleTag("en-US-u-ms-metric"))
+        assertEquals("en-US", result?.toTag("-"))
+    }
+
+    @Test
+    fun fallbackFromScriptRegionToRegion() {
+        val tolgee = createTolgee(listOf(forLocaleTag("en"), forLocaleTag("en-US")))
+        val result = tolgee.testResolveLocale(forLocaleTag("en-Latn-US"))
+        assertEquals("en-US", result?.toTag("-"))
+    }
+
+    @Test
+    fun scriptMatchIsPreferredOverRegionMatch() {
+        val tolgee = createTolgee(listOf(forLocaleTag("en-Latn"), forLocaleTag("en-US")))
+        val result = tolgee.testResolveLocale(forLocaleTag("en-Latn-US"))
+        assertEquals("en-Latn", result?.toTag("-"))
+    }
+
+    @Test
+    fun regionMatchCanCrossScripts() {
+        val tolgee = createTolgee(listOf(forLocaleTag("zh-CN"), forLocaleTag("zh-TW")))
+        val result = tolgee.testResolveLocale(forLocaleTag("zh-Hant-CN"))
+        assertEquals("zh-CN", result?.toTag("-"))
+    }
+
+    @Test
+    fun fallbackFromScriptRegionVariantToScriptRegion() {
+        val tolgee = createTolgee(listOf(forLocaleTag("ca"), forLocaleTag("ca-Latn-ES")))
+        val result = tolgee.testResolveLocale(forLocaleTag("ca-Latn-ES-valencia"))
+        assertEquals("ca-Latn-ES", result?.toTag("-"))
+    }
+
+    @Test
+    fun fallbackFromScriptRegionVariantToRegionVariant() {
+        val tolgee = createTolgee(listOf(forLocaleTag("ca"), forLocaleTag("ca-ES-valencia")))
+        val result = tolgee.testResolveLocale(forLocaleTag("ca-Latn-ES-valencia"))
+        assertEquals("ca-ES-valencia", result?.toTag("-"))
+    }
 }

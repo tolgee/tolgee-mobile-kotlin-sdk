@@ -64,7 +64,7 @@ Data flow:
 tFlow("key", params)
   → localeFlow emits locale
   → loadManifest() fetches available locales from CDN
-  → resolveLocale() applies progressive BCP 47 fallback (zh-Hans-CN → zh-Hans → zh)
+  → resolveLocale() applies progressive BCP 47 fallback (zh-Hans-CN → zh-Hans → zh-CN → zh)
   → loadTranslations() fetches from CDN or cache (LRU in-memory + persistent storage)
   → Translation formatted and emitted via Flow
 ```
