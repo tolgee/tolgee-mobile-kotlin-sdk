@@ -6,7 +6,7 @@
 # Only exceptions are entries produced by this SDK, commented by "Keep at top".
 
 [versions]
-library = "1.0.0-alpha04" # Keep at top
+library = "1.0.0-alpha05" # Keep at top
 activity = "1.13.0"
 android-core = "1.18.0"
 android-tools = "8.13.2"
